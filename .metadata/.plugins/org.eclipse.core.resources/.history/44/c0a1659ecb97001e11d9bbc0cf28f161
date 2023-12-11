@@ -1,0 +1,10 @@
+package com.postgres.sample.controller.lkh;
+
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class LkhController {
+	public String hello() {
+		return ="aa";
+	}
+}
