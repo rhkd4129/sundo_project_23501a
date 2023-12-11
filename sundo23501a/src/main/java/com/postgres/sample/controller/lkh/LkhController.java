@@ -9,5 +9,7 @@ public class LkhController {
 	@GetMapping("/hello")
 	public String hello() {
 		return "lkh/aa";
+		
+		//해버렷다 ...
 	}
 }
