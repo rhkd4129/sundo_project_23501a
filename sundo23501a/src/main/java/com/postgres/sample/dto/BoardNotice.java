@@ -5,7 +5,7 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class Notice {
+public class BoardNotice {
 	private int 	doc_no;
 	private String 	subject;
 	private String 	user_id;

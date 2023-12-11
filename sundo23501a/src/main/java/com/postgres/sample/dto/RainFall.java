@@ -6,66 +6,65 @@ import lombok.Data;
 
 @Data
 public class RainFall {
-//	관측번호(PK)			N/A	INTEGER
+//	관측번호(PK)			N/A	Double
 //	표준코드(PK)(FK)		N/A	VARCHAR(30)
 //	관측일시				N/A	DATE
 	
-	private Integer observe_no;
 	private String river_code;
 	private Date observe_datetime;
-	private Integer hour01;
-	private Integer hour02;
-	private Integer hour03;
-	private Integer hour04;
-	private Integer hour05;
-	private Integer hour06;
-	private Integer hour07;
-	private Integer hour08;
-	private Integer hour09;
-	private Integer hour10;
-	private Integer hour11;
-	private Integer hour12;
-	private Integer hour13;
-	private Integer hour14;
-	private Integer hour15;
-	private Integer hour16;
-	private Integer hour17;
-	private Integer hour18;
-	private Integer hour19;
-	private Integer hour20;
-	private Integer hour21;
-	private Integer hour22;
-	private Integer hour23;
-	private Integer hour24;
+	private Double hour01;
+	private Double hour02;
+	private Double hour03;
+	private Double hour04;
+	private Double hour05;
+	private Double hour06;
+	private Double hour07;
+	private Double hour08;
+	private Double hour09;
+	private Double hour10;
+	private Double hour11;
+	private Double hour12;
+	private Double hour13;
+	private Double hour14;
+	private Double hour15;
+	private Double hour16;
+	private Double hour17;
+	private Double hour18;
+	private Double hour19;
+	private Double hour20;
+	private Double hour21;
+	private Double hour22;
+	private Double hour23;
+	private Double hour24;
 	
 	
 //	RAINFALL
-//	observe_no(PK)	N/A	INTEGER
+//	observe_no(PK)	N/A	Double
 //	river_code(PK)(FK)	N/A	VARCHAR(30)
 //	observe_datetime	N/A	DATE
-//	hour_01	N/A	INTEGER
-//	hour_02	N/A	INTEGER
-//	hour_03	N/A	INTEGER
-//	hour_04	N/A	INTEGER
-//	hour_05	N/A	INTEGER
-//	hour_06	N/A	INTEGER
-//	hour_07	N/A	INTEGER
-//	hour_08	N/A	INTEGER
-//	hour_09	N/A	INTEGER
-//	hour_10	N/A	INTEGER
-//	hour_11	N/A	INTEGER
-//	hour_12	N/A	INTEGER
-//	hour_13	N/A	INTEGER
-//	hour_14	N/A	INTEGER
-//	hour_15	N/A	INTEGER
-//	hour_16	N/A	INTEGER
-//	hour_17	N/A	INTEGER
-//	hour_18	N/A	INTEGER
-//	hour_19	N/A	INTEGER
-//	hour_20	N/A	INTEGER
-//	hour_21	N/A	INTEGER
-//	hour_22	N/A	INTEGER
-//	hour_23	N/A	INTEGER
-//	hour_24	N/A	INTEGER
+//	hour_01	N/A	Double
+//	hour_02	N/A	Double
+//	hour_03	N/A	Double
+//	hour_04	N/A	Double
+//	hour_05	N/A	Double
+//	hour_06	N/A	Double
+//	hour_07	N/A	Double
+//	hour_08	N/A	Double
+//	hour_09	N/A	Double
+//	hour_10	N/A	Double
+//	hour_11	N/A	Double
+//	hour_12	N/A	Double
+//	hour_13	N/A	Double
+//	hour_14	N/A	Double
+//	hour_15	N/A	Double
+//	hour_16	N/A	Double
+//	hour_17	N/A	Double
+//	hour_18	N/A	Double
+//	hour_19	N/A	Double
+//	hour_20	N/A	Double
+//	hour_21	N/A	Double
+//	hour_22	N/A	Double
+//	hour_23	N/A	Double
+//	hour_24	N/A	Double
 
 }
