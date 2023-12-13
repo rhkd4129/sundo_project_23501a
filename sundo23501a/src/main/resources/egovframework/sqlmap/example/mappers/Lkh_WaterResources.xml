@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.postgres.sample.service.impl.dao.lkh.WaterResourcesDAO">
+<mapper namespace="com.postgres.sample.service.impl.dao.lkh.LKH_WaterResourcesDAO">
 	
 	
     <select id="SelectWaterResourceList" resultType="waterResources">
-		select * from water_resources
+		select  
+			w.* , o.*
+		from 
+			water_resources as w , organization AS o
+		where 
+			w.org_code = o.org_code
     </select>
+	
+	
+	<select id="codeSelectList" resultType="Code">
+		select *
+		from
+			 code
+		where
+			 field_name = 'facility_category'
+	</select>
+	
+	
+	<select id="organizationSelectList" resultType="Organization">
+		select *
+		from Organization
+		
+	</select>
 	
 </mapper>
 

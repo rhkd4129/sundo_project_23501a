@@ -16,4 +16,10 @@ public class WaterResources {
 	private Double 	longitude;
 	private Date 	create_datetime;
 	private Date 	modify_datetime;
+	
+	
+	
+	private String org_name;
+	private String org_area;
+	
 }
