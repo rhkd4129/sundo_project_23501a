@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class ActionReport {
-	private int 	don_no;
+	private Integer don_no;
 	private String 	user_id;
 	private String 	facility_category;
 	private String 	facility_code;

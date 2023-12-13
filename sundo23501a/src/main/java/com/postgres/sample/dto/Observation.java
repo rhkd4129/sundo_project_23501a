@@ -22,10 +22,13 @@ public class Observation{
 	private String		river_code;
 	private String		observe_post;
 	private String		observe_type;
-	private String		latitude;
-	private String		longitude;
+
 	private String		observe_method;
 	private String		org_code;
+	
+	private Double		latitude;
+	private Double		longitude;
+	
 	private Date		create_datetime;
 	private Date		modify_datetime;
 	
