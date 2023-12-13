@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="egovframework.sqlmap.example.mappers.Kjo_WaterResources">
+	
+    <select id="findfacility_category" resultType="waterResources">
+		select facility_category from water_resources
+			group by facility_category
+    </select>
+    
+    <select id="findfacility_addr" resultType="waterResources">
+		select facility_category from water_resources
+			group by facility_category
+    </select>
+    
+    
+</mapper>

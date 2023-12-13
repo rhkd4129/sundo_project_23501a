@@ -20,7 +20,7 @@ public class ActionReport {
 	
 	private String 	break_content;
 	private String 	action_content;
-	private String 	specific;
+	private String 	spec_memo;
 	private String 	future_plan;
 	
 	

@@ -8,7 +8,7 @@ import lombok.Data;
 public class UserInfo {
 	private String 	user_id;
 	private String 	user_pw;
-	private String 	system;
+	private String 	system_category;
 	private String 	user_name;
 	private String 	user_email;
 	private String 	user_tel;

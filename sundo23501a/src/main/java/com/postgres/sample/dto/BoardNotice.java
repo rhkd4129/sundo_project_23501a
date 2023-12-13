@@ -10,7 +10,7 @@ public class BoardNotice {
 	private String 	subject;
 	private String 	user_id;
 	private Date 	create_date;
-	private Integer count;
+	private Integer bd_count;
 	private String 	body;
 	private Date 	create_datetime;
 	private Date 	modify_datetime;
