@@ -21,21 +21,24 @@ public class WaterResourcesServiceImpl extends EgovAbstractServiceImpl implement
 	private final LKH_WaterResourcesDAO waterResourcesDAO;
 
 	@Override
-	public List<WaterResources> SelectWaterResourceList() {
-		System.out.println("머야");
-
-		return waterResourcesDAO.SelectWaterResourceList();
+	public List<WaterResources> SelectWaterResourceList(WaterResources resources) {
+		return waterResourcesDAO.SelectWaterResourceList(resources);
 	}
 
 	@Override
-	public List<Code> codeSelectList() {
-		return  waterResourcesDAO.codeSelectList(); 
+	public List<WaterResources> findfacility_category() {
+		return  waterResourcesDAO.findfacility_category(); 
 	
 	}
 
 	@Override
-	public List<Organization> organizationSelectList() {
-		return waterResourcesDAO.organizationSelectList();
+	public List<Organization> organization_category() {
+		return waterResourcesDAO.organization_category();
+	}
+
+	@Override
+	public WaterResources countWaterResource() {
+		return waterResourcesDAO.countWaterResource();
 	}
 
 	

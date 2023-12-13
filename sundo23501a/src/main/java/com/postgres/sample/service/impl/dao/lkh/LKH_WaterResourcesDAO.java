@@ -12,11 +12,15 @@ import com.postgres.sample.dto.WaterResources;
 
 @Mapper("waterResourcesDAO")
 public interface LKH_WaterResourcesDAO {
-	public List<WaterResources> SelectWaterResourceList();
 	
-	public List<Code> codeSelectList();
+	public List<WaterResources> SelectWaterResourceList(WaterResources waterResources);
 	
-	public List<Organization> organizationSelectList();
+	public List<WaterResources> findfacility_category();
+	
+	public List<Organization> organization_category();
+	
+	public WaterResources countWaterResource();
+	
 	
 	
 }								

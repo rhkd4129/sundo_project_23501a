@@ -19,7 +19,19 @@ public class WaterResources {
 	
 	
 	
+	
+	
+	
 	private String org_name;
 	private String org_area;
 	
+	
+	private String cate_name;
+	
+	private String rn;
+	private String search;   	private String keyword;
+	private String pageNum;		private int total;
+	private int start; 		 	private int end;
+
+
 }

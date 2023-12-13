@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.postgres.sample.dto.Code;
 import com.postgres.sample.dto.Organization;
+import com.postgres.sample.dto.Paging;
 import com.postgres.sample.dto.WaterResources;
 import com.postgres.sample.service.kjo.BoardService;
 import com.postgres.sample.service.lkh.WaterResourcesService;
@@ -28,17 +29,35 @@ public class LkhController {
 			 @RequestParam(required = false) String facility_code,
 			 @RequestParam(required = false) String org_code,
 			 @RequestParam(required = false) String org_area,
+			 @RequestParam(required = false) String currentPage,
 			Model model) {
-		  System.out.println(facility_category);
+		
+		  
 		  System.out.println(facility_code);
 		  System.out.println(org_code);
 		  System.out.println(org_area);
-		  List<WaterResources> waterResourcesList = waterResourcesService.SelectWaterResourceList();
-		  List<Code> codeList = waterResourcesService.codeSelectList();
-		  List<Organization> organizationList= waterResourcesService.organizationSelectList();
-		  model.addAttribute("codeList", codeList);
+		  
+		  
+		  WaterResources waterResources = new  WaterResources();
+		  waterResources.setTotal(waterResourcesService.countWaterResource().getTotal());
+		  Paging page  = new Paging(waterResources.getTotal(), currentPage,10);
+		  
+		  
+		  
+		  waterResources.setStart(page.getStart());
+		  waterResources.setEnd(page.getEnd());
+		  
+		  
+		  List<WaterResources> waterResourcesList = waterResourcesService.SelectWaterResourceList(waterResources );
+		  List<WaterResources> findfacility_category = waterResourcesService.findfacility_category();
+		  List<Organization> organization_category= waterResourcesService.organization_category();
+		  
+		  
+		 
+		  model.addAttribute("findfacility_category", findfacility_category);
 		  model.addAttribute("waterResourcesList", waterResourcesList);
-		  model.addAttribute("organizationList", organizationList);
+		  model.addAttribute("organization_category", organization_category);
+		  model.addAttribute("page",page);
 	
 		
 		return "lkh/waterResourcesList";

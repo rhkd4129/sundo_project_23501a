@@ -3,29 +3,67 @@
 <mapper namespace="com.postgres.sample.service.impl.dao.lkh.LKH_WaterResourcesDAO">
 	
 	
-    <select id="SelectWaterResourceList" resultType="waterResources">
-		select  
-			w.* , o.*
-		from 
-			water_resources as w , organization AS o
-		where 
-			w.org_code = o.org_code
+    <select id="SelectWaterResourceList" resultType="waterResources"  parameterType="waterResources">
+			SELECT *
+			FROM
+			    (
+			        SELECT
+			            ROW_NUMBER() OVER() AS rn,
+			            a.*
+			        FROM
+			            (
+			                SELECT
+			                    w.*,
+			                    o.org_name,
+			                    o.org_area,
+			                    code.cate_name
+			                FROM
+			                    water_resources w
+			                    INNER JOIN organization o ON w.org_code = o.org_code
+			                    INNER JOIN (
+			                        SELECT * 
+			                        FROM CODE 
+			                        WHERE field_name = 'facility_type'
+			                    ) code ON w.facility_type = code.cate_code
+			                ORDER BY
+			                    code.cate_name
+			            ) a
+			    ) 
+		OFFSET #{start}-1
+		LIMIT 10
     </select>
 	
 	
-	<select id="codeSelectList" resultType="Code">
-		select *
-		from
-			 code
-		where
-			 field_name = 'facility_category'
+	<select id="findfacility_category" resultType="waterResources">
+		select 
+			facility_category
+		from 
+			water_resources 
+		group by 
+			facility_category
+		
 	</select>
 	
 	
-	<select id="organizationSelectList" resultType="Organization">
-		select *
-		from Organization
-		
+	
+	<select id="countWaterResource"  resultType="waterResources">
+			select 
+				count(*) as total
+			from 
+				water_resources w, organization o
+			where
+				w.org_code = o.org_code
+	</select>
+	
+	
+	
+	
+	
+	<select id="organization_category" resultType="Organization">
+		select 
+			org_code ,org_name,org_area  
+		from 
+			Organization
 	</select>
 	
 </mapper>
