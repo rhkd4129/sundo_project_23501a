@@ -13,18 +13,18 @@ public class Flow {
 	private String river_code;
 	private Integer observe_year;
 	private Integer observe_day;
-	private Double jan;
-	private Double feb;
-	private Double mar;
-	private Double apr;
+	private Double january;
+	private Double february;
+	private Double march;
+	private Double april;
 	private Double may;
-	private Double jun;
-	private Double jul;
-	private Double aug;
-	private Double sep;
-	private Double oct;
-	private Double nov;
-	private Double dec;
+	private Double june;
+	private Double july;
+	private Double august;
+	private Double september;
+	private Double october;
+	private Double november;
+	private Double december;
 	
 
 }

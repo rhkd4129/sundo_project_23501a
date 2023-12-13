@@ -6,11 +6,11 @@ import lombok.Data;
 
 @Data
 public class BoardNotice {
-	private int 	doc_no;
+	private Integer doc_no;
 	private String 	subject;
 	private String 	user_id;
 	private Date 	create_date;
-	private int 	count;
+	private Integer bd_count;
 	private String 	body;
 	private Date 	create_datetime;
 	private Date 	modify_datetime;

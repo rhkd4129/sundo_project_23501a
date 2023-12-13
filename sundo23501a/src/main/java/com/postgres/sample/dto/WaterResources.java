@@ -8,6 +8,9 @@ import lombok.Data;
 public class WaterResources {
 	private String 	facility_code;
 	private String 	facility_category;
+	private String	facility_addr;
+	private String	facility_type;
+
 	private String 	org_code;
 	private Double 	latitude;
 	private Double 	longitude;

@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class LoginLog {
-	private int 	log_no;
+	private Integer log_no;
 	private String	user_id;
 	private Date 	login_datetime;
 	private String 	ip;

@@ -12,30 +12,30 @@ public class RainFall {
 	
 	private String river_code;
 	private Date observe_datetime;
-	private Double hour01;
-	private Double hour02;
-	private Double hour03;
-	private Double hour04;
-	private Double hour05;
-	private Double hour06;
-	private Double hour07;
-	private Double hour08;
-	private Double hour09;
-	private Double hour10;
-	private Double hour11;
-	private Double hour12;
-	private Double hour13;
-	private Double hour14;
-	private Double hour15;
-	private Double hour16;
-	private Double hour17;
-	private Double hour18;
-	private Double hour19;
-	private Double hour20;
-	private Double hour21;
-	private Double hour22;
-	private Double hour23;
-	private Double hour24;
+	private Double hour_01;
+	private Double hour_02;
+	private Double hour_03;
+	private Double hour_04;
+	private Double hour_05;
+	private Double hour_06;
+	private Double hour_07;
+	private Double hour_08;
+	private Double hour_09;
+	private Double hour_10;
+	private Double hour_11;
+	private Double hour_12;
+	private Double hour_13;
+	private Double hour_14;
+	private Double hour_15;
+	private Double hour_16;
+	private Double hour_17;
+	private Double hour_18;
+	private Double hour_19;
+	private Double hour_20;
+	private Double hour_21;
+	private Double hour_22;
+	private Double hour_23;
+	private Double hour_24;
 	
 	
 //	RAINFALL

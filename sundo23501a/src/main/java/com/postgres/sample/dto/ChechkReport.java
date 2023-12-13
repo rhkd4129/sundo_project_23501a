@@ -13,7 +13,7 @@ public class ChechkReport {
 	private String 		user_id;	
 	private String 		check_result;
 	
-	private String 		specific;	
+	private String 		spec_memo;	
 	private Date 		create_datetime;	
 	private Date 		modify_datetime;	
 	
