@@ -26,4 +26,28 @@ public class WaterResourcesServiceImpl extends EgovAbstractServiceImpl implement
 		return (List<WaterResources>) waterResourcesDAO.findfacility_category();
 	}
 
+	@Override
+	public List<WaterResources> findfacility_addr() {
+		// TODO Auto-generated method stub
+		return (List<WaterResources>) waterResourcesDAO.findfacility_addr();
+	}
+
+	@Override
+	public List<WaterResources> findWaterResourceLists() {
+		// TODO Auto-generated method stub
+		return (List<WaterResources>) waterResourcesDAO.findWaterResourceLists();
+	}
+
+	@Override
+	public WaterResources cntWaterResource() {
+		// TODO Auto-generated method stub
+		return (WaterResources) waterResourcesDAO.cntWaterResource();
+	}
+
+	@Override
+	public List<WaterResources> PaingWaterResourceLists(WaterResources wr) {
+		// TODO Auto-generated method stub
+		return (List<WaterResources>) waterResourcesDAO.PaingWaterResourceLists(wr);
+	}
+
 }
