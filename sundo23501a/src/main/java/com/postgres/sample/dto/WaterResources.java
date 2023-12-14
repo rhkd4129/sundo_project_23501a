@@ -21,6 +21,8 @@ public class WaterResources {
 	private String org_name;
 	private String first_area;
 	private String second_area;
+	private String cate_name;
+	
 	
 
 	// 페이징 작업

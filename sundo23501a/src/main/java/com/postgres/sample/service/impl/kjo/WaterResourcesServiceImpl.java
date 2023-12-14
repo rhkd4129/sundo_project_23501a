@@ -21,15 +21,15 @@ public class WaterResourcesServiceImpl extends EgovAbstractServiceImpl implement
 	private final WaterResourcesDAO waterResourcesDAO;
 	
 	@Override
-	public List<WaterResources> findfacility_category() {
+	public List<WaterResources> findFacilityCategory() {
 		// TODO Auto-generated method stub
-		return (List<WaterResources>) waterResourcesDAO.findfacility_category();
+		return (List<WaterResources>) waterResourcesDAO.findFacilityCategory();
 	}
 
 	@Override
-	public List<WaterResources> findfacility_addr() {
+	public List<WaterResources> findFacilityAddr() {
 		// TODO Auto-generated method stub
-		return (List<WaterResources>) waterResourcesDAO.findfacility_addr();
+		return (List<WaterResources>) waterResourcesDAO.findFacilityAddr();
 	}
 
 	@Override
@@ -48,6 +48,24 @@ public class WaterResourcesServiceImpl extends EgovAbstractServiceImpl implement
 	public List<WaterResources> PaingWaterResourceLists(WaterResources wr) {
 		// TODO Auto-generated method stub
 		return (List<WaterResources>) waterResourcesDAO.PaingWaterResourceLists(wr);
+	}
+
+	@Override
+	public List<WaterResources> findFacilityAddrbyCategory(WaterResources wr) {
+		// TODO Auto-generated method stub
+		return (List<WaterResources>) waterResourcesDAO.findFacilityAddrbyCategory(wr);
+	}
+
+	@Override
+	public List<WaterResources> searchWaterResources(WaterResources wr) {
+		// TODO Auto-generated method stub
+		return (List<WaterResources>) waterResourcesDAO.searchWaterResources(wr);
+	}
+
+	@Override
+	public WaterResources findWaterResourcesById(WaterResources wr) {
+		// TODO Auto-generated method stub
+		return (WaterResources) waterResourcesDAO.findWaterResourcesById(wr);
 	}
 
 }
