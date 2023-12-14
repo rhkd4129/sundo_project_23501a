@@ -29,4 +29,5 @@
     <fullyQualifiedTypeName name="com.postgres.sample.dto.WaterResources"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
     <fullyQualifiedTypeName name="lombok.Data"/>
+    <fullyQualifiedTypeName name="com.postgres.sample.service.impl.dao.lkh.LKH_WaterResourcesDAO"/>
 </qualifiedTypeNameHistroy>

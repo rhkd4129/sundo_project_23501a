@@ -25,5 +25,6 @@
 		<typeAlias alias="waterGate" type="com.postgres.sample.dto.WaterGate"/>
 		<typeAlias alias="waterLevel" type="com.postgres.sample.dto.WaterLevel"/>
 		<typeAlias alias="waterResources" type="com.postgres.sample.dto.WaterResources"/>
+		 <typeAlias alias="orgArea" type="com.postgres.sample.dto.OrgArea"/>
     </typeAliases>
 </configuration>

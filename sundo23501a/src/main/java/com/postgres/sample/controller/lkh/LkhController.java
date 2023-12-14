@@ -14,6 +14,7 @@ import com.postgres.sample.dto.LKH_WaterResources;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.Paging;
 import com.postgres.sample.dto.WaterResources;
+import com.postgres.sample.service.impl.dao.lkh.LKH_WaterResourcesDAO;
 import com.postgres.sample.service.kjo.BoardService;
 import com.postgres.sample.service.lkh.WaterResourcesService;
 
@@ -28,7 +29,8 @@ public class LkhController {
 	
 	@GetMapping("/waterResourcesList")
 	public String waterResourcesList( 
-			 LKH_WaterResources lkh_WaterResources,
+		
+			 LKH_WaterResou lkh_WaterResources,
 			 @RequestParam(required = false) String currentPage,
 			Model model) {
 		

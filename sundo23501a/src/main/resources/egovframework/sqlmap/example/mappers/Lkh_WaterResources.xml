@@ -94,6 +94,10 @@
 	</select>
 	
 	
+	<select id="selectOrgAreaList" resultType="OrgArea">
+		select * from org_area
+	</select>
+	
 	
 	<select id="facilityCategoryType" resultType="code" parameterType="String">
 	    SELECT 
