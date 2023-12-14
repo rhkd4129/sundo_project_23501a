@@ -26,19 +26,29 @@ public class WaterResourcesServiceImpl extends EgovAbstractServiceImpl implement
 	}
 
 	@Override
-	public List<WaterResources> findfacility_category() {
-		return  waterResourcesDAO.findfacility_category(); 
+	public List<WaterResources> findfacilityCategory() {
+		return  waterResourcesDAO.findfacilityCategory(); 
 	
 	}
 
 	@Override
-	public List<Organization> organization_category() {
-		return waterResourcesDAO.organization_category();
+	public List<Organization> organizationCategory() {
+		return waterResourcesDAO.organizationCategory();
 	}
 
 	@Override
 	public WaterResources countWaterResource() {
 		return waterResourcesDAO.countWaterResource();
+	}
+
+	@Override
+	public List<Code> facilityCategoryType(String divison) {
+		return waterResourcesDAO.facilityCategoryType(divison);
+	}
+
+	@Override
+	public int waterResourcesInsert(WaterResources waterResources) {
+		return waterResourcesDAO.waterResourcesInsert(waterResources);
 	}
 
 	

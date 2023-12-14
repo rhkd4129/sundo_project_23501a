@@ -11,9 +11,13 @@ public interface WaterResourcesService {
 	
 	 List<WaterResources> SelectWaterResourceList(WaterResources waterResources);
 	 
-	 List<WaterResources> findfacility_category();
+	 List<WaterResources> findfacilityCategory();
 	 
-	 List<Organization> organization_category();
+	 List<Organization> organizationCategory();
 	 
 	 WaterResources countWaterResource();
+	 
+	 List<Code> facilityCategoryType(String division);
+	 
+	 int  waterResourcesInsert(WaterResources waterResources);
 }

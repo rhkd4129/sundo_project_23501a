@@ -6,8 +6,9 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="WaterResourcesList"/>
+		<item key="selection" value=""/>
 		<list key="findhistory">
+			<item value="findfacilityCategory"/>
 			<item value="WaterResourcesList"/>
 			<item value="Integer"/>
 			<item value="Int"/>

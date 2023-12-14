@@ -15,11 +15,16 @@ public interface LKH_WaterResourcesDAO {
 	
 	public List<WaterResources> SelectWaterResourceList(WaterResources waterResources);
 	
-	public List<WaterResources> findfacility_category();
+	public List<WaterResources> findfacilityCategory();
 	
-	public List<Organization> organization_category();
+	public List<Organization> organizationCategory();
 	
 	public WaterResources countWaterResource();
+	
+	
+	public List<Code>	facilityCategoryType(String divison);
+	
+	public int	waterResourcesInsert(WaterResources waterResources);
 	
 	
 	

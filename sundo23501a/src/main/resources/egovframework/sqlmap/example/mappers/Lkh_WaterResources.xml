@@ -34,7 +34,46 @@
     </select>
 	
 	
-	<select id="findfacility_category" resultType="waterResources">
+	<select id="countWaterResource"  resultType="waterResources">
+			select 
+				count(*) as total
+			from 
+				water_resources w, organization o
+			where
+				w.org_code = o.org_code
+	</select>
+	
+	
+	<insert id="waterResourcesInsert" parameterType="waterResources">
+			    INSERT INTO water_resources (
+			        facility_code,
+			        facility_category,
+			        facility_addr,
+			        facility_type,
+			        org_code,
+			        latitude,
+			        longitude
+			      <!--   ,create_datetime,
+			        modify_datetime -->
+			    ) VALUES (
+			        #{facility_code},
+			        #{facility_category},
+			        #{facility_addr},
+			        #{facility_type},
+			        #{org_code},
+			        #{latitude},
+			        #{longitude}
+			       <!--  ,#{create_datetime},
+			        #{modify_datetime} -->
+			    );
+	</insert>
+
+
+	
+	
+	
+	
+	<select id="findfacilityCategory" resultType="waterResources">
 		select 
 			facility_category
 		from 
@@ -46,25 +85,27 @@
 	
 	
 	
-	<select id="countWaterResource"  resultType="waterResources">
-			select 
-				count(*) as total
-			from 
-				water_resources w, organization o
-			where
-				w.org_code = o.org_code
-	</select>
 	
-	
-	
-	
-	
-	<select id="organization_category" resultType="Organization">
+	<select id="organizationCategory" resultType="Organization">
 		select 
 			org_code ,org_name,org_area  
 		from 
 			Organization
 	</select>
+	
+	
+	
+	<select id="facilityCategoryType" resultType="code" parameterType="String">
+	    SELECT 
+	        cate_code, cate_name
+	    FROM 
+	        code
+	    WHERE 
+	        field_name = 'facility_type' AND cate_code like '%' || #{divison} || '%'
+	    ORDER BY 
+	        cate_code
+	</select>
+
 	
 </mapper>
 

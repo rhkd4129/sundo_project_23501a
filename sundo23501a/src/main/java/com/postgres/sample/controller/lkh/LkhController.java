@@ -5,9 +5,12 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.postgres.sample.dto.Code;
+import com.postgres.sample.dto.LKH_WaterResources;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.Paging;
 import com.postgres.sample.dto.WaterResources;
@@ -25,19 +28,11 @@ public class LkhController {
 	
 	@GetMapping("/waterResourcesList")
 	public String waterResourcesList( 
-			 @RequestParam(required = false) String facility_category,
-			 @RequestParam(required = false) String facility_code,
-			 @RequestParam(required = false) String org_code,
-			 @RequestParam(required = false) String org_area,
+			 LKH_WaterResources lkh_WaterResources,
 			 @RequestParam(required = false) String currentPage,
 			Model model) {
 		
-		  
-		  System.out.println(facility_code);
-		  System.out.println(org_code);
-		  System.out.println(org_area);
-		  
-		  
+		
 		  WaterResources waterResources = new  WaterResources();
 		  waterResources.setTotal(waterResourcesService.countWaterResource().getTotal());
 		  Paging page  = new Paging(waterResources.getTotal(), currentPage,10);
@@ -49,8 +44,8 @@ public class LkhController {
 		  
 		  
 		  List<WaterResources> waterResourcesList = waterResourcesService.SelectWaterResourceList(waterResources );
-		  List<WaterResources> findfacility_category = waterResourcesService.findfacility_category();
-		  List<Organization> organization_category= waterResourcesService.organization_category();
+		  List<WaterResources> findfacility_category = waterResourcesService.findfacilityCategory();
+		  List<Organization> organization_category= waterResourcesService.organizationCategory();
 		  
 		  
 		 
@@ -60,7 +55,57 @@ public class LkhController {
 		  model.addAttribute("page",page);
 	
 		
-		return "lkh/waterResourcesList";
+		return "lkh/waterResource/waterResourcesList";
 			//해버렷다 ...
+	}
+	
+
+	@GetMapping("/waterResourcesInsertForm")
+	public String waterResourcesInsertForm(Model model) {
+		
+		 
+		List<Organization> organization_category= waterResourcesService.organizationCategory();
+		List<WaterResources> findfacility_category = waterResourcesService.findfacilityCategory();	
+		List<Code> codeList = waterResourcesService.facilityCategoryType("a");
+		
+		
+		model.addAttribute("organization_category", organization_category);
+		model.addAttribute("codeList", codeList);
+		model.addAttribute("findfacility_category", findfacility_category);
+		return "lkh/waterResource/waterResourceInsetForm";
+	}
+	
+	@ResponseBody
+	@GetMapping("/facilityCategoryType")
+	public List<Code> facilityCategoryType(String divison) {
+		List<Code> codeList = waterResourcesService.facilityCategoryType(divison);
+		return codeList;
+	}
+	
+	
+	@PostMapping("/waterResourcesInsert")
+	public String waterResourcesInsert(WaterResources waterResources) {
+		int result = waterResourcesService.waterResourcesInsert(waterResources);
+		System.out.print("결과"+result);
+		return "redirect:/waterResourcesList";
+	}
+	
+
+	@GetMapping("waterResourcesListDetail")
+	public String waterResourcesListDetail(String facility_code) {
+		return "lkh/waterResource/waterResourceDetail";
+	}
+	
+	
+	@GetMapping("/waterResourcesUpdateForm")
+	public String waterResourcesUpdateForm(WaterResources waterResources) {
+		/* int result = waterResourcesService.waterResourcesUpdate(waterResources); */
+		return "lkh/waterResource/waterResourceUpdateForm";
+	}
+	
+	@PostMapping("/waterResourcesUpdate")
+	public String waterResourcesUpdate(WaterResources waterResources) {
+		/* int result = waterResourcesService.waterResourcesUpdate(waterResources); */
+		return "redirect:/waterResourcesList";
 	}
 }
