@@ -6,6 +6,7 @@ import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
 
 import com.postgres.sample.dto.Code;
+import com.postgres.sample.dto.OrgArea;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.WaterResources;
 import com.postgres.sample.service.impl.dao.kjo.BoardDAOv2;
@@ -49,6 +50,12 @@ public class WaterResourcesServiceImpl extends EgovAbstractServiceImpl implement
 	@Override
 	public int waterResourcesInsert(WaterResources waterResources) {
 		return waterResourcesDAO.waterResourcesInsert(waterResources);
+	}
+
+	@Override
+	public List<OrgArea> OrgAreaCategory() {
+		
+		return waterResourcesDAO.OrgAreaCategory();
 	}
 
 	

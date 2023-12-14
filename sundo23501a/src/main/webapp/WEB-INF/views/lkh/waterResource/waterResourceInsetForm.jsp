@@ -48,7 +48,7 @@
 </head>
 <body>
 
-	<form action ="waterResourcesListInsert" method="post">
+	<form action ="waterResourcesInsert" method="post">
 		<p>
 			시설물 코드 <input type="text" name="facility_code">
 			  
@@ -60,11 +60,11 @@
 	        </select>
 	        
 	        행정구역
-	        <select name="org_area"> <!-- 여기서 "selectBoxName"은 적절한 이름으로 변경하세요. -->
-	    		 <c:forEach var="organization" items="${organization_category}">
-	            	<option value="${organization.org_area}">${organization.org_area}</option>
-	             </c:forEach>
-	        </select>    
+	         <select name="org_area"> <!-- 여기서 "selectBoxName"은 적절한 이름으로 변경하세요. -->
+    		 	<c:forEach var="org_area" items="${orgArea_category}">
+            		<option value="${org_area.org_area}">${org_area.org_area_name}</option>
+             </c:forEach>
+        	</select>   
 	        
 		</p>
 		
@@ -94,7 +94,7 @@
 		
 		
 		
-		<button type="submit">검색</button>
+		<button type="submit">작성</button>
 	</form>
 	
 	

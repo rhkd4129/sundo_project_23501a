@@ -28,11 +28,11 @@
         </select>
         
         행정구역
-        <select name="org_area"> <!-- 여기서 "selectBoxName"은 적절한 이름으로 변경하세요. -->
-    		 <c:forEach var="organization" items="${organization_category}">
-            	<option value="${organization.org_area}">${organization.org_area}</option>
+     	   <select name="org_area"> <!-- 여기서 "selectBoxName"은 적절한 이름으로 변경하세요. -->
+    		 <c:forEach var="org_area" items="${orgArea_category}">
+            	<option value="${org_area.org_area}">${org_area.org_area_name}</option>
              </c:forEach>
-        </select>    
+        </select>
         
          시설물코드 <input type="text" name="facility_code"> <button type="submit">검색</button>
     
@@ -62,8 +62,8 @@
              	<td>${waterResources.facility_category}</td>
                 <td>${waterResources.facility_code}</td>
                	<td>${waterResources.cate_name}</td>
-             	<td>${waterResources.org_area}</td>   
-             	<td>${waterResources.org_name}</td>                                
+             	<td>${waterResources.org_area_name}</td>  <!-- 행정구역이름 -->   
+             	<td>${waterResources.org_name}</td>       <!--   운영기관 이름 -->                  		       
             </tr>
         </c:forEach>
     </tbody>

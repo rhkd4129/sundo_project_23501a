@@ -5,6 +5,7 @@ import java.util.List;
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 
 import com.postgres.sample.dto.Code;
+import com.postgres.sample.dto.OrgArea;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.WaterResources;
 
@@ -18,6 +19,7 @@ public interface LKH_WaterResourcesDAO {
 	public List<WaterResources> findfacilityCategory();
 	
 	public List<Organization> organizationCategory();
+	public List<OrgArea>  OrgAreaCategory();
 	
 	public WaterResources countWaterResource();
 	

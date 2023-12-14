@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.postgres.sample.dto.Code;
 import com.postgres.sample.dto.LKH_WaterResources;
+import com.postgres.sample.dto.OrgArea;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.Paging;
 import com.postgres.sample.dto.WaterResources;
@@ -30,7 +31,7 @@ public class LkhController {
 	@GetMapping("/waterResourcesList")
 	public String waterResourcesList( 
 		
-			 LKH_WaterResou lkh_WaterResources,
+			 LKH_WaterResources lkh_WaterResources,
 			 @RequestParam(required = false) String currentPage,
 			Model model) {
 		
@@ -50,10 +51,13 @@ public class LkhController {
 		  List<Organization> organization_category= waterResourcesService.organizationCategory();
 		  
 		  
-		 
+		  List<OrgArea> orgArea_category = waterResourcesService.OrgAreaCategory();
+		  model.addAttribute("orgArea_category", orgArea_category);
+		  
 		  model.addAttribute("findfacility_category", findfacility_category);
 		  model.addAttribute("waterResourcesList", waterResourcesList);
 		  model.addAttribute("organization_category", organization_category);
+		  
 		  model.addAttribute("page",page);
 	
 		
@@ -69,9 +73,10 @@ public class LkhController {
 		List<Organization> organization_category= waterResourcesService.organizationCategory();
 		List<WaterResources> findfacility_category = waterResourcesService.findfacilityCategory();	
 		List<Code> codeList = waterResourcesService.facilityCategoryType("a");
-		
+		List<OrgArea> orgArea_category = waterResourcesService.OrgAreaCategory();
 		
 		model.addAttribute("organization_category", organization_category);
+		model.addAttribute("orgArea_category", orgArea_category);
 		model.addAttribute("codeList", codeList);
 		model.addAttribute("findfacility_category", findfacility_category);
 		return "lkh/waterResource/waterResourceInsetForm";
@@ -88,6 +93,8 @@ public class LkhController {
 	@PostMapping("/waterResourcesInsert")
 	public String waterResourcesInsert(WaterResources waterResources) {
 		int result = waterResourcesService.waterResourcesInsert(waterResources);
+		
+		
 		System.out.print("결과"+result);
 		return "redirect:/waterResourcesList";
 	}
