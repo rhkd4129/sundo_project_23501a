@@ -33,6 +33,7 @@ public class KjoController {
     private final CheckReportService checkReportService;
     private final CheckListService checkListService;
     private final CheckItemInfoService checkItemInfoService;
+    private final OrganizationService organizationService;
 
 
     @GetMapping("/hello")
@@ -179,22 +180,22 @@ public class KjoController {
         }
 
 
-
-
-
-//        values(#{doc_no},#{facility_code},#{check_category},#{check_item},#{check_grade},#{note})
-//        int chklistresult = checkListService.inputChkList(chkList);
-//        글번호(PK)(FK)	N/A	INTEGER
-//        시설물 코드(FK)	N/A	VARCHAR(100)
-//        점검위치(FK)	N/A	VARCHAR(10)
-//        점검항목(FK)	N/A	VARCHAR(10)
-//        평가점수	N/A	VARCHAR(3)
-//        비고	N/A	VARCHAR(300)
-
-
-
         return null;
     }
+
+    @GetMapping("/selectCheckReport")
+    public String selectCheckReport(Model model){
+        List<WaterResources> wrctgList = wrservice.findFacilityCategory();
+        List<OrgArea> orgList = orgService.findAllOrgArea();
+        List<Organization> organizationList = organizationService.findAllOrgList();
+
+
+        model.addAttribute("wrctgList",wrctgList);
+        model.addAttribute("organizationList",organizationList);
+        model.addAttribute("orgList",orgList);
+        return "kjo/check/selectCheckReport";
+    }
+
 
 
 
