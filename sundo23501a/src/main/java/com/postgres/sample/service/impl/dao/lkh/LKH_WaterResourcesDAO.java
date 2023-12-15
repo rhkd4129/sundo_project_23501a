@@ -26,9 +26,10 @@ public interface LKH_WaterResourcesDAO {
 	
 	public List<Code>	facilityCategoryType(String divison);
 	
-	public int	waterResourcesInsert(WaterResources waterResources);
+	public int		insertWaterResources(WaterResources waterResources);
+
+
 	
-	
-	
+	public WaterResources waterResourceDetail(String facility_code);
+	public List<Integer> doughnutChart();
 }								
- 

@@ -2,6 +2,8 @@ package com.postgres.sample.controller.lkh;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +22,43 @@ import com.postgres.sample.service.kjo.BoardService;
 import com.postgres.sample.service.lkh.WaterResourcesService;
 
 import lombok.RequiredArgsConstructor;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequiredArgsConstructor
 public class LkhController {
 	private final WaterResourcesService waterResourcesService;
-	
-	
-	
+	@ResponseBody
+	@GetMapping("/waterResourcesListA")
+	public ResponseEntity<LKH_WaterResources> waterResourcesListA(
+			@RequestParam(required = false) LKH_WaterResources lkh_waterResources,
+			@RequestParam(required = false) String currentPage) {
+		System.out.println("이건되냐?");
+//		if(lkh_waterResources.getKeyword_facility_code() == null){
+//			System.out.println("널임");
+//			System.out.println(lkh_waterResources.getKeyword_facility_code());
+//		}
+
+		WaterResources waterResources = new WaterResources();
+		waterResources.setTotal(waterResourcesService.countWaterResource().getTotal());
+		Paging page = new Paging(waterResources.getTotal(), currentPage, 10);
+
+		waterResources.setStart(page.getStart());
+		waterResources.setEnd(page.getEnd());
+		List<WaterResources> waterResourcesList = waterResourcesService.SelectWaterResourceList(waterResources);
+
+		LKH_WaterResources lkhWaterResources = new LKH_WaterResources();
+		lkhWaterResources.setWaterResourcesList(waterResourcesList);
+		lkhWaterResources.setPaging(page);
+
+
+		return ResponseEntity.ok(lkhWaterResources);
+	}
+
+
 	@GetMapping("/waterResourcesList")
-	public String waterResourcesList( 
-		
+	public String waterResourcesList(
 			 LKH_WaterResources lkh_WaterResources,
 			 @RequestParam(required = false) String currentPage,
 			Model model) {
@@ -44,20 +72,15 @@ public class LkhController {
 		  
 		  waterResources.setStart(page.getStart());
 		  waterResources.setEnd(page.getEnd());
-		  
-		  
-		  List<WaterResources> waterResourcesList = waterResourcesService.SelectWaterResourceList(waterResources );
+
 		  List<WaterResources> findfacility_category = waterResourcesService.findfacilityCategory();
 		  List<Organization> organization_category= waterResourcesService.organizationCategory();
-		  
-		  
 		  List<OrgArea> orgArea_category = waterResourcesService.OrgAreaCategory();
+
+
 		  model.addAttribute("orgArea_category", orgArea_category);
-		  
 		  model.addAttribute("findfacility_category", findfacility_category);
-		  model.addAttribute("waterResourcesList", waterResourcesList);
 		  model.addAttribute("organization_category", organization_category);
-		  
 		  model.addAttribute("page",page);
 	
 		
@@ -72,7 +95,7 @@ public class LkhController {
 		 
 		List<Organization> organization_category= waterResourcesService.organizationCategory();
 		List<WaterResources> findfacility_category = waterResourcesService.findfacilityCategory();	
-		List<Code> codeList = waterResourcesService.facilityCategoryType("a");
+		List<Code> codeList = waterResourcesService.facilityCategoryType("a"); //기본값고정
 		List<OrgArea> orgArea_category = waterResourcesService.OrgAreaCategory();
 		
 		model.addAttribute("organization_category", organization_category);
@@ -92,6 +115,9 @@ public class LkhController {
 	
 	@PostMapping("/waterResourcesInsert")
 	public String waterResourcesInsert(WaterResources waterResources) {
+		System.out.println(waterResources.getFacility_code());
+
+
 		int result = waterResourcesService.waterResourcesInsert(waterResources);
 		
 		
@@ -101,14 +127,31 @@ public class LkhController {
 	
 
 	@GetMapping("waterResourcesListDetail")
-	public String waterResourcesListDetail(String facility_code) {
+	public String waterResourceDetail(Model  model,String facility_code) {
+		WaterResources waterResources = waterResourcesService.waterResourceDetail(facility_code);
+		model.addAttribute("waterResources",waterResources);
+
 		return "lkh/waterResource/waterResourceDetail";
 	}
 	
 	
 	@GetMapping("/waterResourcesUpdateForm")
-	public String waterResourcesUpdateForm(WaterResources waterResources) {
-		/* int result = waterResourcesService.waterResourcesUpdate(waterResources); */
+	public String waterResourcesUpdateForm(String facility_code ,Model model) {
+
+		WaterResources waterResources = waterResourcesService.waterResourceDetail(facility_code);
+
+		List<Organization> organization_category= waterResourcesService.organizationCategory();
+		List<WaterResources> findfacility_category = waterResourcesService.findfacilityCategory();
+		List<Code> codeList = waterResourcesService.facilityCategoryType("a"); //기본값고정
+		List<OrgArea> orgArea_category = waterResourcesService.OrgAreaCategory();
+
+		model.addAttribute("organization_category", organization_category);
+		model.addAttribute("orgArea_category", orgArea_category);
+		model.addAttribute("codeList", codeList);
+		model.addAttribute("findfacility_category", findfacility_category);
+		model.addAttribute("waterResources", waterResources);
+
+
 		return "lkh/waterResource/waterResourceUpdateForm";
 	}
 	
@@ -116,5 +159,22 @@ public class LkhController {
 	public String waterResourcesUpdate(WaterResources waterResources) {
 		/* int result = waterResourcesService.waterResourcesUpdate(waterResources); */
 		return "redirect:/waterResourcesList";
+	}
+
+
+
+	@GetMapping("/waterResourceStatistics")
+	public String waterResourceStatistics(Model model){
+		return "lkh/waterResource/waterResourceStatistics";
+	}
+
+
+	@ResponseBody
+	@GetMapping("/doughnut_chart")
+	public List<Integer> waterResourceStatistics(){
+		System.out.println("doughnutChart");
+		List<Integer> bac = waterResourcesService.doughnutChart();
+		System.out.println("doughnutCaaaaaaaaaaaaaaaaaahart");
+		return waterResourcesService.doughnutChart();
 	}
 }

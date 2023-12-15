@@ -22,4 +22,7 @@ public interface WaterResourcesService {
 	 List<OrgArea>  OrgAreaCategory();
 	 
 	 int  waterResourcesInsert(WaterResources waterResources);
+
+	 WaterResources waterResourceDetail(String facility_code);
+	List<Integer> doughnutChart();
 }

@@ -20,16 +20,28 @@
 			                FROM
 			                    water_resources wr
 			                    INNER JOIN organization org ON wr.org_code = org.org_code
-								INNER JOIN org_area ar ON  wr.org_area =ar.org_area 
+								INNER JOIN org_area ar ON  wr.org_area =ar.org_area
 			                    INNER JOIN (
-			                        SELECT * 
-			                        FROM CODE 
+			                        SELECT *
+			                        FROM CODE
 			                        WHERE field_name = 'facility_type'
 			                    ) code ON wr.facility_type = code.cate_code
-			                ORDER BY
-			                     wr.facility_code, code.cate_name
+						<!--	where
+								<if test="facility_category != ''">
+									wr.facility_category = #{facility_category}
+								</if>
+								<if test="org_code != ''">
+									and wr.org_code like '%' || #{org_code} || '%'
+								</if>
+								<if test="facility_code != ''">
+									and wr.facility_code like '%' || #{facility_code} || '%'
+								</if>
+								<if test="org_area != ''">
+									and wr.org_area like '%' || #{org_area} || '%'
+								</if>-->
+						ORDER BY wr.facility_code, code.cate_name
 			            ) a
-			    ) 
+			    )
 		OFFSET #{start}-1
 		LIMIT 10
     </select>
@@ -43,7 +55,30 @@
 			where
 				w.org_code = o.org_code
 	</select>
-	
+
+
+
+	<select id="waterResourceDetail" parameterType="String" resultType="waterResources">
+		SELECT
+			wr.*,
+			ar.org_area_name,	-- 행정구역이름
+			org.org_name,		-- 운영기관 이름
+			code.cate_name       -- 유형
+		FROM
+			water_resources wr
+				INNER JOIN organization org ON wr.org_code = org.org_code
+				INNER JOIN org_area ar ON  wr.org_area =ar.org_area
+				INNER JOIN (
+				SELECT *
+				FROM CODE
+				WHERE field_name = 'facility_type'
+			) code ON wr.facility_type = code.cate_code
+
+		WHERE  wr.facility_code =#{facility_code}
+
+	</select>
+
+
 	
 		<insert id="waterResourcesInsert" parameterType="waterResources">
     INSERT INTO water_resources (
@@ -88,9 +123,7 @@
 			facility_category
 		
 	</select>
-	
-	
-	
+
 	
 	<select id="organizationCategory" resultType="Organization">
 		select 
@@ -116,6 +149,15 @@
 	        cate_code
 	</select>
 
-	
+
+
+	<select id="doughnutChart" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS water_resources_count
+		FROM water_resources
+		GROUP BY facility_category
+		ORDER BY facility_category
+	</select>
+
+
 </mapper>
 

@@ -82,7 +82,7 @@
 		    		<c:forEach var="code" items="${codeList}">
 		            	<option value="${code.cate_code}">${code.cate_name}</option>
 		             </c:forEach>
-		        </select>
+		        </select>`
 		</p>
 		
 		

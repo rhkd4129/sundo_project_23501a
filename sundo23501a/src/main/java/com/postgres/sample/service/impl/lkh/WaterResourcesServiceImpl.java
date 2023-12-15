@@ -49,7 +49,17 @@ public class WaterResourcesServiceImpl extends EgovAbstractServiceImpl implement
 
 	@Override
 	public int waterResourcesInsert(WaterResources waterResources) {
-		return waterResourcesDAO.waterResourcesInsert(waterResources);
+		return waterResourcesDAO.insertWaterResources(waterResources);
+	}
+
+	@Override
+	public WaterResources waterResourceDetail(String facility_code) {
+		return waterResourcesDAO.waterResourceDetail(facility_code);
+	}
+
+	@Override
+	public List<Integer> doughnutChart() {
+		return waterResourcesDAO.doughnutChart();
 	}
 
 	@Override
