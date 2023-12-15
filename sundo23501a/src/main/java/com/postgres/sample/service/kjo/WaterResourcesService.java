@@ -13,6 +13,7 @@ public interface WaterResourcesService {
 	public List<WaterResources> PaingWaterResourceLists(WaterResources wr);
 	public List<WaterResources> findFacilityAddrbyCategory(WaterResources wr);
 	public List<WaterResources> searchWaterResources(WaterResources wr);
+	public WaterResources searchcnt(WaterResources wr);
 	public WaterResources findWaterResourcesById(WaterResources wr);
 	
 	

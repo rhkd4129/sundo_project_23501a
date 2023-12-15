@@ -63,9 +63,16 @@ public class WaterResourcesServiceImpl extends EgovAbstractServiceImpl implement
 	}
 
 	@Override
+	public WaterResources searchcnt(WaterResources wr) {
+		return waterResourcesDAO.searchCnt(wr);
+	}
+
+	@Override
 	public WaterResources findWaterResourcesById(WaterResources wr) {
 		// TODO Auto-generated method stub
-		return (WaterResources) waterResourcesDAO.findWaterResourcesById(wr);
+		WaterResources rr = waterResourcesDAO.findWaterResourcesById(wr);
+		System.out.println(rr);
+		return waterResourcesDAO.findWaterResourcesById(wr);
 	}
 
 }

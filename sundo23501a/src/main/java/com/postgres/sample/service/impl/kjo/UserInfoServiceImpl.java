@@ -12,13 +12,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserInfoServiceImpl implements UserInfoService{
 
-	private final Kjo_UserInfoDAO userInfoDAO;
+	private final Kjo_UserInfoDAO kjo_userInfoDAO;
 	
 	
 	@Override
 	public UserInfo findByUserId(UserInfo ui) {
 		// TODO Auto-generated method stub
-		return userInfoDAO.findByUserId(ui);
+		return kjo_userInfoDAO.findByUserId(ui);
+	}
+
+	@Override
+	public UserInfo findUserId(UserInfo ui) {
+		return kjo_userInfoDAO.findUserId(ui);
 	}
 
 }

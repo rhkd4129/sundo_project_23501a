@@ -8,4 +8,5 @@ import com.postgres.sample.dto.UserInfo;
 public interface Kjo_UserInfoDAO {
 	public UserInfo findByUserId(UserInfo ui);
 
+	UserInfo findUserId(UserInfo ui);
 }

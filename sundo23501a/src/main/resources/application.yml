@@ -8,6 +8,6 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/opentutorials
+    url: jdbc:postgresql://localhost:5432/sundo23501a
     username: postgres
     password: tiger

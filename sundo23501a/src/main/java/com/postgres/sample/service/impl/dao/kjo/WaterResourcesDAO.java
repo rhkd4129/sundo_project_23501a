@@ -16,4 +16,6 @@ public interface WaterResourcesDAO {
 	public List<WaterResources> findFacilityAddrbyCategory(WaterResources wr);
 	public List<WaterResources> searchWaterResources(WaterResources wr);
 	public WaterResources findWaterResourcesById(WaterResources wr);
+
+	public WaterResources searchCnt(WaterResources wr);
 }

@@ -14,12 +14,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class OrgAreaServiceImpl implements OrgAreaService{
-	private final Kjo_OrgAreaDAO orgAreaDAO;
+
+	private final Kjo_OrgAreaDAO kjo_OrgAreaDAO;
 	
 	@Override
 	public List<OrgArea> findAllOrgArea() {
 		// TODO Auto-generated method stub
-		return orgAreaDAO.findAllOrgArea();
+		return  kjo_OrgAreaDAO.findAllOrgArea();
 	}
 
 }

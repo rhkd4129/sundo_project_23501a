@@ -22,6 +22,7 @@ public class WaterResources {
 	private String first_area;
 	private String second_area;
 	private String cate_name;
+	private String org_area;
 	
 	
 

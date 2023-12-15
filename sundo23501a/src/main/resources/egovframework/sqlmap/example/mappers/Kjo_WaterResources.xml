@@ -5,7 +5,7 @@
     <select id="cntWaterResource" resultType="waterResources">
 		select count(*) as total
 			from water_resources wr, organization org
-			where wr.org_code = org.org_code;
+			where wr.org_code = org.org_code
     </select>
     
     <select id="findFacilityCategory" resultType="waterResources">
@@ -44,28 +44,48 @@
 		 and wr.facility_category = #{facility_category}
 		order by facility_code)
     </select>
-    
+
     <select id="searchWaterResources" parameterType="waterResources" resultType="waterResources">
 		select  * from
-			(select wr.*,cd.cate_name
+		(select ROW_NUMBER() over() as rn,  wr.*,cd.cate_name, (select org_name from organization where org_area like '%' || #{org_area} || '%'),split_part(wr.facility_addr::varchar, ' ', 1) as first_area, split_part(wr.facility_addr::varchar, ' ', 2)as second_area
 			from water_resources wr, organization org, code cd
 				where wr.org_code = org.org_code and wr.facility_type = cd.cate_code
 				<if test="facility_category != ''">
 					and wr.facility_category = #{facility_category}
 				</if>
 				<if test="facility_addr != ''">
-					and wr.facility_addr = #{facility_addr}
+					and wr.org_area like '%' || #{org_area} || '%'
 				</if>
 				<if test="facility_code != ''">
 					and wr.facility_code like '%' || #{facility_code} || '%'
 				</if>
 				<if test="cate_name != ''">
-					and cd.cate_name = #{cate_name}
+					and cd.cate_name like '%' || #{cate_name} || '%'
 				</if>
-			order by facility_code)
+		order by rn)
+		where rn between #{start} and #{end}
     </select>
-	  
+
+	<select id="searchCnt" parameterType="waterResources" resultType="waterResources">
+		select  count(*) as total from
+		(select ROW_NUMBER() over() as rn,  wr.*,cd.cate_name, (select org_name from organization where org_area like '%' || #{org_area} || '%'),split_part(wr.facility_addr::varchar, ' ', 1) as first_area, split_part(wr.facility_addr::varchar, ' ', 2)as second_area
+		from water_resources wr, organization org, code cd
+		where wr.org_code = org.org_code and wr.facility_type = cd.cate_code
+		<if test="facility_category != ''">
+			and wr.facility_category = #{facility_category}
+		</if>
+		<if test="facility_addr != ''">
+			and wr.org_area like '%' || #{org_area} || '%'
+		</if>
+		<if test="facility_code != ''">
+			and wr.facility_code like '%' || #{facility_code} || '%'
+		</if>
+		<if test="cate_name != ''">
+			and cd.cate_name like '%' || #{cate_name} || '%'
+		</if>
+		)
+	</select>
     <select id="findWaterResourcesById" parameterType="waterResources" resultType="waterResources">
-		select * from water_resources wr, code cd where wr.facility_type = cd.cate_code and wr.facility_code = #{facility_code};
+		select * from water_resources wr, code cd where wr.facility_type = cd.cate_code and wr.facility_code = #{facility_code}
     </select>
 </mapper>
