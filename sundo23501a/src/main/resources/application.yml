@@ -11,4 +11,3 @@ spring:
     url: jdbc:postgresql://localhost:5432/sundo23501a
     username: postgres
     password: tiger
-  
