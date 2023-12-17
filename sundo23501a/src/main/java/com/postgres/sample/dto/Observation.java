@@ -26,13 +26,13 @@ public class Observation{
 	private String		observe_method;
 	private String		org_code;
 	private String  	org_area;
-	
+
 	private Double		latitude;
 	private Double		longitude;
 	
 	private Date		create_datetime;
 	private Date		modify_datetime;
-	
+
 	// 조회용
 	private String	observe_method_name;
 	private String  org_name;
