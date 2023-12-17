@@ -13,10 +13,10 @@ public class UserInfo {
 	private String 	user_email;
 	private String 	user_tel;
 	private String 	org_code;
-	private String	user_department;
+	private String	department;
 	private String	user_position;
 	private String	use_flag;
 	private Date 	create_datetime;
 	private Date 	modify_datetime;
-
+	
 }
