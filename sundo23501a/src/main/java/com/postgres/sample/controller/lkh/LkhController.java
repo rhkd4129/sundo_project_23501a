@@ -32,13 +32,10 @@ public class LkhController {
 	@ResponseBody
 	@GetMapping("/waterResourcesListA")
 	public ResponseEntity<LKH_WaterResources> waterResourcesListA(
-			@RequestParam(required = false) LKH_WaterResources lkh_waterResources,
+			LKH_WaterResources lkh_waterResources,
 			@RequestParam(required = false) String currentPage) {
 		System.out.println("이건되냐?");
-//		if(lkh_waterResources.getKeyword_facility_code() == null){
-//			System.out.println("널임");
-//			System.out.println(lkh_waterResources.getKeyword_facility_code());
-//		}
+
 
 		WaterResources waterResources = new WaterResources();
 		waterResources.setTotal(waterResourcesService.countWaterResource().getTotal());
@@ -76,8 +73,10 @@ public class LkhController {
 		  List<WaterResources> findfacility_category = waterResourcesService.findfacilityCategory();
 		  List<Organization> organization_category= waterResourcesService.organizationCategory();
 		  List<OrgArea> orgArea_category = waterResourcesService.OrgAreaCategory();
+		  List<WaterResources> waterResourcesList = waterResourcesService.SelectWaterResourceList(waterResources);
 
 
+		  model.addAttribute("waterResourcesList",waterResourcesList);
 		  model.addAttribute("orgArea_category", orgArea_category);
 		  model.addAttribute("findfacility_category", findfacility_category);
 		  model.addAttribute("organization_category", organization_category);
