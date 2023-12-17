@@ -8,4 +8,6 @@ public interface CheckReportService {
     public CheckReport cntByFacilityCode(CheckReport checkReport);
 
     int inputChkReport(CheckReport checkReport);
+
+
 }

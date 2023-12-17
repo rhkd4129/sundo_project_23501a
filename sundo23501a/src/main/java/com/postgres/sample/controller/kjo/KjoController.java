@@ -122,7 +122,7 @@ public class KjoController {
 
         return "kjo/check/checkresultform";
     }
-
+    /*
     @PostMapping("/checkresultSave")
     public String checkresultSave(KJO_CheckReport cr, RedirectAttributes redirectAttributes) {
         //  입력된 사용자
@@ -153,11 +153,11 @@ public class KjoController {
         checkReport.setUser_id(userId);
         checkReport.setCheck_result(cr.getCheck_result());  //점검결과
         checkReport.setSpec_memo(cr.getSpec_memo());        //특이항
-// 다른 필드 설정
+
         checkReport.setCreate_datetime(String.valueOf(LocalDate.now()));
 
         int result = checkReportService.inputChkReport(checkReport);
-        /*              chkList저장                                                */
+
         String notes = cr.getNote();
         String grades = cr.getCheck_grade();
         String[] noteArray = notes.split("\\|");
@@ -182,7 +182,7 @@ public class KjoController {
 
         return null;
     }
-
+    */
     @GetMapping("/selectCheckReport")
     public String selectCheckReport(Model model){
         List<WaterResources> wrctgList = wrservice.findFacilityCategory();

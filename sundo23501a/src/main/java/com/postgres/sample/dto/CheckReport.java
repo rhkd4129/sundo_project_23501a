@@ -5,7 +5,7 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class ChechkReport {
+public class CheckReport {
 	private Integer	 	doc_no;
 	private String 		facility_code;
 	private Date 		check_date;	
@@ -14,8 +14,8 @@ public class ChechkReport {
 	private String 		check_result;
 	
 	private String 		spec_memo;	
-	private Date 		create_datetime;	
-	private Date 		modify_datetime;	
+	private String		create_datetime;
+	private String 		modify_datetime;
 	
 
 }
