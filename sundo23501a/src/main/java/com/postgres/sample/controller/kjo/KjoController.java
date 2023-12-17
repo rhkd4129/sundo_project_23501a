@@ -1,4 +1,4 @@
-package com.postgres.sample.controller.hij;
+package com.postgres.sample.controller.kjo;
 
 import java.util.List;
 
@@ -19,22 +19,28 @@ import com.postgres.sample.service.kjo.BoardService;
 import lombok.RequiredArgsConstructor;
 
 
-@RestController
+//@RestController
+@Controller
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class HijController {
-	private static final Logger Logger = LoggerFactory.getLogger(HijController.class);
+public class KjoController {
+	private static final Logger Logger = LoggerFactory.getLogger(KjoController.class);
 	
 	
     private final BoardService boardservice;
 
-    @GetMapping("/hello3")
-    public List<BoardVO> HelloWorld_v3() throws Exception {
+    @GetMapping("/hello")
+    public List<BoardVO> HelloWorld() throws Exception {
         return (List<BoardVO>) boardservice.SelectBoardList();
     }
-    @GetMapping("/hello4")
-    public List<BoardVO> HelloWorld_v4() throws Exception {
+    @GetMapping("/hello2")
+    public List<BoardVO> HelloWorld_v2() throws Exception {
         return (List<BoardVO>) boardservice.SelectBoardList();
     }
-	
+    @GetMapping("/hello10")
+    public String HelloWorld_v10() throws Exception {
+    	System.out.println("hi");
+        return "kjo/hello";
+    }
+//	fdskljfdklfksdjklfdsafds
 }
