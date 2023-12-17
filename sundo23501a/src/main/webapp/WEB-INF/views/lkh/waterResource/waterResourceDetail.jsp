@@ -22,7 +22,8 @@
 	</style>
 </head>
 <body>
-	디테일 화면
+	<h2>수자원 정보</h2>
+	<button type="button" onclick="location.href='/waterResourcesList' ">목록으로</button>
 	<table>
 		<thead>
 		<tr>

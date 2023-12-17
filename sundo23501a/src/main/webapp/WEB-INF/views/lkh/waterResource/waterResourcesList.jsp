@@ -24,9 +24,7 @@
 
 	<script>
 		// 페이지 로드 시 자동으로 데이터를 받아오는 함수 호출
-		$(document).ready(function() {
-			fetchData();
-		});
+
 
 		// 데이터를 받아오는 함수
 		function fetchData() {
@@ -88,7 +86,7 @@
 				contentType: "application/json; charset=utf-8",
 				data: lkh_waterResources, // 객체 직접 전달
 				success: function(data) {
-					fetchData(data.waterResourcesList);
+					displayData(data.waterResourcesList);
 				},
 				error: function(error) {
 					alert("Error: " + error.responseText);
@@ -126,7 +124,9 @@
          시설물코드 <input type="text" name="keyword_facility_code"> <button ONCLICK="Listsearch()">검색</button>
     
 
+<br>
 <button type="button" onclick="location.href='/waterResourcesInsertForm' ">생성</button>
+<button type="button" onclick="location.href='/waterResourcesInsertForm' ">저장</button>
 
 
 
@@ -145,7 +145,17 @@
 		</tr>
 		</thead>
 		<tbody>
-		<!-- 데이터가 동적으로 추가될 자리 -->
+		<c:forEach items="${waterResourcesList}" var="waterResource">
+				<tr>
+					<td>${waterResource.rn}</td>
+					<td>${waterResource.facility_category}</td>
+					<td><a href="waterResourcesListDetail?facility_code=${waterResource.facility_code}">${waterResource.facility_code}</a></td>
+					<td>${waterResource.cate_name}</td>
+					<td>${waterResource.org_area_name}</td>
+					<td>${waterResource.org_name}</td>
+				</tr>
+		</c:forEach>
+
 		</tbody>
 	</table>
 
