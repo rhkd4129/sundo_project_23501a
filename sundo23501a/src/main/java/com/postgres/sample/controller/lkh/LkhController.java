@@ -73,11 +73,12 @@ public class LkhController {
 		  waterResources.setStart(page.getStart());
 		  waterResources.setEnd(page.getEnd());
 
+		List<WaterResources> waterResourcesList = waterResourcesService.SelectWaterResourceList(waterResources);
 		  List<WaterResources> findfacility_category = waterResourcesService.findfacilityCategory();
 		  List<Organization> organization_category= waterResourcesService.organizationCategory();
 		  List<OrgArea> orgArea_category = waterResourcesService.OrgAreaCategory();
 
-
+		model.addAttribute("waterResourcesList", waterResourcesList);
 		  model.addAttribute("orgArea_category", orgArea_category);
 		  model.addAttribute("findfacility_category", findfacility_category);
 		  model.addAttribute("organization_category", organization_category);
