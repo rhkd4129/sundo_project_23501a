@@ -14,8 +14,8 @@ public class CheckReport {
 	private String 		check_result;
 	
 	private String 		spec_memo;
-	private Date 		create_datetime;	
-	private Date 		modify_datetime;	
+	private String 		create_datetime;
+	private String		modify_datetime;
 
 
 	//조회용
