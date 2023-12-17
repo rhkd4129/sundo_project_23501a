@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class BreakReport {
-	private Integer doc_no;
+	private Integer don_no;
 	private String 	user_id;
 	private String 	facility_category;
 	private String 	facility_code;
@@ -18,7 +18,7 @@ public class BreakReport {
 	
 	private String 	subject;
 	
-	private String 	break_date;
+	private Date 	break_date;
 	
 	private String 	break_cause;
 	private String 	current_state;
@@ -27,9 +27,6 @@ public class BreakReport {
 	
 	private String 	future_plan;
 	
-	private String 	create_datetime;
-	private String 	modify_datetime;
-	
-	// 조회용 추가
-	private String	user_name;
+	private Date 	create_datetime;
+	private Date 	modify_datetime;
 }
