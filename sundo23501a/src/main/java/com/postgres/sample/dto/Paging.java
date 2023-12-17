@@ -20,7 +20,7 @@ public class Paging {
 		//				1				10
 		start 	= (currentPage - 1) * rowPage + 1;	//시작시  1	11
 		end		= start + rowPage - 1;				//시작시 10	20
-		
+
 		//									25    /   10
 		totalPage = (int) Math.ceil((double)total / rowPage);
 		//				2			2

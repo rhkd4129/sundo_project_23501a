@@ -11,24 +11,30 @@ public class WaterResources {
 	private String	facility_addr;
 	private String	facility_type;
 
-	private String 	org_code;
+	private String 	org_code;	//운영기관
+	private String 	org_area;  //행정구역 코드
+	
 	private Double 	latitude;
 	private Double 	longitude;
-	private Date 	create_datetime;
-	private Date 	modify_datetime;
-
-	//	조회용
-	private String org_name;
-	private String first_area;
-	private String second_area;
-	private String cate_name;
-	private String org_area;
-	
+	private String 	create_datetime;
+	private String 	modify_datetime;
 	
 
-	// 페이징 작업
+	//조회용
+
+    private String first_area;
+    private String second_area;
+
+	private String org_area_name;// 행정기관 이름
+	private String cate_name; 		// ex) 목재댐
+	
+	private String org_name;	//운영기관 이름
+	
 	private String rn;
-	private String search;   	private String keyword;
 	private String pageNum;		private int total;
 	private int start; 		 	private int end;
+	private String search;   	private String keyword;
+
+	
+
 }
