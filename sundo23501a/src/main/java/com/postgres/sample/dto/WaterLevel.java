@@ -37,7 +37,4 @@ public class WaterLevel {
 	private Double hour_22;
 	private Double hour_23;
 	private Double hour_24;
-
-	//조회용
-	private String observe_post;
 }
