@@ -4,24 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62f0e6c6-bd6a-436d-8615-78419aa22f8d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lkh/waterResource/waterResourceDetail.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lkh/waterResource/waterResourceInsetForm.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lkh/waterResource/waterResourceStatistics.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lkh/waterResource/waterResourceUpdateForm.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lkh/waterResource/waterResourcesList.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/postgres/sample/dto/CheckReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/postgres/sample/dto/CheckReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/postgres/sample/service/impl/dao/kjo/BoardDAOv2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/postgres/sample/service/impl/dao/kjo/BoardDAOv2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/postgres/sample/service/impl/dao/kjo/WaterResourcesDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/postgres/sample/service/impl/dao/kjo/KJO_WaterResourcesDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/postgres/sample/service/impl/kjo/WaterResourcesServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/postgres/sample/service/impl/kjo/WaterResourcesServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/postgres/sample/service/impl/lkh/WaterResourcesServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/postgres/sample/service/impl/lkh/LKH_WaterResourcesServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/egovframework/sqlmap/example/mappers/Kjo_WaterResources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/egovframework/sqlmap/example/mappers/Kjo_WaterResources.xml" afterDir="false" />
-    </list>
+    <list default="true" id="62f0e6c6-bd6a-436d-8615-78419aa22f8d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -103,7 +86,7 @@
       <option name="presentableId" value="Default" />
       <updated>1702795505425</updated>
       <workItem from="1702795506434" duration="1478000" />
-      <workItem from="1702797024492" duration="2014000" />
+      <workItem from="1702797024492" duration="2355000" />
     </task>
     <servers />
   </component>
