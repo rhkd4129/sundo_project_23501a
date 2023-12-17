@@ -25,11 +25,15 @@ public class WaterResources {
 	private String cate_name; 		// ex) 목재댐
 	
 	private String org_name;	//운영기관 이름
-	
+	private String first_area;
+	private String second_area;
+
+
+	// 페이징 작업
 	private String rn;
+	private String search;   	private String keyword;
 	private String pageNum;		private int total;
 	private int start; 		 	private int end;
-	private String search;   	private String keyword;
 
 	
 
