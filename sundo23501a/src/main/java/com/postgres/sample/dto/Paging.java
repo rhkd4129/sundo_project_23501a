@@ -17,16 +17,16 @@ public class Paging {
 		if (currentPage1 != null) {
 			this.currentPage = Integer.parseInt(currentPage1); // 2
 		}
+		//				1				10
+		start 	= (currentPage - 1) * rowPage + 1;	//시작시  1	11
+		end		= start + rowPage - 1;				//시작시 10	20
 		
-		start 	= (currentPage - 1) * rowPage + 1;	
-		end		= start + rowPage - 1;				
-		
-		
+		//									25    /   10
 		totalPage = (int) Math.ceil((double)total / rowPage);
 		//				2			2
 		startPage = currentPage - (currentPage - 1) % pageBlock; // 시작시1
 		endPage = startPage + pageBlock - 1; //10
-		//		
+		//		10		14
 		if (endPage > totalPage) {
 			endPage = totalPage;
 		}
@@ -38,15 +38,15 @@ public class Paging {
 		if (currentPage1 != null) {
 			this.currentPage = Integer.parseInt(currentPage1);	//2
 		}
-		//	1				1
+		//	1				10
 		start = (currentPage - 1) * rowPage + 1;				// 시작시 1
 		end = start + rowPage - 1;								// 시작시 10
 		//							25		10
 		totalPage = (int) Math.ceil((double) total / rowPage);
-	
+		//		2				2
 		startPage = currentPage - (currentPage - 1) % pageBlock;//	시작시 1
 		endPage = startPage + pageBlock - 1;		//	10
-		
+		//		10			14
 		if (endPage > totalPage) {
 			endPage = totalPage;
 		}

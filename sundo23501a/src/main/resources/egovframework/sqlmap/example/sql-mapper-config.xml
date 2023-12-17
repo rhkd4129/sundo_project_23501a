@@ -5,13 +5,13 @@
     <typeAliases>
 		<typeAlias alias="egovMap" type="org.egovframe.rte.psl.dataaccess.util.EgovMap"/>
 		<typeAlias alias="boardVO" type="com.postgres.sample.dto.BoardVO"/>
-		
+
 		<typeAlias alias="accessLog" type="com.postgres.sample.dto.AccessLog"/>
 		<typeAlias alias="actionReport" type="com.postgres.sample.dto.ActionReport"/>
 		<typeAlias alias="alarm" type="com.postgres.sample.dto.Alarm"/>
 		<typeAlias alias="boardNotice" type="com.postgres.sample.dto.BoardNotice"/>
 		<typeAlias alias="breakReport" type="com.postgres.sample.dto.BreakReport"/>
-		<typeAlias alias="chechkReport" type="com.postgres.sample.dto.ChechkReport"/>
+		<typeAlias alias="checkReport" type="com.postgres.sample.dto.CheckReport"/>
 		<typeAlias alias="checkItemInfo" type="com.postgres.sample.dto.CheckItemInfo"/>
 		<typeAlias alias="checkList" type="com.postgres.sample.dto.CheckList"/>
 		<typeAlias alias="code" type="com.postgres.sample.dto.Code"/>
