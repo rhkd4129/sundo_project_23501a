@@ -13,12 +13,13 @@ public class CheckReport {
 	private String 		user_id;	
 	private String 		check_result;
 	
-	private String 		spec_memo;	
-	private String 		create_datetime;
-	private String 		modify_datetime;
+	private String 		spec_memo;
+	private Date 		create_datetime;	
+	private Date 		modify_datetime;	
+
 
 	//조회용
 	private Integer 	total;
-	
+
 
 }

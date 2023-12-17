@@ -6,6 +6,8 @@
 	</section>
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="C:\githubRepository\sundo_project_23501a\sundo23501a"/>
+			<item value="C:\gitRepository\ex-DataAccess-MYBATIS"/>
 			<item value="C:\gitRepository\sundo_project_23501a\sundo23501a"/>
 			<item value="C:\eGovFrameDev-4.1.0-64bit\workspace\test_boot_v5"/>
 		</list>
