@@ -1,4 +1,4 @@
- package com.postgres.config;
+package com.postgres.config;
 
 import javax.sql.DataSource;
 import org.egovframe.rte.fdl.idgnr.impl.EgovTableIdGnrServiceImpl;
