@@ -21,6 +21,10 @@ public class WaterResources {
 	
 
 	//조회용
+
+    private String first_area;
+    private String second_area;
+
 	private String org_area_name;// 행정기관 이름
 	private String cate_name; 		// ex) 목재댐
 	

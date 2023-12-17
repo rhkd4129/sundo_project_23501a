@@ -29,7 +29,7 @@ public class Observation{
 
 	private Double		latitude;
 	private Double		longitude;
-
+	
 	private Date		create_datetime;
 	private Date		modify_datetime;
 
