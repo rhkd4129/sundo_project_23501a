@@ -1,7 +1,0 @@
-INDEX VERSION 1.4+C:\gitRepository\sundo_project_23501a\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
-1563390370.index
-2054102754.index
-611126711.index
-3598754426.index
-2286382674.index
-645081717.index

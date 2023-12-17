@@ -1,5 +1,0 @@
-INDEX VERSION 1.131
-C:\githubRepository\sundo_project_23501a\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2013742350.index
-\sundo23501a\src\main\java
-C:\githubRepository\sundo_project_23501a\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\3339944105.index
-\sundo23501a\src\main\java
