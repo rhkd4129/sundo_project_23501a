@@ -5,7 +5,7 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class ChechkReport {
+public class CheckReport {
 	private Integer	 	doc_no;
 	private String 		facility_code;
 	private Date 		check_date;	
