@@ -18,5 +18,4 @@ public class UserInfo {
 	private String	use_flag;
 	private Date 	create_datetime;
 	private Date 	modify_datetime;
-	
 }
