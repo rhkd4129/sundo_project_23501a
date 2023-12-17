@@ -16,4 +16,19 @@ public class WaterResources {
 	private Double 	longitude;
 	private Date 	create_datetime;
 	private Date 	modify_datetime;
+
+	//	조회용
+	private String org_name;
+	private String first_area;
+	private String second_area;
+	private String cate_name;
+	private String org_area;
+	
+	
+
+	// 페이징 작업
+	private String rn;
+	private String search;   	private String keyword;
+	private String pageNum;		private int total;
+	private int start; 		 	private int end;
 }

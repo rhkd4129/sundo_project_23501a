@@ -11,7 +11,7 @@
 		<typeAlias alias="alarm" type="com.postgres.sample.dto.Alarm"/>
 		<typeAlias alias="boardNotice" type="com.postgres.sample.dto.BoardNotice"/>
 		<typeAlias alias="breakReport" type="com.postgres.sample.dto.BreakReport"/>
-		<typeAlias alias="chechkReport" type="com.postgres.sample.dto.ChechkReport"/>
+		<typeAlias alias="checkReport" type="com.postgres.sample.dto.CheckReport"/>
 		<typeAlias alias="checkItemInfo" type="com.postgres.sample.dto.CheckItemInfo"/>
 		<typeAlias alias="checkList" type="com.postgres.sample.dto.CheckList"/>
 		<typeAlias alias="code" type="com.postgres.sample.dto.Code"/>
@@ -25,7 +25,6 @@
 		<typeAlias alias="waterGate" type="com.postgres.sample.dto.WaterGate"/>
 		<typeAlias alias="waterLevel" type="com.postgres.sample.dto.WaterLevel"/>
 		<typeAlias alias="waterResources" type="com.postgres.sample.dto.WaterResources"/>
-		<typeAlias alias="categoryVO" type="com.postgres.sample.dto.CategoryVO"/>
-		
+		<typeAlias alias="orgArea" type="com.postgres.sample.dto.OrgArea"/>
     </typeAliases>
 </configuration>
