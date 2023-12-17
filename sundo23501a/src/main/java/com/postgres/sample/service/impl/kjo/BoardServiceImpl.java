@@ -8,7 +8,6 @@ import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
 
 import com.postgres.sample.dto.BoardVO;
-import com.postgres.sample.service.impl.dao.kjo.BoardDAO;
 import com.postgres.sample.service.impl.dao.kjo.BoardDAOv2;
 import com.postgres.sample.service.kjo.BoardService;
 
@@ -21,14 +20,11 @@ import lombok.RequiredArgsConstructor;
 public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardService{
 
 
-	private final BoardDAO boardDAO;
+	private final BoardDAOv2 boardDAOv2;
 	
 	@Override
 	public List<?> SelectBoardList() {
-		System.out.println("fdsfds");
-		System.out.println(boardDAO.SelectBoardList());
-		
-		return boardDAO.SelectBoardList();
+		return boardDAOv2.SelectBoardList();
 	}
 
 }
