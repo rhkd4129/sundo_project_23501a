@@ -9,7 +9,6 @@ import com.postgres.sample.dto.Code;
 import com.postgres.sample.dto.OrgArea;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.WaterResources;
-import com.postgres.sample.service.impl.dao.kjo.BoardDAOv2;
 
 import com.postgres.sample.service.impl.dao.lkh.LKH_WaterResourcesDAO;
 import com.postgres.sample.service.lkh.WaterResourcesService;
@@ -18,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class WaterResourcesServiceImpl extends EgovAbstractServiceImpl implements WaterResourcesService {
+public class LkhWaterResourcesServiceImpl extends EgovAbstractServiceImpl implements WaterResourcesService {
 	private final LKH_WaterResourcesDAO waterResourcesDAO;
 
 	@Override

@@ -7,7 +7,7 @@ import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 import com.postgres.sample.dto.WaterResources;
 
 @Mapper
-public interface WaterResourcesDAO {
+public interface Kjo_WaterResourcesDAO {
 	public List<WaterResources> findFacilityCategory();
 	public List<WaterResources> findFacilityAddr();
 	public List<WaterResources> findWaterResourceLists();
