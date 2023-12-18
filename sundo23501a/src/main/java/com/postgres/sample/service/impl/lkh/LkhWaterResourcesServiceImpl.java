@@ -62,6 +62,11 @@ public class LkhWaterResourcesServiceImpl extends EgovAbstractServiceImpl implem
 	}
 
 	@Override
+	public List<WaterResources> orgAreaLineGraph() {
+		return  waterResourcesDAO.orgAreaLineGraph();
+	}
+
+	@Override
 	public List<OrgArea> OrgAreaCategory() {
 		
 		return waterResourcesDAO.OrgAreaCategory();
