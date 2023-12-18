@@ -32,4 +32,5 @@ public interface LKH_WaterResourcesDAO {
 	
 	public WaterResources waterResourceDetail(String facility_code);
 	public List<Integer> doughnutChart();
-}								
+	public List<WaterResources> orgAreaLineGraph();
+}

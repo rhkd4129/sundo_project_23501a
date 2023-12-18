@@ -172,8 +172,17 @@ public class LkhController {
 	@GetMapping("/doughnut_chart")
 	public List<Integer> waterResourceStatistics(){
 		System.out.println("doughnutChart");
-		List<Integer> bac = waterResourcesService.doughnutChart();
-		System.out.println("doughnutCaaaaaaaaaaaaaaaaaahart");
 		return waterResourcesService.doughnutChart();
+	}
+
+
+	@ResponseBody
+	@GetMapping("/orgAreaLineGraph")
+	public List<WaterResources> orgAreaLineGraph(){
+		System.out.println("orgAreaLineGraph");
+		List<WaterResources> abc = waterResourcesService.orgAreaLineGraph();
+		System.out.println(abc.get(1).getSEOUL());
+		return  waterResourcesService.orgAreaLineGraph();
+
 	}
 }

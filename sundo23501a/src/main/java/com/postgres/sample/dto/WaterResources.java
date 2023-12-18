@@ -30,6 +30,15 @@ public class WaterResources {
 	
 	private String org_name;	//운영기관 이름
 
+	//그래프 조회용
+	private Integer SEOUL;
+	private Integer GYEONGGI;
+
+	private Integer category_1;
+	private Integer category_2;
+	private Integer category_3;
+	private Integer category_4;
+
 
 
 	// 페이징 작업
