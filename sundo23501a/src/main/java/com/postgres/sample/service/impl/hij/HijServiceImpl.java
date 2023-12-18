@@ -101,12 +101,20 @@ public class HijServiceImpl extends EgovAbstractServiceImpl implements HijServic
 		return obDelete;
 	}
 	
+	
 	// 시자료 목록
 	@Override
 	public List<WaterLevel> waterLevelList(WaterLevel waterLevel) {
 		System.out.println("HijServiceImpl waterLevelList START");
 		List<WaterLevel> waterLevelList = hd.ijWaterLevelList(waterLevel);
 		return waterLevelList;
+	}
+
+	@Override
+	public int waterLevelTotal() {
+		int totalCount = hd.ijWaterLevelTotal();
+		System.out.println("HijServiceImpl totalCount START");
+		return totalCount;
 	}
 
 }

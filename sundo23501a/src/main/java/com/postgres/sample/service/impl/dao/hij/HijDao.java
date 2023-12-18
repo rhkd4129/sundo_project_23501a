@@ -25,6 +25,9 @@ public interface HijDao {
 	public List<WaterGate> ijWaterGateList();
 	public int ijObEdit(Observation observation);	//관측소 수정시행
 	public int ijObDelete(Observation observation);	// 관측소 삭제
+	
 	// 2. 관측소 - 시자료
-	public List<WaterLevel> ijWaterLevelList(WaterLevel waterLevel); //수위정보
+	public List<WaterLevel> ijWaterLevelList(WaterLevel waterLevel);//수위정보
+	public int ijWaterLevelTotal();
+	
 }

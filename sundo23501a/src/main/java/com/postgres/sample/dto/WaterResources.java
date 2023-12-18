@@ -16,8 +16,8 @@ public class WaterResources {
 	
 	private Double 	latitude;
 	private Double 	longitude;
-	private String 	create_datetime;
-	private String 	modify_datetime;
+	private Date 	create_datetime;
+	private Date 	modify_datetime;
 	
 
 	//조회용
@@ -29,6 +29,12 @@ public class WaterResources {
 	private String cate_name; 		// ex) 목재댐
 	
 	private String org_name;	//운영기관 이름
+
+	//그래프 조회용
+	private Integer category_1;
+	private Integer category_2;
+	private Integer category_3;
+	private Integer category_4;
 
 
 
