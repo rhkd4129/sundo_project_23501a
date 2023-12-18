@@ -17,7 +17,7 @@ public class Observation{
 //	운영기관코드(FK)	N/A	VARCHAR(30)
 //	등록일시			N/A	DATE
 //	수정일시			N/A	DATE
-
+	//변경했다.
 	private Integer 	observe_code;	//	N/A	INTEGER
 	private String		river_code;
 	private String		observe_post;
