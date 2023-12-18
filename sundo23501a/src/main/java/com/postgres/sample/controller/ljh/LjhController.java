@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class LjhController {
-	
+	//
 	private final LjhService ljhService;
 
 	// 고장/조치결과보고 > 고장 보고서 목록
