@@ -16,8 +16,8 @@ public class WaterResources {
 	
 	private Double 	latitude;
 	private Double 	longitude;
-	private String 	create_datetime;
-	private String 	modify_datetime;
+	private Date 	create_datetime;
+	private Date 	modify_datetime;
 	
 
 	//조회용
