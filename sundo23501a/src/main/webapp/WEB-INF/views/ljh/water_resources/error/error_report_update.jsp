@@ -6,6 +6,67 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<style type="text/css">
+	.title {
+		text-align: center;
+		font-size: 25pt;
+	}
+	
+	table {
+		width: 100%;
+		border-top: solid gray 2px;
+		border-bottom: solid gray 2px;
+	}
+	
+	tr {
+		border-bottom: solid lightgray 1px;
+		border-top: solid lightgray 1px;
+	}
+	
+	th {
+		background: #EAEAEA;
+		padding: 5px 10px;
+	}
+	
+	td {
+		padding: 5px 10px;
+	}
+	
+	select, .subject {
+		width: 100%;
+	}
+	
+	textarea {
+		width: 100%;
+	}
+	
+	.handling_content {
+		width: 95%;
+	}
+	
+	.handling_flag {
+		width: 4%;
+	}
+	
+	.btns {
+		text-align: right;
+		margin-top: 20px;
+	}
+	
+	button {
+		width: 80px;
+	}
+	
+	.rptTbl th {
+		width: 200px;
+	}
+
+	.alarmTbl .cate {
+		width: 200px;
+	}
+</style>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script type="text/javascript">
 	$(function() {
@@ -70,11 +131,11 @@
 </head>
 <body>
 	<div>
-		<h1>고장 보고서 수정</h1>
+		<p class="title">고장 보고서 수정</p>
 		<form action="error_report_update" method="post">
 			<input type="hidden" name="doc_no" value="${breakReport.doc_no}">
 			<input type="hidden" name="break_report_no" value="${breakReport.doc_no}">
-			<table border="1">
+			<table class="rptTbl">
 				<thead>
 					<tr>
 						<th>시설물 종류</th>
@@ -155,8 +216,9 @@
 							</select>
 						</td>
 					</tr>
-				
-					<tr><th>제목</th><td colspan="5"><input type="text" name="subject" value="${breakReport.subject }"></td></tr>
+				</thead>
+				<tbody>
+					<tr><th>제목</th><td colspan="5"><input type="text" class="subject" name="subject" value="${breakReport.subject }"></td></tr>
 					<tr><th>고장일자</th><td colspan="5"><input type="date" name="break_date" value="${breakReport.break_date }"></td></tr>
 					<tr><th>고장원인</th><td colspan="5"><textarea name="break_cause">${breakReport.break_cause }</textarea></td></tr>
 					<tr><th>현재상황</th><td colspan="5"><textarea name="current_state">${breakReport.current_state }</textarea></td></tr>
@@ -164,21 +226,23 @@
 						<td colspan="5">
 							<c:choose>
 								<c:when test="${breakReport.handling_flag == 'Y' }">
-									<input type="checkbox" name="handling_flag" value="Y" checked="checked">
+									<input type="checkbox" class="handling_flag" name="handling_flag" value="Y" checked="checked">
 								</c:when>
 								<c:otherwise>
-									<input type="checkbox" name="handling_flag" value="N">
+									<input type="checkbox" class="handling_flag" name="handling_flag" value="N">
 								</c:otherwise>
 							</c:choose>
-							<input type="text" name="handling_content" value="${breakReport.handling_content }">
+							<input type="text" name="handling_content" class="handling_content" value="${breakReport.handling_content }">
 						</td></tr>
 					<tr><th>향후계획</th><td colspan="5"><textarea name="future_plan">${breakReport.future_plan }</textarea></td></tr>
 					<!-- <tr><th>파일첨부</th><td colspan="5"><input type="file" name="file1"></td></tr> -->
-				</thead>
-				
+				</tbody>
+			</table>
+			
+			<table class="alarmTbl">
 				<tbody id="alarmBox">
  					<tr>
-						<th rowspan="50">알람내역</th>
+						<th rowspan="50" class="cate">알람내역</th>
 						<th>알람코드</th><th>알람내용</th><th>알람일시</th><th>확인</th>
 					</tr>
 					<c:forEach var="rptAlarm" items="${rptAlarmList }">
@@ -194,16 +258,11 @@
 						</tr>
 					</c:forEach>
 				</tbody>
-				
-				<tfoot>
-					<tr>
-						<td colspan="6">
-							<button type="button" onclick="location.href='/error_report_list'">돌아가기</button>
-							<button type="submit">저장</button>
-						</td>
-					</tr>
-				</tfoot>
 			</table>
+			<div class="btns">
+				<button type="button" class="btn btn-dark btn-sm" onclick="location.href='/error_report_read?doc_no=${breakReport.doc_no}'">돌아가기</button>
+				<button type="submit" class="btn btn-dark btn-sm">저장</button>
+			</div>
 		</form>
 	</div>
 </body>

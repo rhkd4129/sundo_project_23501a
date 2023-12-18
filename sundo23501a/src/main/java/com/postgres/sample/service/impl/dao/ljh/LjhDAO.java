@@ -58,6 +58,21 @@ public interface LjhDAO {
 
 	// 고장/조치결과보고 > 조치 결과 보고서 목록
 	public List<ActionReport> ljhGetActionRptList();
+
+	// 조치 결과 보고서 INSERT
+	public int ljhInsertActionRpt(ActionReport actionReport);
+
+	// 조치 결과 보고서 상세
+	public ActionReport ljhGetActionRpt(Integer doc_no);
+
+	// 조치 결과 보고서 수정
+	public int ljhUpdateActionRpt(ActionReport actionReport);
+
+	// 조치 결과 보고서 삭제
+	public int ljhDeleteActionRpt(Integer doc_no);
+
+	// 고장 보고서 목록 페이징 작업용
+	public List<BreakReport> ljhGetBreakRptListPage(BreakReport breakRpt);
 	
 	
 	

@@ -34,8 +34,20 @@
 		padding: 5px 10px;
 	}
 	
-	select {
+	select, .subject {
 		width: 100%;
+	}
+	
+	textarea {
+		width: 100%;
+	}
+	
+	.handling_content {
+		width: 95%;
+	}
+	
+	.handling_flag {
+		width: 4%;
 	}
 	
 	.btns {
@@ -47,10 +59,6 @@
 		width: 80px;
 	}
 	
-	.cate {
-		width: 200px;
-	}
-	
 	.rptTbl th {
 		width: 200px;
 	}
@@ -59,7 +67,6 @@
 		width: 200px;
 	}
 </style>
-
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script type="text/javascript">
 	$(function() {
@@ -84,7 +91,7 @@
 					}
 					
 					options += '</select>';
-
+	
 					wrCodeOption.empty();
 					wrCodeOption.append(options);
 					
@@ -119,95 +126,111 @@
 			});
 		});
 	});
-
+	
 </script>
 </head>
 <body>
 	<div>
-		<p class="title">고장 보고서 작성</p>
-		<form action="error_report_write" method="post">
+		<p class="title">고장 보고서 수정</p>
+		<form action="action_report_update" method="post">
+			<input type="hidden" name="doc_no" value="${actionRpt.doc_no}">
 			<table class="rptTbl">
 				<thead>
 					<tr>
-						<th class="cate">시설물 종류</th>
+						<th>시설물 종류</th>
 						<td>
 							<select id="waterCategorySelect" name="facility_category">
-								<option>전체</option>
 								<c:forEach var="water" items="${waterCategory }">
-									<option value="${water.facility_category }">${water.facility_category }</option>
+									<c:if test="${water.facility_category == actionRpt.facility_category }">
+										<option value="${water.facility_category }" selected="selected">${water.facility_category }</option>
+									</c:if>
+									<c:if test="${water.facility_category != actionRpt.facility_category }">
+										<option value="${water.facility_category }">${water.facility_category }</option>
+									</c:if>
 								</c:forEach>
 							</select>
 						</td>
-						<th class="cate">시설물 코드</th>
+						<th>시설물 코드</th>
 						<td>
 							<div id="wrCodeOption">
 								<select id="wrCodeSelect" name="facility_code">
-									<option>전체</option>	
+									<c:forEach var="wrCodeList" items="${wrCodeList }">
+										<c:if test="${wrCodeList.facility_code == actionRpt.facility_code}">
+											<option value="${wrCodeList.facility_code }" selected="selected">${wrCodeList.facility_code }</option>
+										</c:if>
+										<c:if test="${wrCodeList.facility_code != actionRpt.facility_code}">
+											<option value="${wrCodeList.facility_code }">${wrCodeList.facility_code }</option>
+										</c:if>
+									</c:forEach>
 								</select>
 							</div>
 						</td>
-						<th class="cate">작성자</th><td><input type="text" name="user_id"></td>	<!-- 로그인한 사용자 이름 자동 표출 필요 -->
+						<th>작성자</th>
+						<td><input type="hidden" name="user_id" value="${actionRpt.user_id }">${actionRpt.user_name }</td>	<!-- 로그인한 사용자 이름 자동 표출 필요 -->
 					</tr>
 					<tr>
-						<th class="cate">점검대상</th>
+						<th>점검대상</th>
 						<td>
 							<select name="check_target">
-								<option>전체</option>
-									<c:forEach var="checkCode" items="${checkCodeList }">
-										<c:if test="${checkCode.field_name == 'check_target' }">
+								<c:forEach var="checkCode" items="${checkCodeList }">
+									<c:choose>
+										<c:when test="${checkCode.field_name == 'check_target' && checkCode.cate_name == actionRpt.check_target}">
+											<option value="${checkCode.cate_name }" selected="selected">${checkCode.cate_name }</option>
+										</c:when>
+										<c:when test="${checkCode.field_name == 'check_target' && checkCode.cate_name != actionRpt.check_target}">
 											<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
-										</c:if>
-									</c:forEach>
+										</c:when>
+									</c:choose>
+								</c:forEach>
 							</select>
 						</td>
-						<th class="cate">중분류</th>
+						<th>중분류</th>
 						<td>
 							<select name="m_category">
-								<option>전체</option>
-									<c:forEach var="checkCode" items="${checkCodeList }">
-										<c:if test="${checkCode.field_name == 'm_category' }">
+								<c:forEach var="checkCode" items="${checkCodeList }">
+									<c:choose>
+										<c:when test="${checkCode.field_name == 'm_category' && checkCode.cate_name == actionRpt.m_category}">
+											<option value="${checkCode.cate_name }" selected="selected">${checkCode.cate_name }</option>
+										</c:when>
+										<c:when test="${checkCode.field_name == 'm_category' && checkCode.cate_name != actionRpt.m_category}">
 											<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
-										</c:if>
-									</c:forEach>
+										</c:when>
+									</c:choose>
+								</c:forEach>
 							</select>
 						</td>
-						<th class="cate">소분류</th>
+						<th>소분류</th>
 						<td>
 							<select name="s_category">
-								<option>전체</option>
-									<c:forEach var="checkCode" items="${checkCodeList }">
-										<c:if test="${checkCode.field_name == 's_category' }">
+								<c:forEach var="checkCode" items="${checkCodeList }">
+									<c:choose>
+										<c:when test="${checkCode.field_name == 's_category' && checkCode.cate_name == actionRpt.s_category}">
+											<option value="${checkCode.cate_name }" selected="selected">${checkCode.cate_name }</option>
+										</c:when>
+										<c:when test="${checkCode.field_name == 's_category' && checkCode.cate_name != actionRpt.s_category}">
 											<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
-										</c:if>
-									</c:forEach>
+										</c:when>
+									</c:choose>
+								</c:forEach>
 							</select>
 						</td>
 					</tr>
 				</thead>
 				<tbody>
-					<tr><th class="cate">제목</th><td colspan="5"><input type="text" name="subject"></td></tr>
-					<tr><th class="cate">고장일자</th><td colspan="5"><input type="date" name="break_date"></td></tr>
-					<tr><th class="cate">고장원인</th><td colspan="5"><textarea name="break_cause"></textarea></td></tr>
-					<tr><th class="cate">현재상황</th><td colspan="5"><textarea name="current_state"></textarea></td></tr>
-					<tr><th class="cate">즉시처리</th><td colspan="5"><input type="checkbox" name="handling_flag" value="Y">
-													   <input type="text" name="handling_content"></td></tr>
-					<tr><th class="cate">향후계획</th><td colspan="5"><textarea name="future_plan"></textarea></td></tr>
-					<tr><th class="cate">파일첨부</th><td colspan="5"><!-- <input type="file" name="file1"> --></td></tr>
-				</tbody>
-			</table>
-			<table class="alarmTbl">	
-				<tbody id="alarmBox">
- 					<tr>
-						<th rowspan="50" class="cate">알람내역</th>
-						<th>알람코드</th><th>알람내용</th><th>알람일시</th><th>확인</th>
-					</tr>
 					<tr>
-						<td> </td><td> </td><td> </td><td><input type="checkbox"></td>
+						<th>고장/발생일자</th>
+						<td colspan="2"><input type="date" name="break_date" value="${actionRpt.break_date }"></td>
+						<td colspan="2"><input type="date" name="action_date" value="${actionRpt.action_date }"></td>					
 					</tr>
+					<tr><th>고장내역</th><td colspan="5"><textarea name="break_content">${actionRpt.break_content }</textarea></td></tr>
+					<tr><th>조치내역</th><td colspan="5"><textarea name="action_content">${actionRpt.action_content }</textarea></td></tr>
+					<tr><th>특이사항</th><td colspan="5"><textarea name="spec_memo">${actionRpt.spec_memo }</textarea></td>
+					<tr><th>향후계획</th><td colspan="5"><textarea name="future_plan">${actionRpt.future_plan }</textarea></td></tr>
+					<!-- <tr><th>파일첨부</th><td colspan="5"><input type="file" name="file1"></td></tr> -->
 				</tbody>
 			</table>
 			<div class="btns">
-				<button class="btn btn-dark btn-sm" onclick="location.href='/error_report_list'">돌아가기</button>
+				<button type="button" class="btn btn-dark btn-sm" onclick="location.href='/action_report_read?doc_no=${actionRpt.doc_no}'">돌아가기</button>
 				<button type="submit" class="btn btn-dark btn-sm">저장</button>
 			</div>
 		</form>

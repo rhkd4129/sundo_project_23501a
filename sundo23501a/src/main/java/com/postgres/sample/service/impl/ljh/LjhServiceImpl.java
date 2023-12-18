@@ -122,12 +122,12 @@ public class LjhServiceImpl extends EgovAbstractServiceImpl implements LjhServic
 
 	// 고장 보고서 상세 - 고장 보고서 SELECT
 	@Override
-	public BreakReport gerErrorRpt(Integer doc_no) {
-		System.out.println("LjhServiceImpl gerErrorRpt Start");
+	public BreakReport getErrorRpt(Integer doc_no) {
+		System.out.println("LjhServiceImpl getErrorRpt Start");
 		
 		BreakReport breakReport = new BreakReport();
 		breakReport = ljhDAO.ljhGetErrorRpt(doc_no);
-		System.out.println("breakReport -> " + breakReport);
+		System.out.println("LjhServiceImpl getErrorRpt breakReport -> " + breakReport);
 		
 		return breakReport;
 	}
@@ -213,12 +213,69 @@ public class LjhServiceImpl extends EgovAbstractServiceImpl implements LjhServic
 	// 고장/조치결과보고 > 조치 결과 보고서 목록
 	@Override
 	public List<ActionReport> getActionRptList() {
-		System.out.println("LjhServiceImpl getResolustionRptList Start");
+		System.out.println("LjhServiceImpl getActionRptList Start");
 		
 		List<ActionReport> actionReportList = null;
 		actionReportList = ljhDAO.ljhGetActionRptList();
+		System.out.println("LjhServiceImpl getActionRptList actionReportList.size() : " + actionReportList.size());
 		
-		return null;
+		return actionReportList;
+	}
+
+	// 조치 결과 보고서 INSERT
+	@Override
+	public int actionRptWrite(ActionReport actionReport) {
+		System.out.println("LjhServiceImpl actionRptWrite Start");
+		
+		int result = ljhDAO.ljhInsertActionRpt(actionReport);
+		System.out.println("LjhServiceImpl actionRptWrite result : " + result);
+		
+		return result;
+	}
+
+	// 조치 결과 보고서 상세
+	@Override
+	public ActionReport getActionRpt(Integer doc_no) {
+		System.out.println("LjhServiceImpl getActionRpt Start");
+		
+		ActionReport actionRpt = null;
+		actionRpt = ljhDAO.ljhGetActionRpt(doc_no);
+		
+		System.out.println("LjhServiceImpl getActionRpt actionRpt -> " + actionRpt);
+		
+		return actionRpt;
+	}
+	
+	// 조치 결과 보고서 수정
+	@Override
+	public int actionRptUpdate(ActionReport actionReport) {
+		System.out.println("LjhServiceImpl actionRptUpdate Start");
+		
+		int result = ljhDAO.ljhUpdateActionRpt(actionReport);
+		System.out.println("LjhServiceImpl actionRptUpdate result -> " + result);
+		
+		return result;
+	}
+
+	// 조치 결과 보고서 삭제
+	@Override
+	public int actionRptDelete(Integer doc_no) {
+		System.out.println("LjhServiceImpl actionRptDelete Start");
+		
+		int result = ljhDAO.ljhDeleteActionRpt(doc_no);
+		System.out.println("LjhServiceImpl actionRptDelete result -> " + result);
+		
+		return result;
+	}
+
+	@Override
+	public List<BreakReport> getBreakRptListPage(BreakReport breakRpt) {
+		System.out.println("LjhServiceImpl getBreakRptListPage Start");
+		
+		List<BreakReport> breakRptList = ljhDAO.ljhGetBreakRptListPage(breakRpt);
+		System.out.println("LjhServiceImpl getBreakRptListPage breakRptList.size() -> " + breakRptList.size());
+		
+		return breakRptList;
 	}
 	
 	

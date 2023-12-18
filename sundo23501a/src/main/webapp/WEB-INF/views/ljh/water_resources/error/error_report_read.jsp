@@ -6,9 +6,50 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<style type="text/css">
+	.title {
+		text-align: center;
+		font-size: 25pt;
+	}
+	
+	table {
+		width: 100%;
+		border-top: solid gray 2px;
+		border-bottom: solid gray 2px;
+	}
+	
+	tr {
+		border-bottom: solid lightgray 1px;
+		border-top: solid lightgray 1px;
+	}
+	
+	.btns {
+		text-align: right;
+		margin-top: 20px;
+	}
+	
+	th {
+		background: #EAEAEA;
+		padding: 5px 10px;
+	}
+	
+	td {
+		padding: 5px 10px;
+	}
+	
+	.rptTbl th {
+		width: 200px;
+	}
+
+	.alarmTbl .cate {
+		width: 200px;
+	}
+</style>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script type="text/javascript">
-	function delRpt() {
+	function delErrorRpt() {
 		var answer = confirm('보고서를 삭제하시겠습니까?')
 		
 		if (answer) {
@@ -34,9 +75,9 @@
 </script>
 </head>
 <body>
-	고장 보고서 상세 페이지
+	<p class="title">고장 보고서 상세 페이지</p>
 	<div>
-		<table border="1">
+		<table class="rptTbl">
 			<tr>
 				<th>시설물 종류</th><td>${breakReport.facility_category }</td>
 				<th>시설물 코드</th><td>${breakReport.facility_code }</td>
@@ -64,9 +105,11 @@
 				</td></tr>
 			<tr><th>향후계획</th><td colspan="5">${breakReport.future_plan }</td></tr>
 			<!-- <tr><th>파일</th><td colspan="5"><input type="file" name="file1"></td></tr> -->
-			
+		</table>
+		
+		<table class="alarmTbl">
 			<tr>
-				<th rowspan="50">알람내역</th>
+				<th rowspan="50" class="cate">알람내역</th>
 				<th>알람코드</th><th>알람내용</th><th>알람일시</th>
 			</tr>
 			
@@ -75,17 +118,12 @@
 					<td>${alarmList.alarm_code }</td><td>${alarmList.alarm_content }</td><td>${alarmList.alarm_date }</td>
 				</tr>
 			</c:forEach>
-			
-			<tfoot>
-				<tr>
-					<td colspan="6">
-						<button onclick="location.href='/error_report_list'">목록</button>
-						<button onclick="location.href='/error_report_update_form?doc_no=${breakReport.doc_no}'">수정</button>
-						<button onclick="delRpt()">삭제</button>
-					</td>
-				</tr>
-			</tfoot>
 		</table>
+		<div class="btns">
+			<button class="btn btn-dark btn-sm" onclick="location.href='/error_report_list'">목록</button>
+			<button class="btn btn-dark btn-sm" onclick="location.href='/error_report_update_form?doc_no=${breakReport.doc_no}'">수정</button>
+			<button class="btn btn-dark btn-sm" onclick="delErrorRpt()">삭제</button>
+		</div>
 	</div>
 </body>
 </html>

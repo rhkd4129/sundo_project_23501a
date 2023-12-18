@@ -4,12 +4,26 @@
 
 	<!-- 고장/조치결과보고 > 고장 보고서 목록 -->
 	<select id="ljhGetErrorRptList" resultType="breakReport">
-		SELECT	doc_no, user_id, facility_category, facility_code, check_target, m_category, s_category,
-				subject, break_date, break_cause, current_state, handling_flag, handling_content, future_plan,
-				TO_CHAR(create_datetime, 'yyyy-MM-dd') AS create_datetime,
-				TO_CHAR(modify_datetime, 'yyyy-MM-dd') AS modify_datetime
-		FROM	break_report
+		SELECT	br.doc_no, TO_CHAR(br.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+				br.facility_category, br.subject, u.user_name
+		FROM	break_report br, user_info u
+		WHERE	u.user_id = br.user_id
 		ORDER BY doc_no desc
+	</select>
+
+	<!-- 고장/조치결과보고 > 고장 보고서 목록 페이징 작업용 -->
+	<select id="ljhGetBreakRptListPage" parameterType="breakReport" resultType="breakReport">
+		<![CDATA[
+			SELECT	*
+			FROM	(
+						SELECT	br.doc_no, TO_CHAR(br.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+								br.facility_category, br.subject, u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+						FROM	break_report br, user_info u
+						WHERE	u.user_id = br.user_id
+					)
+			WHERE	rn >= #{start}
+			AND		rn <= #{end}
+		]]>
 	</select>
 
 	<!-- 수자원 시설물 종류 SELECT -->
@@ -107,14 +121,50 @@
 		WHERE	break_report_no = #{doc_no}
 	</update>
 	
+	
+<!-- ////////////////////////////////////////////////////////////////////////////////////// -->	
 	<!-- 고장/조치결과보고 > 조치 결과 보고서 목록 -->
 	<select id="ljhGetActionRptList" resultType="actionReport">
-		SELECT	doc_no, user_id, facility_category, facility_code, check_target, m_category,
-			s_category, break_date, action_content, spec_memo, future_plan,
-			TO_CHAR(create_datetime, 'yyyy-MM-dd') AS create_datetime,
-			TO_CHAR(modify_datetime, 'yyyy-MM-dd') AS modify_datetime
-		FROM	action_report
+		SELECT	ar.doc_no, ar.facility_category, ar.action_date,
+				TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+				u.user_name
+		FROM	action_report ar, user_info u
+		WHERE	u.user_id = ar.user_id
+		ORDER BY doc_no desc
 	</select>
+	
+	<!-- 조치 결과 보고서 INSERT -->
+	<insert id="ljhInsertActionRpt" parameterType="actionReport">
+		INSERT INTO action_report (doc_no, user_id, facility_category, facility_code, check_target, m_category, s_category,
+								   break_date, action_date, break_content, action_content, spec_memo, future_plan, create_datetime)
+		VALUES (nextval('action_report_doc_no_seq'), #{user_id}, #{facility_category}, #{facility_code}, #{check_target},
+				#{m_category}, #{s_category}, #{break_date}::date, #{action_date}::date, #{break_content}, #{action_content},
+		 		#{spec_memo}, #{future_plan}, CURRENT_DATE)
+	</insert>
+	
+	<!-- 조치 결과 보고서 상세 -->
+	<select id="ljhGetActionRpt" parameterType="Integer" resultType="actionReport">
+		SELECT	ar.*, u.user_name
+		FROM	action_report ar, user_info u
+		WHERE	u.user_id = ar.user_id
+		AND		doc_no = #{doc_no}
+	</select>
+	
+	<!-- 조치 결과 보고서 수정 -->
+	<update id="ljhUpdateActionRpt" parameterType="actionReport">
+		UPDATE	action_report
+		SET		facility_category = #{facility_category}, facility_code = #{facility_code},
+				check_target = #{check_target}, m_category = #{m_category}, s_category = #{s_category},
+				break_date = #{break_date}::date, action_date = #{action_date}::date,
+				break_content = #{break_content}, action_content = #{action_content},
+				spec_memo = #{spec_memo}, future_plan = #{future_plan}, modify_datetime = CURRENT_DATE 
+		WHERE	doc_no = #{doc_no}
+	</update>
+	
+	<delete id="ljhDeleteActionRpt" parameterType="Integer">
+		DELETE	FROM	action_report
+		WHERE	doc_no = #{doc_no}
+	</delete>
 	
 	
 	

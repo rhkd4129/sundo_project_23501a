@@ -16,6 +16,7 @@ import com.postgres.sample.dto.ActionReport;
 import com.postgres.sample.dto.Alarm;
 import com.postgres.sample.dto.BreakReport;
 import com.postgres.sample.dto.Code;
+import com.postgres.sample.dto.Paging;
 import com.postgres.sample.dto.WaterResources;
 import com.postgres.sample.service.ljh.LjhService;
 
@@ -29,13 +30,24 @@ public class LjhController {
 
 	// 고장/조치결과보고 > 고장 보고서 목록
 	@RequestMapping("/error_report_list")
-	public String errorRptList(Model model) {
+	public String errorRptList(String currentPage, Model model) {
 		System.out.println("LjhController errorReportList Start");
 		
 		List<BreakReport> breakReportList = new ArrayList<BreakReport>();
 		breakReportList = ljhService.getErrorRptList();
 		
-		model.addAttribute("breakReportList", breakReportList);
+		// 페이징 작업
+		int total = breakReportList.size();
+		
+		Paging paging = new Paging(total, currentPage, 10);
+		BreakReport breakRpt = new BreakReport();
+		breakRpt.setStart(paging.getStart());
+		breakRpt.setEnd(paging.getEnd());
+		
+		List<BreakReport> breakRptList = ljhService.getBreakRptListPage(breakRpt);
+		
+		model.addAttribute("breakReportList", breakRptList);
+		model.addAttribute("page", paging);
 		
 		return "ljh/water_resources/error/error_report_list";
 	}
@@ -93,8 +105,8 @@ public class LjhController {
 		
 		if (breakReport.getHandling_flag() == null) {
 			breakReport.setHandling_flag("N");
-			
 			System.out.println("breakReport.getHandling_flag() -> " + breakReport.getHandling_flag());
+			
 			int result = ljhService.errorRptWrite(breakReport, alarm);
 		} else {
 			int result = ljhService.errorRptWrite(breakReport, alarm);
@@ -109,7 +121,7 @@ public class LjhController {
 		System.out.println("LjhController errorRptRead Start");
 		
 		BreakReport breakReport = new BreakReport();
-		breakReport = ljhService.gerErrorRpt(doc_no);		// 고장 보고서 SELECT
+		breakReport = ljhService.getErrorRpt(doc_no);		// 고장 보고서 SELECT
 		
 		List<Alarm> alarmList = new ArrayList<Alarm>();
 		alarmList = ljhService.getErrorRptAlarm(doc_no);	// 고장 보고서에 등록된 알람 SELECT
@@ -132,7 +144,7 @@ public class LjhController {
 		checkCodeList = ljhService.getCheckCode();			// 점검대상, 중분류, 소분류 SELECT
 		
 		BreakReport breakReport = new BreakReport();
-		breakReport = ljhService.gerErrorRpt(doc_no);		// 고장 보고서 SELECT
+		breakReport = ljhService.getErrorRpt(doc_no);		// 고장 보고서 SELECT
 		
 		String facility_category = breakReport.getFacility_category();
 		List<WaterResources> wrCodeList = new ArrayList<WaterResources>();
@@ -165,7 +177,7 @@ public class LjhController {
 		
 		int result = ljhService.errorRptUpdate(breakReport, alarm);
 		
-		return "redirect:/error_report_read?doc_no=" + breakReport.getDon_no();
+		return "redirect:/error_report_read?doc_no=" + breakReport.getDoc_no();
 	}
 	
 	// 고장 보고서 삭제
@@ -193,20 +205,92 @@ public class LjhController {
 		return "ljh/water_resources/error/action_report_list";
 	}
 	
-	//  조치 결과 보고서 작성
+	// 조치 결과 보고서 작성
 	@RequestMapping("/action_report_write_form")
 	public String actionRptWriteForm(Model model) {
 		System.out.println("LjhController actionRptWriteForm Start");
 		
+		List<WaterResources> waterCategory = new ArrayList<WaterResources>();
+		waterCategory = ljhService.getWaterCategory();
+		
+		List<Code> checkCodeList = new ArrayList<Code>();
+		checkCodeList = ljhService.getCheckCode();
+		
+		model.addAttribute("waterCategory", waterCategory);
+		model.addAttribute("checkCodeList", checkCodeList);
+		
 		return "ljh/water_resources/error/action_report_write";
 	}
 	
+	// 조치 결과 보고서 INSERT
+	@RequestMapping("/action_report_write")
+	public String actionRptWrite(ActionReport actionReport) {
+		System.out.println("LjhController actionRptWrite Start");
+		
+		int result = ljhService.actionRptWrite(actionReport);
+		
+		return "redirect:/action_report_list";
+	}
 	
+	// 조치 결과 보고서 상세
+	@RequestMapping("/action_report_read")
+	public String actionRptRead(Integer doc_no, Model model) {
+		System.out.println("LjhController actionRptRead Start");
+		
+		ActionReport actionRpt = new ActionReport();
+		actionRpt = ljhService.getActionRpt(doc_no);
+		
+		model.addAttribute("actionRpt", actionRpt);
+		
+		return "ljh/water_resources/error/action_report_read";
+	}
 	
-
+	// 조치 결과 보고서 수정
+	@RequestMapping("/action_report_update_form")
+	public String actionRptUpdateForm(Integer doc_no, Model model) {
+		System.out.println("LjhController actionRptUpdateForm Start");
+		
+		List<WaterResources> waterCategory = new ArrayList<WaterResources>();
+		waterCategory = ljhService.getWaterCategory();		// 수자원 시설물 카테고리 SELECT
+		
+		List<Code> checkCodeList = new ArrayList<Code>();
+		checkCodeList = ljhService.getCheckCode();			// 점검대상, 중분류, 소분류 SELECT
+		
+		ActionReport actionRpt = new ActionReport();
+		actionRpt = ljhService.getActionRpt(doc_no);		// 조치 결과 보고서 SELECT
+		
+		String facility_category = actionRpt.getFacility_category();
+		List<WaterResources> wrCodeList = new ArrayList<WaterResources>();
+		wrCodeList = getWRCode(facility_category);			// SELECT한 고장 보고서의 시설물 종류에 해당하는 시설물 코드 리스트
+		
+		model.addAttribute("waterCategory", waterCategory);
+		model.addAttribute("checkCodeList", checkCodeList);
+		model.addAttribute("actionRpt", actionRpt);
+		model.addAttribute("wrCodeList", wrCodeList);
+		
+		return "ljh/water_resources/error/action_report_update";
+	}
 	
-
+	// 조치 결과 보고서 수정 실행
+	@RequestMapping("/action_report_update")
+	public String actionRptUpdate(ActionReport actionReport) {
+		System.out.println("LjhController actionRptUpdate Start");
+		
+		int result = ljhService.actionRptUpdate(actionReport);
+		
+		return "redirect:/action_report_read?doc_no=" + actionReport.getDoc_no();
+	}
 	
+	// 조치 결과 보고서 삭제
+	@ResponseBody
+	@RequestMapping("/action_report_delete")
+	public int actionRptDelete(Integer doc_no) {
+		System.out.println("LjhController actionRptDelete Start");
+		
+		int result = ljhService.actionRptDelete(doc_no);
+		
+		return result;
+	}
 	
 	
 	
