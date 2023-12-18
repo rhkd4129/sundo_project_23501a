@@ -11,4 +11,7 @@
 <%--<link rel="stylesheet" type="text/css" href="/common/css/common.css">
 <script type="text/javascript" src="/common/js/common.js"></script>--%>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- 부트스트랩 JavaScript 및 Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- COMMON END -->
