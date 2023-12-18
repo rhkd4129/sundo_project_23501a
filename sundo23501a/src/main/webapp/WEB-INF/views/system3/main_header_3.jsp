@@ -6,7 +6,32 @@
 	<div class="container-fluid">		
 		<button class="btn btn-secondary" onclick="goto('/main')">
 			<a class="navbar-brand" style="margin-left:10px" href="/main"><b>수자원 시설물 관리시스템</b></a>
-		</button>		
+		</button>
+
+		<div style="margin-left: 4%">
+			<button class="btn btn-secondary" onclick="goto('/main')">
+				<a class="navbar-brand" style="margin-left:10px" href="/water_resourcesList"><b>점검결과작성</b></a>
+			</button>
+
+			<button class="btn btn-secondary" onclick="goto('/main')">
+				<a class="navbar-brand" style="margin-left:10px" href="/selectCheckReportList"><b>점검이력조회</b></a>
+			</button>
+
+
+			<button class="btn btn-secondary" onclick="goto('/main')">
+				<a class="navbar-brand" style="margin-left:10px" href="/main"><b>점검이력통계</b></a>
+			</button>
+
+			<button class="btn btn-secondary" onclick="goto('/main')">
+				<a class="navbar-brand" style="margin-left:10px" href="/action_report_list"><b>고장/조치결과보고</b></a>
+			</button>
+
+		</div>
+
+
+
+
+
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>

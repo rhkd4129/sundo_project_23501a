@@ -12,9 +12,9 @@ $(function() {
 	if(system_category == '1') {
 		location.href = '/adminpage_main';
 	}else if(system_category == '2') {
-		location.href = '/observation_main';
+		location.href = '/realTimeSystem/layer';
 	}else if(system_category == '3') {
-		location.href = '/water_main';
+		location.href = '/water_resourcesList';
 	}else{
 		location.href = '/user_login';
 	}

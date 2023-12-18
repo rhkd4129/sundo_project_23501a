@@ -12,6 +12,7 @@
 
 <!-- JS START -->
 <script type="text/javascript" src="/js/board.js"></script>
+	<script type="text/javascript" src="/js/common.js"></script>
 <!-- JS END -->
 
 <script type="text/javascript">

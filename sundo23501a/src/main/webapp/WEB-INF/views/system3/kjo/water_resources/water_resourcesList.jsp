@@ -6,6 +6,34 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+        header {
+            height: 55px;
+        }
+    </style>
+    <script>
+
+        $(function() {
+
+            $.ajax({
+                url			: '/main_header_3',
+                dataType 	: 'html',
+                success		: function(data) {
+                    $('#header').html(data);
+                }
+            });
+
+            $.ajax({
+                url			: '/main_footer',
+                dataType 	: 'html',
+                success		: function(data) {
+                    $('#footer').html(data);
+                }
+            });
+        });
+
+    </script>
+
     <meta charset="UTF-8">
     <title>Insert title here</title>
 <%--    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>--%>
@@ -97,86 +125,101 @@
 
     </script>
 </head>
-
-<table>
-    <tr>
-        <td>시설물 종류:</td>
-        <td>
-            <select class="form-select" id="facility_code_List" onchange="getWrList()">
-                <c:forEach items="${wrctgList}" var="list">
-                    <option name="facility_category"
-                            value="${list.facility_category}">${list.facility_category}</option>
-                </c:forEach>
-            </select>
-        </td>
-        <td>행정구역:</td>
-        <td>
-            <select class="form-select" id="org_area_List">
-                <c:forEach items="${orgList}" var="list">
-                    <option name="facility_addr" value="${list.org_area}">${list.org_area_name}</option>
-                </c:forEach>
-            </select>
-        </td>
-        <td>시설물 유형:</td>
-        <td>
-            <input class="form-control" type="text" name="cate_name" id="cate_name">
-        </td>
-        <td>시설물 코드:</td>
-        <td>
-            <input class="form-control" type="text" name="facility_code" id="facility_code" placeholder="XXXXXXXXXXX">
-        </td>
-        <td>
-            <input class="btn btn-secondary" type="button" id="search_button" value="검색" onclick="searchWaterResources()">
-        </td>
-    </tr>
-</table>
-<table class="table">
-    <tr>
-        <th>연번</th>
-        <th>시설물 종류</th>
-        <th>시설물 유형</th>
-        <th>시설물 코드</th>
-        <th>1급 행정구역</th>
-        <th>2급 행정구역</th>
-        <th>관리기관</th>
-        <th>결과 작성</th>
-    </tr>
-    <tbody id="table_body">
-    <c:forEach items="${wrList}" var="list">
-        <tr>
-            <td>${list.rn}</td>
-            <td>${list.facility_category}</td>
-            <td>${list.cate_name}</td>
-            <td>${list.facility_code}</td>
-            <td>${list.first_area}</td>
-            <td>${list.second_area}</td>
-            <td>${list.org_name}</td>
-            <td><input type="button" value="입력" class="btn btn-light" onclick="getcheckresult(${list.facility_code})">
-
-        </tr>
-    </c:forEach>
+<body>
+    <header id="header"></header>
 
 
+    <div class="container" style="margin-top: 3%">
+        <div class="row">
+            <div id="center">
+                <table>
+                    <tr>
+                        <td>시설물 종류:</td>
+                        <td>
+                            <select class="form-select" id="facility_code_List" onchange="getWrList()">
+                                <c:forEach items="${wrctgList}" var="list">
+                                    <option name="facility_category"
+                                            value="${list.facility_category}">${list.facility_category}</option>
+                                </c:forEach>
+                            </select>
+                        </td>
+                        <td>행정구역:</td>
+                        <td>
+                            <select class="form-select" id="org_area_List">
+                                <c:forEach items="${orgList}" var="list">
+                                    <option name="facility_addr" value="${list.org_area}">${list.org_area_name}</option>
+                                </c:forEach>
+                            </select>
+                        </td>
+                        <td>시설물 유형:</td>
+                        <td>
+                            <input class="form-control" type="text" name="cate_name" id="cate_name">
+                        </td>
+                        <td>시설물 코드:</td>
+                        <td>
+                            <input class="form-control" type="text" name="facility_code" id="facility_code" placeholder="XXXXXXXXXXX">
+                        </td>
+                        <td>
+                            <input class="btn btn-secondary" type="button" id="search_button" value="검색" onclick="searchWaterResources()">
+                        </td>
+                    </tr>
+                </table>
+                <table class="table">
+                    <tr>
+                        <th>연번</th>
+                        <th>시설물 종류</th>
+                        <th>시설물 유형</th>
+                        <th>시설물 코드</th>
+                        <th>1급 행정구역</th>
+                        <th>2급 행정구역</th>
+                        <th>관리기관</th>
+                        <th>결과 작성</th>
+                    </tr>
+                    <tbody id="table_body">
+                    <c:forEach items="${wrList}" var="list">
+                        <tr>
+                            <td>${list.rn}</td>
+                            <td>${list.facility_category}</td>
+                            <td>${list.cate_name}</td>
+                            <td>${list.facility_code}</td>
+                            <td>${list.first_area}</td>
+                            <td>${list.second_area}</td>
+                            <td>${list.org_name}</td>
+                            <td><input type="button" value="입력" class="btn btn-light" onclick="getcheckresult(${list.facility_code})">
 
-    </tbody>
-</table>
-<div id="paging" class="pagination justify-content-center">
-    <c:if test="${page.startPage > page.pageBlock}">
-        <div class="page-link" onclick="searchWaterResources(${page.startPage - page.pageBlock})">
-            이전
+                        </tr>
+                    </c:forEach>
+
+
+
+                    </tbody>
+                </table>
+                <div id="paging" class="pagination justify-content-center">
+                    <c:if test="${page.startPage > page.pageBlock}">
+                        <div class="page-link" onclick="searchWaterResources(${page.startPage - page.pageBlock})">
+                            이전
+                        </div>
+                    </c:if>
+                    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+                        <div class="page-item" onclick="searchWaterResources(${i})">
+                            <div class="page-link" style="cursor:pointer">${i}</div>
+                        </div>
+                    </c:forEach>
+                    <c:if test="${page.endPage <= page.pageBlock}">
+                        <div class="page-link" onclick="searchWaterResources(${page.startPage + page.pageBlock})">
+                            다음
+                        </div>
+                    </c:if>
+                </div>
+            </div>
         </div>
-    </c:if>
-    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-        <div class="page-item" onclick="searchWaterResources(${i})">
-            <div class="page-link" style="cursor:pointer">${i}</div>
+    </div>
+    <footer class="footer py-2">
+        <div id="footer" class="container">
         </div>
-    </c:forEach>
-    <c:if test="${page.endPage <= page.pageBlock}">
-        <div class="page-link" onclick="searchWaterResources(${page.startPage + page.pageBlock})">
-            다음
-        </div>
-    </c:if>
-</div>
+    </footer>
+
+
 </body>
 
 </html>
