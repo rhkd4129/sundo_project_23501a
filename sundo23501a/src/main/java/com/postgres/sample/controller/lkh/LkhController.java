@@ -116,6 +116,8 @@ public class LkhController {
 	@PostMapping("/waterResourcesInsert")
 	public String waterResourcesInsert(WaterResources waterResources) {
 		System.out.println(waterResources.getFacility_code());
+		System.out.println(waterResources.getFacility_addr());
+		System.out.println(waterResources.getFacility_code());
 		int result = waterResourcesService.waterResourcesInsert(waterResources);
 		System.out.print("결과"+result);
 		return "redirect:/waterResourcesList";
@@ -161,7 +163,7 @@ public class LkhController {
 
 	@GetMapping("/waterResourceStatistics")
 	public String waterResourceStatistics(Model model){
-		return "lkh/waterResource/waterResourceStatistics";
+		return "system2/lkh/waterResource/waterResourceStatistics";
 	}
 
 
@@ -181,4 +183,12 @@ public class LkhController {
 		return  waterResourcesService.orgAreaLineGraph();
 
 	}
+
+	@GetMapping("/observation_rainfull")
+	public List<WaterResources> observation_rainfull(){
+
+		return  waterResourcesService.orgAreaLineGraph();
+
+	}
+
 }
