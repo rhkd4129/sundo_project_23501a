@@ -6,9 +6,12 @@
         select count(*) as total from check_report where facility_code = #{facility_code}
     </select>
 -->
+    <select id="cntChkListByFacilityCode" parameterType="checkList" resultType="checkList">
+        select count(*) as total from check_list where facility_code = #{facility_code}
+    </select>
 
     <insert id="inputChkList" parameterType="checkList" >
         insert into check_list
-        values(#{doc_no},#{facility_code},#{check_category},#{check_item},#{check_grade},#{note},default)
+        values(#{doc_no},#{facility_code},#{check_category},#{check_item},#{check_grade},#{note},#{checklistist_no})
     </insert>
 </mapper>

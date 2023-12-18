@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
+<%@ include file="/WEB-INF/views/header.jsp" %>
 
 <!DOCTYPE html>
 <html>
@@ -10,7 +11,18 @@
     <script type="text/javascript"
             src="http://code.jquery.com/jquery-latest.min.js"></script>
     <!-- COMMON END -->
+    <style type="text/css">
+        container{
+            width: 80%;
+        }
+        ul{
+            padding: 0;
+        }
+        li{
+            list-style: none;
+        }
 
+    </style>
 
     <script type="text/javascript">
 
@@ -86,8 +98,12 @@
                 success: function (response) {
                     // 서버 응답에 대한 로직
                     console.log(response);
+                    let url = "/water_resourcesList";
+                    location.replace(url);
+
                 },
                 error: function (error) {
+                    alert("값을 정확히 입력하세요");
                     console.log(error);
                 }
             });
@@ -97,8 +113,8 @@
     </script>
 </head>
 <body>
-<form action="checkresultSave" method="post" id="checkResultForm">
-    <table>
+<container>
+    <table class="table">
         <tr>
             <td>시설물코드</td>
             <input type="hidden" id="facility_code" value="${WaterResources.facility_code}">
@@ -108,7 +124,7 @@
             <td>유형</td>
             <td id="cate_name">${WaterResources.cate_name }</td>
         </tr>
-        <tr>
+        <tr class="table">
             <td>점검일자:</td>
             <td><input type="date" name="check_date" id="check_date"></td>
 
@@ -119,13 +135,13 @@
                 <option value="비">비</option>
             </select></td>
             <td>점검자 소속:</td>
-            <td><input type="text" name="user_department" id="user_department">
+            <td><input class="form-control" type="text" name="user_department" id="user_department">
             </td>
             <td>직급:</td>
-            <td><input type="text" name="user_position" id="user_position">
+            <td><input class="form-control" type="text" name="user_position" id="user_position">
             </td>
             <td>이름:</td>
-            <td><input type="text" name="user_name" id="user_name">
+            <td><input class="form-control" type="text" name="user_name" id="user_name">
             </td>
 
         </tr>
@@ -147,17 +163,17 @@
             </td>
             <td>
                 <ul>
-                    <li><select class="check_grade" id="check_grade1">
+                    <li><select class="check_grade form-select" id="check_grade1">
                         <option value="a">a</option>
                         <option value="b">b</option>
                         <option value="c">c</option>
                     </select></li>
-                    <li><select class="check_grade" id="check_grade2">
+                    <li><select class="check_grade form-select" id="check_grade2">
                         <option value="a">a</option>
                         <option value="b">b</option>
                         <option value="c">c</option>
                     </select></li>
-                    <li><select class="check_grade" id="check_grade3">
+                    <li><select class="check_grade form-select" id="check_grade3">
                         <option value="a">a</option>
                         <option value="b">b</option>
                         <option value="c">c</option>
@@ -166,9 +182,9 @@
             </td>
             <td>
                 <ul>
-                    <li><input class="note" id="note1" type="text" name="input1"></li>
-                    <li><input class="note" id="note2" type="text" name="input2"></li>
-                    <li><input class="note" id="note3" type="text" name="input3"></li>
+                    <li><input class="note form-control" id="note1" type="text" name="input1"></li>
+                    <li><input class="note form-control" id="note2" type="text" name="input2"></li>
+                    <li><input class="note form-control" id="note3" type="text" name="input3"></li>
                 </ul>
             </td>
         </tr>
@@ -185,22 +201,22 @@
             </td>
             <td>
                 <ul>
-                    <li><select class="check_grade" id=check_grade4>
+                    <li><select class="check_grade form-select" id=check_grade4>
                         <option value="a">a</option>
                         <option value="b">b</option>
                         <option value="c">c</option>
                     </select></li>
-                    <li><select class="check_grade" id=check_grade5>
+                    <li><select class="check_grade form-select" id=check_grade5>
                         <option value="a">a</option>
                         <option value="b">b</option>
                         <option value="c">c</option>
                     </select></li>
-                    <li><select class="check_grade" id=check_grade6>
+                    <li><select class="check_grade form-select" id=check_grade6>
                         <option value="a">a</option>
                         <option value="b">b</option>
                         <option value="c">c</option>
                     </select></li>
-                    <li><select class="check_grade" id=check_grade7>
+                    <li><select class="check_grade form-select" id=check_grade7>
                         <option value="a">a</option>
                         <option value="b">b</option>
                         <option value="c">c</option>
@@ -209,10 +225,10 @@
             </td>
             <td>
                 <ul>
-                    <li><input class="note" id="note4" type="text" name="input1"></li>
-                    <li><input class="note" id="note5" type="text" name="input2"></li>
-                    <li><input class="note" id="note6" type="text" name="input3"></li>
-                    <li><input class="note" id="note7" type="text" name="input3"></li>
+                    <li><input class="note form-control" id="note4" type="text" name="input1"></li>
+                    <li><input class="note form-control" id="note5" type="text" name="input2"></li>
+                    <li><input class="note form-control" id="note6" type="text" name="input3"></li>
+                    <li><input class="note form-control" id="note7" type="text" name="input3"></li>
                 </ul>
             </td>
         </tr>
@@ -228,22 +244,22 @@
             </td>
             <td>
                 <ul>
-                    <li><select class="check_grade" id=check_grade8>
+                    <li><select class="check_grade form-select" id=check_grade8>
                         <option value="a">a</option>
                         <option value="b">b</option>
                         <option value="c">c</option>
                     </select></li>
-                    <li><select class="check_grade" id=check_grade9>
+                    <li><select class="check_grade form-select" id=check_grade9>
                         <option value="a">a</option>
                         <option value="b">b</option>
                         <option value="c">c</option>
                     </select></li>
-                    <li><select class="check_grade" id=check_grade10>
+                    <li><select class="check_grade form-select" id=check_grade10>
                         <option value="a">a</option>
                         <option value="b">b</option>
                         <option value="c">c</option>
                     </select></li>
-                    <li><select class="check_grade" id=check_grade11>
+                    <li><select class="check_grade form-select" id=check_grade11>
                         <option value="a">a</option>
                         <option value="b">b</option>
                         <option value="c">c</option>
@@ -252,10 +268,10 @@
             </td>
             <td>
                 <ul>
-                    <li><input class="note" id="note8" type="text" name="input2"></li>
-                    <li><input class="note" id="note9" type="text" name="input3"></li>
-                    <li><input class="note" id="note10" type="text" name="input4"></li>
-                    <li><input class="note" id="note11" type="text" name="input4"></li>
+                    <li><input class="note form-control" id="note8" type="text" name="input2"></li>
+                    <li><input class="note form-control" id="note9" type="text" name="input3"></li>
+                    <li><input class="note form-control" id="note10" type="text" name="input4"></li>
+                    <li><input class="note form-control" id="note11" type="text" name="input4"></li>
                 </ul>
             </td>
         </tr>
@@ -269,12 +285,12 @@
             </td>
             <td>
                 <ul>
-                    <li><select class="check_grade" id=check_grade12>
+                    <li><select class="check_grade form-select" id=check_grade12>
                         <option value="a">a</option>
                         <option value="b">b</option>
                         <option value="c">c</option>
                     </select></li>
-                    <li><select class="check_grade" id=check_grade13>
+                    <li><select class="check_grade form-select" id=check_grade13>
                         <option value="a">a</option>
                         <option value="b">b</option>
                         <option value="c">c</option>
@@ -283,18 +299,24 @@
             </td>
             <td>
                 <ul>
-                    <li><input class="note" id="note12" type="text" name="input1"></li>
-                    <li><input class="note" id="note13" type="text" name="input2"></li>
+                    <li><input class="note form-control" id="note12" type="text" name="input1"></li>
+                    <li><input class="note form-control" id="note13" type="text" name="input2"></li>
                 </ul>
             </td>
         </tr>
         <tr>
             <td>점검결과:</td>
-            <td><input id="check_result" type="text"></td>
+
+            <td>
+                <select class="form-select" id="check_result" name="check_result">
+                    <option value="보수필요">보수필요</option>
+                    <option value="양호">양호</option>
+                </select>
+            </td>
         </tr>
         <tr>
             <td>특이사항:</td>
-            <td><input id="spec_memo" type="text"></td>
+            <td><input class="form-control" id="spec_memo" type="text"></td>
         </tr>
         <tr>
             <td>점검일지:파일임</td>
@@ -305,6 +327,6 @@
     <input type="button" value="삭제">
     <input type="button" value="초기화">
     <input type="button" value="저장" id="saveButton" onclick="btnclick()">
-</form>
+</container>
 </body>
 </html>

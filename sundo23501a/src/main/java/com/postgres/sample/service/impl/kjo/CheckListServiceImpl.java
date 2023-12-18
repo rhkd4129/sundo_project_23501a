@@ -16,4 +16,9 @@ public class CheckListServiceImpl implements CheckListService {
     public int inputChkList(CheckList checkList) {
         return kjo_CheckListDAO.inputChkList(checkList);
     }
+
+    @Override
+    public CheckList cntChkListByFacilityCode(CheckList chkList) {
+        return kjo_CheckListDAO.cntChkListByFacilityCode(chkList);
+    }
 }

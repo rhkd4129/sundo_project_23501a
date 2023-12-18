@@ -4,4 +4,6 @@ import com.postgres.sample.dto.CheckList;
 
 public interface CheckListService {
     int inputChkList(CheckList checkList);
+
+    CheckList cntChkListByFacilityCode(CheckList chkList);
 }
