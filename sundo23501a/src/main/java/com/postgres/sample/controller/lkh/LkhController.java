@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequiredArgsConstructor
+
 public class LkhController {
 	private final WaterResourcesService waterResourcesService;
 	@ResponseBody
@@ -83,7 +84,7 @@ public class LkhController {
 		  model.addAttribute("page",page);
 	
 		
-		return "lkh/waterResource/waterResourcesList";
+		return "system2/lkh/waterResource/waterResourcesList";
 			//해버렷다 ...
 	}
 	
@@ -101,7 +102,7 @@ public class LkhController {
 		model.addAttribute("orgArea_category", orgArea_category);
 		model.addAttribute("codeList", codeList);
 		model.addAttribute("findfacility_category", findfacility_category);
-		return "lkh/waterResource/waterResourceInsetForm";
+		return "system2/lkh/waterResource/waterResourceInsetForm";
 	}
 	
 	@ResponseBody
@@ -115,11 +116,9 @@ public class LkhController {
 	@PostMapping("/waterResourcesInsert")
 	public String waterResourcesInsert(WaterResources waterResources) {
 		System.out.println(waterResources.getFacility_code());
-
-
+		System.out.println(waterResources.getFacility_addr());
+		System.out.println(waterResources.getFacility_code());
 		int result = waterResourcesService.waterResourcesInsert(waterResources);
-		
-		
 		System.out.print("결과"+result);
 		return "redirect:/waterResourcesList";
 	}
@@ -130,7 +129,7 @@ public class LkhController {
 		WaterResources waterResources = waterResourcesService.waterResourceDetail(facility_code);
 		model.addAttribute("waterResources",waterResources);
 
-		return "lkh/waterResource/waterResourceDetail";
+		return "system2/lkh/waterResource/waterResourceDetail";
 	}
 	
 	
@@ -151,7 +150,7 @@ public class LkhController {
 		model.addAttribute("waterResources", waterResources);
 
 
-		return "lkh/waterResource/waterResourceUpdateForm";
+		return "system2/lkh/waterResource/waterResourceUpdateForm";
 	}
 	
 	@PostMapping("/waterResourcesUpdate")
@@ -164,7 +163,7 @@ public class LkhController {
 
 	@GetMapping("/waterResourceStatistics")
 	public String waterResourceStatistics(Model model){
-		return "lkh/waterResource/waterResourceStatistics";
+		return "system2/lkh/waterResource/waterResourceStatistics";
 	}
 
 
@@ -172,8 +171,24 @@ public class LkhController {
 	@GetMapping("/doughnut_chart")
 	public List<Integer> waterResourceStatistics(){
 		System.out.println("doughnutChart");
-		List<Integer> bac = waterResourcesService.doughnutChart();
-		System.out.println("doughnutCaaaaaaaaaaaaaaaaaahart");
 		return waterResourcesService.doughnutChart();
 	}
+
+
+	@ResponseBody
+	@GetMapping("/orgAreaLineGraph")
+	public List<WaterResources> orgAreaLineGraph(){
+		System.out.println("orgAreaLineGraph");
+		List<WaterResources> abc = waterResourcesService.orgAreaLineGraph();
+		return  waterResourcesService.orgAreaLineGraph();
+
+	}
+
+	@GetMapping("/observation_rainfull")
+	public List<WaterResources> observation_rainfull(){
+
+		return  waterResourcesService.orgAreaLineGraph();
+
+	}
+
 }

@@ -25,4 +25,5 @@ public interface WaterResourcesService {
 
 	 WaterResources waterResourceDetail(String facility_code);
 	List<Integer> doughnutChart();
+	List<WaterResources> orgAreaLineGraph();
 }

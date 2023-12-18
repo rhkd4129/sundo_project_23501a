@@ -96,7 +96,18 @@
 	</script>
 </head>
 <body>
-<h2>Water Resources Table</h2>
+
+<div>
+	<button type="button"  class="btn btn-sm btn-secondary " onclick="location.href='/waterResourcesList' ">목록</button>
+	<button type="button"  class="btn btn-sm btn-secondary " onclick="location.href='/realTimeSystem/layer' ">지도</button>
+
+
+	<button type="button"  class="btn btn-sm btn-secondary " onclick="location.href='/observation_find' ">관측소</button>
+	<button type="button"  class="btn btn-sm btn-secondary " onclick="location.href='/waterResourcesList' ">수자원</button>
+</div>
+
+
+
  <h2><a href="/waterResourcesList">정보</a> | <a href="/waterResourceStatistics">통계</a></h2>
 
     			
@@ -125,13 +136,14 @@
     
 
 <br>
-<button type="button" onclick="location.href='/waterResourcesInsertForm' ">생성</button>
-<button type="button" onclick="location.href='/waterResourcesInsertForm' ">저장</button>
+<button type="button" class="btn btn-sm btn-primary"  onclick="location.href='/waterResourcesInsertForm' ">등록</button>
+<button type="button"  class="btn btn-sm btn-secondary " onclick="location.href='/waterResourcesInsertForm' ">저장</button>
 
 
 
 
-<h1>데이터를 테이블로 표시하기</h1>
+
+
 	<table id="facilityTable">
 		<thead>
 		<tr>
@@ -159,23 +171,23 @@
 		</tbody>
 	</table>
 
-<div id="paging">
-	<c:if test="${page.startPage > page.pageBlock}">
-		<div onclick="location.href='/waterResourcesList?currentPage=${page.startPage - page.pageBlock}'">
-			<p>[이전]</p>
-		</div>
-	</c:if>
-	<c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-		<div class="page-item" onclick="location.href='/waterResourcesList?currentPage=${i}'">
-			<div class="page-link" style="cursor:pointer">${i}</div>
-		</div>
-	</c:forEach>
-	<c:if test="${page.endPage <= page.pageBlock}">
-		<div onclick="location.href='/waterResourcesList?currentPage=${page.startPage + page.pageBlock}'">
-			<p>[다음]</p>
-		</div>
-	</c:if>
-</div>
+	<div id="paging" class="pagination justify-content-center">
+		<c:if test="${page.startPage > page.pageBlock}">
+			<div onclick="location.href='/waterResourcesList?currentPage=${page.startPage - page.pageBlock}'">
+				<p>[이전]</p>
+			</div>
+		</c:if>
+		<c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+			<div class="page-item" onclick="location.href='/waterResourcesList?currentPage=${i}'">
+				<div class="page-link" style="cursor:pointer">${i}</div>
+			</div>
+		</c:forEach>
+		<c:if test="${page.endPage <= page.pageBlock}">
+			<div onclick="location.href='/waterResourcesList?currentPage=${page.startPage + page.pageBlock}'">
+				<p>[다음]</p>
+			</div>
+		</c:if>
+	</div>
 
 
 </body>

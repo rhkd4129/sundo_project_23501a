@@ -53,6 +53,11 @@
 			padding: 1%;
 		}
 
+		.btn_group{
+			margin-top: 25%;
+			margin-bottom: 2%;
+			text-align: center;
+		}
 
 	</style>
 </head>
@@ -60,10 +65,10 @@
 
 
 	<div id="formbox">
-
-		<h2>수자원 정보</h2>
 		<button type="button" onclick="location.href='/waterResourcesList' ">목록으로</button>
-		<hr>
+		<h2>수자원 정보</h2>
+
+		<hr style="margin-bottom: 5%">
 
 		<form action ="waterResourcesInsert" method="post">
 			<p>
@@ -110,8 +115,10 @@
 			</p>
 
 
+			<div class="btn_group">
+				<button type="submit" class="btn btn-sm btn-primary">등록</button>
+			</div>
 
-			<button type="submit">작성</button>
 		</form>
 	</div>
 	
