@@ -97,6 +97,17 @@
 </head>
 <body>
 
+<div>
+	<button type="button"  class="btn btn-sm btn-secondary " onclick="location.href='/waterResourcesList' ">목록</button>
+	<button type="button"  class="btn btn-sm btn-secondary " onclick="location.href='/realTimeSystem/layer' ">지도</button>
+
+
+	<button type="button"  class="btn btn-sm btn-secondary " onclick="location.href='/observation_find' ">관측소</button>
+	<button type="button"  class="btn btn-sm btn-secondary " onclick="location.href='/waterResourcesList' ">수자원</button>
+</div>
+
+
+
  <h2><a href="/waterResourcesList">정보</a> | <a href="/waterResourceStatistics">통계</a></h2>
 
     			
@@ -127,6 +138,7 @@
 <br>
 <button type="button" class="btn btn-sm btn-primary"  onclick="location.href='/waterResourcesInsertForm' ">등록</button>
 <button type="button"  class="btn btn-sm btn-secondary " onclick="location.href='/waterResourcesInsertForm' ">저장</button>
+
 
 
 
