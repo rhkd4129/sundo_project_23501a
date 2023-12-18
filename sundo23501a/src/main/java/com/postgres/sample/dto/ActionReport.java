@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class ActionReport {
-	private Integer don_no;
+	private Integer doc_no;
 	private String 	user_id;
 	private String 	facility_category;
 	private String 	facility_code;
@@ -15,8 +15,8 @@ public class ActionReport {
 	private String 	s_category;
 	
 	
-	private Date 	break_date;
-	private Date 	action_date;
+	private String 	break_date;
+	private String 	action_date;
 	
 	private String 	break_content;
 	private String 	action_content;
@@ -24,8 +24,15 @@ public class ActionReport {
 	private String 	future_plan;
 	
 	
-	private Date 	create_datetime;
-	private Date 	modify_datetime;
+	private String 	create_datetime;
+	private String 	modify_datetime;
 	
+	// 페이징 작업
+	private int rn;
+	private String search;   	private String keyword;
+	private String pageNum;		private int total;
+	private int start; 		 	private int end;
 	
+	// 조회용 추가
+	private String	user_name;
 }

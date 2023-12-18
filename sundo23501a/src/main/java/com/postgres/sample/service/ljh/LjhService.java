@@ -16,11 +16,17 @@ public interface LjhService {
 	List<WaterResources> 	getWRCode(String facility_category);
 	List<Alarm> 			getAlarm(String facility_code);
 	int 					errorRptWrite(BreakReport breakReport, Alarm alarm);
-	BreakReport 			gerErrorRpt(Integer doc_no);
+	BreakReport 			getErrorRpt(Integer doc_no);
 	List<Alarm> 			getErrorRptAlarm(Integer doc_no);
 	int 					errorRptUpdate(BreakReport breakReport, Alarm alarm);
 	int 					errorRptDelete(Integer doc_no);
 	List<ActionReport> 		getActionRptList();
+	int 					actionRptWrite(ActionReport actionReport);
+	ActionReport 			getActionRpt(Integer doc_no);
+	int 					actionRptUpdate(ActionReport actionReport);
+	int 					actionRptDelete(Integer doc_no);
+	List<BreakReport> 		getBreakRptListPage(BreakReport breakRpt);
+	List<ActionReport> 		getActionRptListPage(ActionReport actionRpt);
 	
 	
 	
