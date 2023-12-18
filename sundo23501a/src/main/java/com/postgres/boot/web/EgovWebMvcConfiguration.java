@@ -26,9 +26,13 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 import com.postgres.cmmn.web.EgovBindingInitializer;
 import com.postgres.cmmn.web.EgovImgPaginationRenderer;
+import com.postgres.sample.service.impl.jmh.AdminInterceptor;
+import com.postgres.sample.service.impl.jmh.System2Interceptor;
+import com.postgres.sample.service.impl.jmh.System3Interceptor;
+import com.postgres.sample.service.impl.jmh.UserInfoCheckInterceptor;
 
 @Configuration
-public class EgovWebMvcConfiguration extends WebMvcConfigurationSupport {	
+public class EgovWebMvcConfiguration extends WebMvcConfigurationSupport {
 //	WebMvcConfigurationSupport:Spring MVC의 기본 구성
 //	XML이 아닌 Java Config를 통해 해당 설정할 수 있도록 해줌.
 
@@ -87,30 +91,57 @@ public class EgovWebMvcConfiguration extends WebMvcConfigurationSupport {
 		rendererType.put("image", imageRenderer);
 		DefaultPaginationManager defaultPaginationManager = new DefaultPaginationManager();
 		defaultPaginationManager.setRendererType(rendererType);
-		return defaultPaginationManager;	
+		return defaultPaginationManager;
 	}
 
 	@Bean
-    public SessionLocaleResolver localeResolver() {
-        return new SessionLocaleResolver();
-    }
+	public SessionLocaleResolver localeResolver() {
+		return new SessionLocaleResolver();
+	}
 
 	@Bean
-    public LocaleChangeInterceptor localeChangeInterceptor() {
-        LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-        interceptor.setParamName("language");
-        return interceptor;
-    }
+	public LocaleChangeInterceptor localeChangeInterceptor() {
+		LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+		interceptor.setParamName("language");
+		return interceptor;
+	}
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(localeChangeInterceptor());
-    }
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		//registry.addInterceptor(localeChangeInterceptor());
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    	registry.addResourceHandler("/**").addResourceLocations("/");
-    }
+		registry.addInterceptor(new UserInfoCheckInterceptor()) //로그인 세션 권한
+				// Interceptor 적용
+				.addPathPatterns("/**")
+
+				// Interceptor 적용하지 않음
+				.excludePathPatterns("/main_header", "/main_footer", "/board_notice_list", "/board_notice_read"
+						, "/user_login", "/user_join_write", "/user_join_agree", "/user_find_pw"
+						, "/user_find_pw_new/**", "/user_find_id", "/user_find_id_result", "/user_find_pw_auth"
+						, "/send_save_mail", "/write_user_info", "/id_confirm", "/user_find_pw_update", "/user_login_check"
+						, "/bootstrap-5.3.2-examples/assets/dist/css/bootstrap.min.css"
+						, "/bootstrap-5.3.2-examples/css/sign-in.css"
+						, "/bootstrap-5.3.2-dist/css/bootstrap.css"
+						, "/css/egovframework/common.css"
+						, "/js/board.js"
+						, "/images/**"
+				)
+		;
+
+		registry.addInterceptor(new AdminInterceptor())		//	어드민 권한 조회
+				.addPathPatterns("/system1/**");
+
+		registry.addInterceptor(new System2Interceptor())	//	실시간 수문정보 관리시스템 권한 조회
+				.addPathPatterns("/system2/**");
+
+		registry.addInterceptor(new System3Interceptor())	//	수자원 시설물 관리시스템 권한 조회
+				.addPathPatterns("/system3/**");
+	}
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/**").addResourceLocations("/");
+	}
 
 	@Bean
 	public FilterRegistrationBean encodingFilterBean() {

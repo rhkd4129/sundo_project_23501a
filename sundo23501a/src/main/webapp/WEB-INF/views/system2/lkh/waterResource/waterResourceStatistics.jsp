@@ -9,6 +9,11 @@
     <meta charset="UTF-8">
     <title>수자원 목록</title>
     <style>
+
+          header {
+              height: 55px;
+          }
+
         .doughnut_1{
         margin: 2%;
         border: 1px solid black;
@@ -31,6 +36,23 @@
 
 
         $(function () {
+
+            $.ajax({
+                url			: '/main_header_21',
+                dataType 	: 'html',
+                success		: function(data) {
+                    $('#header').html(data);
+                }
+            });
+
+            $.ajax({
+                url			: '/main_footer',
+                dataType 	: 'html',
+                success		: function(data) {
+                    $('#footer').html(data);
+                }
+            });
+
             $.ajax({
                 url: "/doughnut_chart",
                 dataType: 'json',
@@ -178,30 +200,36 @@
     </script>
 </head>
 <body>
+<header id="header"></header>
+    <div class="container">
+        <div class="row">
+            <div id="center">
+                <h2><a href="/waterResourcesList">정보</a> | <a href="/waterResourceStatistics">통계</a></h2>
+                <div class="flex-container">
+                    <!-- 첫 번째 그래프 영역 (비율 1) -->
+                    <!-- 도넛 차트의 캔버스 ID 변경 -->
+                    <div class="doughnut_1">
+                        <canvas id="doughnut_chart"></canvas>
+                    </div>
 
 
+                    <!-- 두 번째 그래프 영역 (비율 2) -->
+                    <!-- 라인 차트의 캔버스 ID 변경 -->
+                    <div class="orgAreaLineGraph">
+                        <canvas id="line_chart"></canvas>
+                    </div>
+                </div>
 
-<div class="container-fluid">
-    <h2><a href="/waterResourcesList">정보</a> | <a href="/waterResourceStatistics">통계</a></h2>
-    <div class="flex-container">
-        <!-- 첫 번째 그래프 영역 (비율 1) -->
-        <!-- 도넛 차트의 캔버스 ID 변경 -->
-        <div class="doughnut_1">
-            <canvas id="doughnut_chart"></canvas>
+            </div>
         </div>
-
-
-        <!-- 두 번째 그래프 영역 (비율 2) -->
-        <!-- 라인 차트의 캔버스 ID 변경 -->
-        <div class="orgAreaLineGraph">
-            <canvas id="line_chart"></canvas>
-        </div>
-
     </div>
-</div>
 
 
 
+    <footer class="footer py-2">
+        <div id="footer" class="container">
+        </div>
+    </footer>
 
 </body>
 </html>

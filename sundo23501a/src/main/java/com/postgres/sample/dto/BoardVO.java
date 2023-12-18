@@ -1,10 +1,7 @@
 package com.postgres.sample.dto;
 
-import lombok.Data;
-
 import java.util.Date;
 
-@Data
 public class BoardVO {
 
 	private int bno;

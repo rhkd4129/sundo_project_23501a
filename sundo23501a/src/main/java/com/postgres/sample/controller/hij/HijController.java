@@ -45,16 +45,16 @@ public class HijController {
         System.out.println("HijController observation_find START");
         int  totalCount = hs.totalCount();	// 관측소 목록 갯수
 
-   
+
         Paging page = new Paging(totalCount, currentPage);
         observation.setStart(page.getStart());
         observation.setEnd(page.getEnd());
-        
-        
+
+
         List<Observation> observationList = hs.observationList(observation); //관측소 목록 리스트
         System.out.println("observationList size : " + observationList.size());
-        
-		
+
+
         List<Code> codeListM = hs.getCodeList("observe_method"); //관측방식리스트
         List<Organization> orgList = hs.getOrgList(); //운영기관 리스트
         CategoryVO categoryVO = new CategoryVO();
@@ -73,7 +73,7 @@ public class HijController {
         model.addAttribute("categoryList", categoryList);
 
 
-        return "/observation_sys/observation_find";
+        return "/system2/observation_sys/observation_find";
     }
 
     // 관측소 등록 페이지
@@ -91,7 +91,7 @@ public class HijController {
         model.addAttribute("OrgList", orgList);
         model.addAttribute("categoryList", categoryList);
 
-        return "/observation_sys/observation_create";
+        return "/system2/observation_sys/observation_create";
     }
 
     // 관측소 등록 시행
@@ -122,7 +122,7 @@ public class HijController {
         Observation getObservation = hs.getObservation(observation);
 
         model.addAttribute("observation", getObservation);
-        return "/observation_sys/observation_detail";
+        return "/system2/observation_sys/observation_detail";
     }
 
     // 관측소 수정 조회 페이지
@@ -143,7 +143,7 @@ public class HijController {
         model.addAttribute("OrgList", orgList);
         model.addAttribute("categoryList", categoryList);
 
-        return "/observation_sys/observation_edit";
+        return "/system2/observation_sys/observation_edit";
     }
 
     // 관측소 수정 시행
@@ -177,21 +177,23 @@ public class HijController {
     @GetMapping("/time_find")
     public String time_find(WaterLevel waterLevel, String currentPage, Model model) {
         System.out.println("HijController time_find START");
-        
-        
+
+
         int totalCount= hs.waterLevelTotal();
-        
+
         Paging page = new Paging(totalCount, currentPage);
         waterLevel.setStart(page.getStart());
         waterLevel.setEnd(page.getEnd());
-        
+
         List<WaterLevel> waterLevelList = hs.waterLevelList(waterLevel);	// waterLevel 리스트
-        
+
         model.addAttribute("totalCount", totalCount);
         model.addAttribute("page", page);
         model.addAttribute("waterLevelList", waterLevelList);
         model.addAttribute("waterLevelListSize", waterLevelList.size());
-        
-        return "/observation_sys/time_find";
+        return "/system2/observation_sys/time_find";
+
+
+
     }
 }
