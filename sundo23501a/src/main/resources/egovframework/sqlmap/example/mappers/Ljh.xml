@@ -133,6 +133,22 @@
 		ORDER BY doc_no desc
 	</select>
 	
+	<!-- 고장/조치결과보고 > 조치 결과 보고서 목록 페이징 작업용 -->
+	<select id="ljhGetActionRptListPage" parameterType="actionReport" resultType="actionReport">
+		<![CDATA[
+			SELECT	*
+			FROM	(
+						SELECT	ar.doc_no, ar.facility_category, ar.action_date,
+								TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+								u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+						FROM	action_report ar, user_info u
+						WHERE	u.user_id = ar.user_id
+					)
+			WHERE	rn >= #{start}
+			AND		rn <= #{end}
+		]]>
+	</select>
+	
 	<!-- 조치 결과 보고서 INSERT -->
 	<insert id="ljhInsertActionRpt" parameterType="actionReport">
 		INSERT INTO action_report (doc_no, user_id, facility_category, facility_code, check_target, m_category, s_category,

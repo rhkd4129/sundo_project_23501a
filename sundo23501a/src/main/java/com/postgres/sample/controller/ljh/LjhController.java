@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class LjhController {
-	//
+	
 	private final LjhService ljhService;
 
 	// 고장/조치결과보고 > 고장 보고서 목록
@@ -192,15 +192,28 @@ public class LjhController {
 		return result;
 	}
 	
+	
+//-----------------------------------------------------------------------------------------
 	// 고장/조치결과보고 > 조치 결과 보고서 목록
 	@RequestMapping("/action_report_list")
-	public String actionRptList(Model model) {
+	public String actionRptList(String currentPage, Model model) {
 		System.out.println("LjhController actionRptList Start");
 		
 		List<ActionReport> actionReportList = new ArrayList<ActionReport>();
 		actionReportList = ljhService.getActionRptList();
 		
-		model.addAttribute("actionReportList", actionReportList);
+		// 페이징 작업
+		int total = actionReportList.size();
+		
+		Paging paging = new Paging(total, currentPage, 10);
+		ActionReport actionRpt = new ActionReport();
+		actionRpt.setStart(paging.getStart());
+		actionRpt.setEnd(paging.getEnd());
+		
+		List<ActionReport> actionRptList = ljhService.getActionRptListPage(actionRpt);
+		
+		model.addAttribute("actionReportList", actionRptList);
+		model.addAttribute("page", paging);
 		
 		return "ljh/water_resources/error/action_report_list";
 	}

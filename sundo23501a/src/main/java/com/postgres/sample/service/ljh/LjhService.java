@@ -26,6 +26,7 @@ public interface LjhService {
 	int 					actionRptUpdate(ActionReport actionReport);
 	int 					actionRptDelete(Integer doc_no);
 	List<BreakReport> 		getBreakRptListPage(BreakReport breakRpt);
+	List<ActionReport> 		getActionRptListPage(ActionReport actionRpt);
 	
 	
 	

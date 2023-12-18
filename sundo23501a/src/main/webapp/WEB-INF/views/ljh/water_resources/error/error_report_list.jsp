@@ -82,7 +82,7 @@
 			<c:if test="${page.endPage < page.totalPage}">
 				<a href="error_report_list?currentPage=${page.startPage + page.pageBlock}">[다음]</a>
 			</c:if>
-		</ul>		
+		</ul>
 	</div>
 </body>
 </html>

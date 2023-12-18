@@ -277,6 +277,16 @@ public class LjhServiceImpl extends EgovAbstractServiceImpl implements LjhServic
 		
 		return breakRptList;
 	}
+
+	@Override
+	public List<ActionReport> getActionRptListPage(ActionReport actionRpt) {
+		System.out.println("LjhServiceImpl getActionRptListPage Start");
+		
+		List<ActionReport> actionRptList = ljhDAO.ljhGetActionRptListPage(actionRpt);
+		System.out.println("LjhServiceImpl getActionRptListPage actionRptList.size() -> " + actionRptList.size());
+		
+		return actionRptList;
+	}
 	
 	
 	

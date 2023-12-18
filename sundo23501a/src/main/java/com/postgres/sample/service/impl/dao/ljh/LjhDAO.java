@@ -73,6 +73,9 @@ public interface LjhDAO {
 
 	// 고장 보고서 목록 페이징 작업용
 	public List<BreakReport> ljhGetBreakRptListPage(BreakReport breakRpt);
+
+	// 조치 결과 보고서 목록 페이징 작업용
+	public List<ActionReport> ljhGetActionRptListPage(ActionReport actionRpt);
 	
 	
 	

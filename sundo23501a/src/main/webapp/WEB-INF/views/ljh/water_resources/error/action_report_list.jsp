@@ -61,14 +61,28 @@
 			<tr class="tableCate">
 				<th>연번</th><th>등록 일자</th><th>시설물 종류</th><th>조치/복구 일자</th><th>작성자</th><th>조치 결과 보고서</th>
 			</tr>
-			<c:forEach var="arList" items="${actionReportList }" varStatus="status">
+			<c:forEach var="arList" items="${actionReportList }">
 				<tr class="tableRow">
-					<td>${status.count }</td><td>${arList.create_datetime }</td><td>${arList.facility_category }</td>
+					<td>${arList.rn }</td><td>${arList.create_datetime }</td><td>${arList.facility_category }</td>
 					<td>${arList.action_date }</td><td>${arList.user_name }</td>
 					<td><input type="button" class="btn btn-outline-dark btn-sm" value="열기" onclick="location.href='/action_report_read?doc_no=${arList.doc_no }'"></td>
 				</tr>
 			</c:forEach>
 		</table>
+		
+		<ul class="pagination justify-content-center">
+			<c:if test="${page.startPage > page.pageBlock}">
+				<a href="action_report_list?currentPage=${page.startPage - page.pageBlock}">[이전]</a>
+			</c:if>
+
+			<c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+				<a href="action_report_list?currentPage=${i}">[${i}]</a>
+			</c:forEach>
+
+			<c:if test="${page.endPage < page.totalPage}">
+				<a href="action_report_list?currentPage=${page.startPage + page.pageBlock}">[다음]</a>
+			</c:if>
+		</ul>
 	</div>
 </body>
 </html>
