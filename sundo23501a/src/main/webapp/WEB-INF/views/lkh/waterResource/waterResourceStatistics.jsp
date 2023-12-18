@@ -68,12 +68,14 @@
                 dataType: 'json',
                 success: function (response) {
                     console.log(response);
+
                     ////////////데이터 전처리  ///////////
                     category_1_list=[]
                     category_2_list=[]
                     category_3_list=[]
                     category_4_list=[]
                     var labels = []
+
                     for (let i = 0; i < response.length; i++) {
                         labels.push(response[i].org_area_name+'('+response[i].org_area+')');
                         category_1_list.push(response[i].category_1);
@@ -82,8 +84,7 @@
                         category_4_list.push(response[i].category_4);
                     }
 
-
-                    ///////////////////////
+                    ////////////데이터 전처리  ///////////
                     const lineCtx = document.getElementById('line_chart').getContext('2d'); // 두 번째 차트에 대해 다른 변수 사용
                     const line_data = {
                         labels: labels,
@@ -118,7 +119,6 @@
                             }
                         ]
                     };
-
                     createDrawChart(lineCtx, 'line', line_data, line_Options);
                 }
             });
@@ -132,8 +132,6 @@
                     legend: {  // 범례 설정
                         position: 'bottom'  // 아래에 위치
                     },
-
-
                 },
 
                 scales: {
@@ -149,7 +147,6 @@
                             text: '마강 수산자원시설물'
 
                         },
-
                         legend: {  // 범례 설정
                             position: 'bottom'  // 아래에 위치
                         },
