@@ -1,5 +1,7 @@
 package com.postgres.sample.dto;
 
+
+
 import java.util.Date;
 
 import lombok.Data;
@@ -11,7 +13,7 @@ public class RainFall {
 //	관측일시				N/A	DATE
 	
 	private String river_code;
-	private Date observe_datetime;
+	private Date observe_date;
 	private Double hour_01;
 	private Double hour_02;
 	private Double hour_03;

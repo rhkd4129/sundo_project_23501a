@@ -11,14 +11,22 @@
 	
 	<!-- 관측소 목록 리스트 -->
 	<select id="ijObservationList" parameterType="Observation" resultType="Observation">
-		SELECT T.*, C.cate_name observe_method_name, O.org_name, O.org_area
-		FROM 
-		   Observation T
-		   LEFT OUTER JOIN Code C
-		      ON T.observe_method = C.cate_code
-		      AND C.field_name = 'observe_method'
-		   LEFT OUTER JOIN Organization O
-		      ON T.org_code = O.org_code
+		SELECT *
+		FROM(	
+			SELECT (row_number() over()) AS rn, a.*
+			FROM(
+				SELECT T.*, C.cate_name observe_method_name, O.org_name, O.org_area
+				FROM 
+				   Observation T
+				   LEFT OUTER JOIN Code C
+				      ON T.observe_method = C.cate_code
+				      AND C.field_name = 'observe_method'
+				   LEFT OUTER JOIN Organization O
+				      ON T.org_code = O.org_code
+				      )a
+				)
+		WHERE rn BETWEEN #{start} and #{end}
+			
 	</select>
 	
 	<!-- 코드 리스트 -->
@@ -118,10 +126,26 @@
 	
 	<!-- 시자료 리스트 -->
 	<select id="ijWaterLevelList" parameterType="WaterLevel" resultType="WaterLevel">
-		SELECT W.*, T.observe_post
-		FROM 
-		   water_level W
-		   LEFT OUTER JOIN Observation T
-		   ON W.river_code = T.river_code
+			SELECT *
+			FROM(
+				SELECT (row_number() over()) AS rn, a.*	
+				FROM(
+					SELECT W.*, T.observe_post, T.observe_code
+						FROM 
+						   water_level W
+						   LEFT OUTER JOIN Observation T
+						   ON W.river_code = T.river_code
+						   WHERE W.river_code=#{river_code}
+						  )a
+				)
+		WHERE rn BETWEEN #{start} and #{end}
+				
 	</select>
+	
+	<!-- waterLevel Total -->
+	<select id="ijWaterLevelTotal" resultType="int">
+		SELECT COUNT(*)
+		FROM Water_Level
+	</select>
+
 </mapper>
