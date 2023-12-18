@@ -49,7 +49,7 @@ public class LjhController {
 		model.addAttribute("breakReportList", breakRptList);
 		model.addAttribute("page", paging);
 		
-		return "ljh/water_resources/error/error_report_list";
+		return "/system3/ljh/water_resources/error/error_report_list";
 	}
 	
 	// 고장 보고서 작성 페이지로 이동
@@ -66,7 +66,7 @@ public class LjhController {
 		model.addAttribute("waterCategory", waterCategory);
 		model.addAttribute("checkCodeList", checkCodeList);
 		
-		return "ljh/water_resources/error/error_report_write";
+		return "/system3/ljh/water_resources/error/error_report_write";
 	}
 	
 	// 고장보고서 작성 페이지에서 시설물 종류(facility_category) 선택 시 AJAX 실행 - 시설물 코드 SELECT
@@ -129,7 +129,7 @@ public class LjhController {
 		model.addAttribute("breakReport", breakReport);
 		model.addAttribute("alarmList", alarmList);
 		
-		return "ljh/water_resources/error/error_report_read";
+		return "/system3/ljh/water_resources/error/error_report_read";
 	}
 	
 	// 고장 보고서 수정
@@ -164,7 +164,7 @@ public class LjhController {
 		model.addAttribute("alarmList", alarmList);
 		model.addAttribute("rptAlarmList", rptAlarmList);
 		
-		return "ljh/water_resources/error/error_report_update";
+		return "/system3/ljh/water_resources/error/error_report_update";
 	}
 	
 	// 고장 보고서 수정 실행
@@ -215,7 +215,7 @@ public class LjhController {
 		model.addAttribute("actionReportList", actionRptList);
 		model.addAttribute("page", paging);
 		
-		return "ljh/water_resources/error/action_report_list";
+		return "/system3/ljh/water_resources/error/action_report_list";
 	}
 	
 	// 조치 결과 보고서 작성
@@ -232,7 +232,7 @@ public class LjhController {
 		model.addAttribute("waterCategory", waterCategory);
 		model.addAttribute("checkCodeList", checkCodeList);
 		
-		return "ljh/water_resources/error/action_report_write";
+		return "/system3/ljh/water_resources/error/action_report_write";
 	}
 	
 	// 조치 결과 보고서 INSERT
@@ -255,7 +255,7 @@ public class LjhController {
 		
 		model.addAttribute("actionRpt", actionRpt);
 		
-		return "ljh/water_resources/error/action_report_read";
+		return "/system3/ljh/water_resources/error/action_report_read";
 	}
 	
 	// 조치 결과 보고서 수정
@@ -281,7 +281,7 @@ public class LjhController {
 		model.addAttribute("actionRpt", actionRpt);
 		model.addAttribute("wrCodeList", wrCodeList);
 		
-		return "ljh/water_resources/error/action_report_update";
+		return "/system3/ljh/water_resources/error/action_report_update";
 	}
 	
 	// 조치 결과 보고서 수정 실행
