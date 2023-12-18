@@ -64,7 +64,7 @@ public class HijController {
         model.addAttribute("categoryList", categoryList);
 
 
-        return "/observation_sys/observation_find";
+        return "/system2/observation_sys/observation_find";
     }
 
     // 관측소 등록 페이지
@@ -82,7 +82,7 @@ public class HijController {
         model.addAttribute("OrgList", orgList);
         model.addAttribute("categoryList", categoryList);
 
-        return "/observation_sys/observation_create";
+        return "/system2/observation_sys/observation_create";
     }
 
     // 관측소 등록 시행
@@ -113,7 +113,7 @@ public class HijController {
         Observation getObservation = hs.getObservation(observation);
 
         model.addAttribute("observation", getObservation);
-        return "/observation_sys/observation_detail";
+        return "/system2/observation_sys/observation_detail";
     }
 
     // 관측소 수정 조회 페이지
@@ -134,7 +134,7 @@ public class HijController {
         model.addAttribute("OrgList", orgList);
         model.addAttribute("categoryList", categoryList);
 
-        return "/observation_sys/observation_edit";
+        return "/system2/observation_sys/observation_edit";
     }
 
     // 관측소 수정 시행
@@ -173,6 +173,6 @@ public class HijController {
 
         model.addAttribute("waterLevelList", waterLevelList);
 
-        return "/observation_sys/time_find";
+        return "/system2/observation_sys/time_find";
     }
 }

@@ -11,3 +11,14 @@ spring:
     url: jdbc:postgresql://localhost:5432/sundo23501a
     username: postgres
     password: tiger
+  #gmail transfer
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jinijuniwa@gmail.com
+    password: vctdpmxycqugxznr
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
