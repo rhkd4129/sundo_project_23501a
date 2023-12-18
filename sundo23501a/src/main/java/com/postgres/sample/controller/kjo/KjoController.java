@@ -47,7 +47,7 @@ public class KjoController {
     	model.addAttribute("orgList",orgList);
     	model.addAttribute("wrList",wrList);
     	model.addAttribute("page",page);
-    	return "kjo/water_resources/water_resourcesList";
+    	return "/system3/kjo/water_resources/water_resourcesList";
     }
 
     @ResponseBody
@@ -93,7 +93,7 @@ public class KjoController {
 
         model.addAttribute("WaterResources",wr);
     	
-        return "kjo/check/checkresultform";
+        return "/system3/kjo/check/checkresultform";
     }
     
     @PostMapping("/checkresultSave")
@@ -185,7 +185,7 @@ public class KjoController {
         model.addAttribute("orgList",orgList);
         model.addAttribute("crList",crList);
         model.addAttribute("page",page);
-        return "kjo/check/selectCheckReportList";
+        return "/system3/kjo/check/selectCheckReportList";
     }
 
     @ResponseBody
