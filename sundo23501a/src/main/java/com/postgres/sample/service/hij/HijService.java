@@ -24,6 +24,9 @@ public interface HijService {
 	int obDelete(Observation observation);	// 삭제시행
 	
 	// 2. 관측소 - 시자료
-	List<WaterLevel> waterLevelList(WaterLevel waterLevel); //시자료 목록
+	
+	List<WaterLevel> waterLevelList(WaterLevel waterLevel);//시자료 목록
+	int waterLevelTotal();
+
 
 }
