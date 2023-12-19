@@ -121,17 +121,18 @@
                 type: "POST",
                 url: "checkresultSave",
                 data: cr,
-                dataType: 'json',
                 success: function (response) {
                     // 서버 응답에 대한 로직
                     console.log(response);
                     let url = "/water_resourcesList";
                     location.replace(url);
-
-                },
+                }
+                ,
                 error: function (error) {
-                    alert("값을 정확히 입력하세요");
                     console.log(error);
+                    console.error(error);
+
+                    alert("값을 정확히 입력하세요");
                 }
             });
         }

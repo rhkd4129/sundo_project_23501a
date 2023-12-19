@@ -23,6 +23,10 @@
     </style>
 
     <script type="text/javascript">
+        $(function (){
+            doubliClickEvents();
+        })
+
         $(function() {
 
             $.ajax({
@@ -42,8 +46,7 @@
             });
         });
 
-
-        $(function (){
+        function doubliClickEvents(){
             var trElements = document.querySelectorAll('.cont');
 
             console.log(trElements.length);
@@ -54,27 +57,21 @@
                     console.log("fds");
 
                     var doc_no = trElement.getAttribute('data-doc-no');
+
+                    window.location.href = "/getcheckresult?doc_no=" + doc_no;
                     // getcheckresultform
                 });
             });
+        }
 
-
-        })
 
         function searchCheckReportList(currentPage) {
-            let facility_category = $("#facility_category_List").val();
-            let org_area_name = $("#org_area_List").val();  //  행정기관
-            let org_name = $("#org_name_List").val();       //  관리기관
-            let user_department = $("#user_department").val();      //  소속
-            let firstdate = $("#find_date1").val();
-            let secdate = $("#find_date2").val();
-            let cate_name = $("#cate_name").val();
-            let facility_code = $("#facility_code").val();
-            let research = $("#research").val();
+
 
             const cr = {
+                currentPage : currentPage,
                 facility_category : $("#facility_category_List").val(),
-                org_area_name : $("#org_area_List").val(),  //  행정기관
+                org_area : $("#org_area_List").val(),  //  행정기관
                 org_name : $("#org_name_List").val(),       //  관리기관
                 user_department : $("#user_department").val(),      //  소속
                 firstdate : $("#find_date1").val(),
@@ -90,16 +87,45 @@
 
                 success(data) {
                     let table_body = $("#table_body");
+                    const CRList = data.objList;
+                    const obj = data.obj;
+                    table_body.empty();
 
-                    console.log("data");
-                    console.log(data);
-                    const page = JSON.parse(data.Obj);
-                    console.log("page");
-                    console.log(page);
-                    const CRList = JSON.parse(data.ObjList);
-                    console.log("CRList");
-                    console.log(CRList);
+                    $.each(CRList, function (key, values) {
+                        const newtr = $('<tr></tr>');
+                        newtr.addClass("cont");
+                        newtr.attr('data-doc-no', values.doc_no); // jQuery를 사용하여 data-doc-no 속성 추가
+                        newtr.append('<td>' + values.rn + '</td>');
+                        newtr.append('<td>' + values.facility_category + '</td>');
+                        newtr.append('<td>' + values.facility_code + '</td>');
+                        newtr.append('<td>' + values.org_area_name + '</td>');
+                        newtr.append('<td>' + values.org_name + '</td>');
+                        newtr.append('<td>' + values.check_date + '</td>');
+                        newtr.append('<td>' + values.check_result + '</td>');
+                        newtr.append('<td>' + values.user_name + '</td>');
+                        table_body.append(newtr);
+                    });
+                    var paginationDiv = $('#paging'); // 페이지네이션을 표시할 div
+                    paginationDiv.empty(); // 페이지네이션을 초기화
 
+                    var jspPagination = '';
+
+                    if (obj.startPage > obj.pageBlock) {
+                        jspPagination += '<div class="page-link" onclick="searchCheckReportList(' + (obj.startPage - obj.pageBlock) + ')">이전</div>';
+                    }
+
+                    for (var i = obj.startPage; i <= obj.endPage; i++) {
+                        jspPagination += '<div class="page-item" onclick="searchCheckReportList(' + i + ')"><div class="page-link">' + i + '</div></div>';
+                    }
+
+                    if (obj.endPage >= obj.pageBlock) {
+                        jspPagination += '<div class="page-link" onclick="searchCheckReportList(' + (obj.startPage + obj.pageBlock) + ')">다음</div>';
+                    }
+                    jspPagination += '</div>';
+                    paginationDiv.html(jspPagination); // JSP 페이지 네비게이션 코드를 추가
+
+
+                    doubliClickEvents();
                 }
             })
 
@@ -217,7 +243,7 @@
                             <div class="page-link" style="cursor:pointer">${i}</div>
                         </div>
                     </c:forEach>
-                    <c:if test="${page.endPage <= page.pageBlock}">
+                    <c:if test="${page.endPage >= page.pageBlock}">
                         <div class="page-link" onclick="searchCheckReportList(${page.startPage + page.pageBlock})">
                             다음
                         </div>

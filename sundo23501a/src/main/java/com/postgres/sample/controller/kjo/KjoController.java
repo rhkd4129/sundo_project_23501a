@@ -2,6 +2,7 @@ package com.postgres.sample.controller.kjo;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -109,9 +110,10 @@ public class KjoController {
         wr.setFacility_code(cr.getFacility_code());
         UserInfo uid = (kjoService.findUserId(ui));
         if (uid.equals(null)) {
+            int error = 0;
 
             redirectAttributes.addAttribute("WaterResources",wr);
-            return "redirect/checkresultSave";
+            return "redirect:/checkresultform";
         }
 
         CheckReport checkReport = new CheckReport();
@@ -144,7 +146,7 @@ public class KjoController {
 
         chkList.setDoc_no(checkReport.getDoc_no());
         chkList.setFacility_code(checkReport.getFacility_code());
-        chkList.setChecklistist_no(kjoService.cntChkListByFacilityCode(chkList).getTotal());
+        chkList.setChecklist_no(kjoService.cntChkListByFacilityCode(chkList).getTotal());
 
         for (int i = 0; i < chkItemInfoList.size(); i++) {
             chkList.setCheck_category(chkItemInfoList.get(i).getCheck_category());
@@ -152,13 +154,13 @@ public class KjoController {
             chkList.setCheck_grade(gradeArray[i]);
             chkList.setNote(noteArray[i]);
 
-            chkList.setChecklistist_no(chkList.getChecklistist_no()+1);
+            chkList.setChecklist_no(chkList.getChecklist_no()+1);
 
             chklistresult += kjoService.inputChkList(chkList);
         }
 
 
-        return "forward:/water_resourcesList";
+        return "redirect:/selectCheckReportList";
     }
 
     @GetMapping("/selectCheckReportList")
@@ -167,7 +169,7 @@ public class KjoController {
         List<OrgArea> orgList = kjoService.findAllOrgArea();
         List<Organization> organizationList = kjoService.findAllOrgList();
         CheckReport crt = kjoService.cntAllReport();
-        Paging page = new Paging(crt.getTotal(), currentPage);
+        Paging page = new Paging(crt.getTotal(), currentPage, 10);
         crt.setStart(page.getStart());
         crt.setEnd(page.getEnd());
 
@@ -192,10 +194,20 @@ public class KjoController {
     @GetMapping("/getcheckresultform")
     public KjoResponse getcheckresultform(CheckReport cr,  Model model){
         System.out.println("checkresult");
+//        if (cr.get)
+        if (cr.getFacility_category().equals("전체")) {
+            cr.setFacility_category("");
+        }
+        if (cr.getOrg_name().equals("전체")) {
+            cr.setOrg_name("");
+        }
+        if (cr.getOrg_area().equals("전체")) {
+            cr.setOrg_area("");
+        }
 
         cr.setTotal(kjoService.cntSearchChkReport(cr).getTotal());
 
-        Paging page = new Paging(cr.getTotal(), cr.getCurrentPage());
+        Paging page = new Paging(cr.getTotal(), cr.getCurrentPage(),10);
         cr.setStart(page.getStart());
         cr.setEnd(page.getEnd());
 
@@ -207,6 +219,28 @@ public class KjoController {
         return response;
     }
 
+    @GetMapping("/getcheckresult")
+    public String getcheckresult(CheckReport cr,Model model) {
+        CheckReport checkReport = kjoService.findCheckReportByDocNo(cr);
+        CheckList cl = new CheckList();
+        cl.setDoc_no(cr.getDoc_no());
+        List<CheckList> CLList = kjoService.findCheckListAndCodeByDocNo(cl);
+
+        List<CheckList> FloorList = CLList.stream().filter(checkList -> "마루".equals(checkList.getCheck_category())).collect(Collectors.toList());
+        List<CheckList> TopCLList = CLList.stream().filter(checkList -> "상류면".equals(checkList.getCheck_category())).collect(Collectors.toList());
+        List<CheckList> BotList = CLList.stream().filter(checkList -> "하류면".equals(checkList.getCheck_category())).collect(Collectors.toList());
+        List<CheckList> IpqList = CLList.stream().filter(checkList -> "검사량".equals(checkList.getCheck_category())).collect(Collectors.toList());
+
+
+        model.addAttribute("CheckReport", checkReport);
+        model.addAttribute("CheckList", CLList);
+
+        model.addAttribute("FloorList", FloorList);
+        model.addAttribute("TopCLList", TopCLList);
+        model.addAttribute("BotList", BotList);
+        model.addAttribute("IpqList", IpqList);
+        return "system3/kjo/check/getcheckresult";
+    }
 
 
 
