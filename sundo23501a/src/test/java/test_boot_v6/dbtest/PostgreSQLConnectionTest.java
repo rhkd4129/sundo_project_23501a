@@ -51,10 +51,11 @@ public class PostgreSQLConnectionTest {
 
 //name=boardDAO object=org.apache.ibatis.binding.MapperProxy@365cdacf
 //name=boardDAOv2 object=org.apache.ibatis.binding.MapperProxy@303c55fa
-    AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(EgovConfig.class);
     @Test
     @DisplayName("모든 빈 출력하기")
     void findAllBean() {
+        AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(EgovConfig.class);
+
         String[] beanDefinitionNames = ac.getBeanDefinitionNames();
         for (String beanDefinitionName : beanDefinitionNames) {
             Object bean = ac.getBean(beanDefinitionName);
@@ -64,7 +65,8 @@ public class PostgreSQLConnectionTest {
     
     @Test
     @DisplayName("애플리케이션 빈 출력하기")
-    void findApplicationBean() {
+    void findApplicationBean() {AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(EgovConfig.class);
+
         String[] beanDefinitionNames = ac.getBeanDefinitionNames();
         for (String beanDefinitionName : beanDefinitionNames) {
             BeanDefinition beanDefinition = ac.getBeanDefinition(beanDefinitionName);
@@ -80,7 +82,8 @@ public class PostgreSQLConnectionTest {
     
     @Test
     @DisplayName("부모 타입으로 모두 조회하기 - Object")
-    void findAllBeanByObjectType() {
+    void findAllBeanByObjectType() {AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(EgovConfig.class);
+
         Map<String, Object> beansOfType = ac.getBeansOfType(Object.class);
         for (String key : beansOfType.keySet()) {
             System.out.println("key = " + key + " value=" + beansOfType.get(key));

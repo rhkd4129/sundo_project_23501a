@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@ include file="/WEB-INF/views/header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+
 <style type="text/css">
 	.title {
 		text-align: center;
@@ -50,10 +51,36 @@
 	.actionRead {
 		width: 130px;
 	}
-	
+
+	header {
+		height: 55px;
+	}
+
+
 </style>
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script>
+
+		$(function() {
+
+			$.ajax({
+				url			: '/main_header_3',
+				dataType 	: 'html',
+				success		: function(data) {
+					$('#header').html(data);
+				}
+			});
+
+			$.ajax({
+				url			: '/main_footer',
+				dataType 	: 'html',
+				success		: function(data) {
+					$('#footer').html(data);
+				}
+			});
+		});
+
+	</script>
 <script type="text/javascript">
 	function goBack(){
 		location.href="/action_report_list";
@@ -120,86 +147,104 @@
 </script>
 </head>
 <body>
-	<div>
-		<p class="title">조치 결과 보고서 작성</p>
-		<form action="action_report_write" method="post">
-			<table>
-				<thead>
-					<tr>
-						<th>시설물 종류</th>
-						<td>
-		 					<select id="waterCategorySelect" name="facility_category">
-								<option>전체</option>
-		 						<c:forEach var="water" items="${waterCategory }">
-									<option value="${water.facility_category }">${water.facility_category }</option>
-								</c:forEach>
-							</select>
-						</td>
-						<th>시설물 코드</th>
-						<td>
-		 					<div id="wrCodeOption">
-								<select id="wrCodeSelect" name="facility_code">
-									<option>전체</option>	
-								</select>
-							</div>
-						</td>
-						<th>작성자</th><td><input type="text" name="user_id"></td>	<!-- 로그인한 사용자 이름 자동 표출 필요 -->
-					</tr>
-					
-					<tr>
-						<th>점검대상</th>
-						<td>
-							<select name="check_target">
-								<option>전체</option>
-		 							<c:forEach var="checkCode" items="${checkCodeList }">
-										<c:if test="${checkCode.field_name == 'check_target' }">
-											<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
-										</c:if>
-									</c:forEach>
-							</select>
-						</td>
-						<th>중분류</th>
-						<td>
-							<select name="m_category">
-								<option>전체</option>
-		 							<c:forEach var="checkCode" items="${checkCodeList }">
-										<c:if test="${checkCode.field_name == 'm_category' }">
-											<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
-										</c:if>
-									</c:forEach>
-							</select>
-						</td>
-						<th>소분류</th>
-						<td>
-							<select name="s_category">
-								<option>전체</option>
-		 							<c:forEach var="checkCode" items="${checkCodeList }">
-										<c:if test="${checkCode.field_name == 's_category' }">
-											<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
-										</c:if>
-									</c:forEach>
-							</select>
-						</td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<th>고장/발생 일자</th><td colspan="2"><input type="date" name="break_date"></td>
-						<th>조치/복구 일자</th><td colspan="2"><input type="date" name="action_date"></td>
-					</tr>
-					<tr><th>고장내역</th><td colspan="5"><textarea name="break_content"></textarea></td></tr>
-					<tr><th>조치내역</th><td colspan="5"><textarea name="action_content"></textarea></td></tr>
-					<tr><th>특이사항</th><td colspan="5"><textarea name="spec_memo"></textarea></td></tr>
-					<tr><th>향후계획</th><td colspan="5"><textarea name="future_plan"></textarea></td></tr>
-					<tr><th>파일첨부</th><td colspan="5"></td></tr>
-				</tbody>
-			</table>
-			<div class="btns">
-				<input type="button" class="btn btn-dark btn-sm buttons" onclick="goBack()" value="돌아가기"/>
-				<input type="button" class="btn btn-dark btn-sm actionRead" value="고장보고서 보기">
-				<input type="submit" class="btn btn-dark btn-sm buttons" value="저장">
+
+
+<header id="header" style="margin-top: 3%"></header>
+
+
+	<div class="container">
+		<div class="row">
+			<div id="center">
+				<div>
+					<p class="title">조치 결과 보고서 작성</p>
+					<form action="action_report_write" method="post">
+						<table>
+							<thead>
+							<tr>
+								<th>시설물 종류</th>
+								<td>
+									<select id="waterCategorySelect" name="facility_category">
+										<option>전체</option>
+										<c:forEach var="water" items="${waterCategory }">
+											<option value="${water.facility_category }">${water.facility_category }</option>
+										</c:forEach>
+									</select>
+								</td>
+								<th>시설물 코드</th>
+								<td>
+									<div id="wrCodeOption">
+										<select id="wrCodeSelect" name="facility_code">
+											<option>전체</option>
+										</select>
+									</div>
+								</td>
+								<th>작성자</th><td><input type="text" name="user_id"></td>	<!-- 로그인한 사용자 이름 자동 표출 필요 -->
+							</tr>
+
+							<tr>
+								<th>점검대상</th>
+								<td>
+									<select name="check_target">
+										<option>전체</option>
+										<c:forEach var="checkCode" items="${checkCodeList }">
+											<c:if test="${checkCode.field_name == 'check_target' }">
+												<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
+											</c:if>
+										</c:forEach>
+									</select>
+								</td>
+								<th>중분류</th>
+								<td>
+									<select name="m_category">
+										<option>전체</option>
+										<c:forEach var="checkCode" items="${checkCodeList }">
+											<c:if test="${checkCode.field_name == 'm_category' }">
+												<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
+											</c:if>
+										</c:forEach>
+									</select>
+								</td>
+								<th>소분류</th>
+								<td>
+									<select name="s_category">
+										<option>전체</option>
+										<c:forEach var="checkCode" items="${checkCodeList }">
+											<c:if test="${checkCode.field_name == 's_category' }">
+												<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
+											</c:if>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<th>고장/발생 일자</th><td colspan="2"><input type="date" name="break_date"></td>
+								<th>조치/복구 일자</th><td colspan="2"><input type="date" name="action_date"></td>
+							</tr>
+							<tr><th>고장내역</th><td colspan="5"><textarea name="break_content"></textarea></td></tr>
+							<tr><th>조치내역</th><td colspan="5"><textarea name="action_content"></textarea></td></tr>
+							<tr><th>특이사항</th><td colspan="5"><textarea name="spec_memo"></textarea></td></tr>
+							<tr><th>향후계획</th><td colspan="5"><textarea name="future_plan"></textarea></td></tr>
+							<tr><th>파일첨부</th><td colspan="5"></td></tr>
+							</tbody>
+						</table>
+						<div class="btns">
+							<input type="button" class="btn btn-dark btn-sm buttons" onclick="goBack()" value="돌아가기"/>
+							<input type="button" class="btn btn-dark btn-sm actionRead" value="고장보고서 보기">
+							<input type="submit" class="btn btn-dark btn-sm buttons" value="저장">
+						</div>
+					</form>
+				</div>
 			</div>
-		</form>
+		</div>
 	</div>
+	<footer class="footer py-2">
+		<div id="footer" class="container">
+		</div>
+	</footer>
+
+
+
 </body>
 </html>
