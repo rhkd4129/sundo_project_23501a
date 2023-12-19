@@ -84,7 +84,7 @@
 <script type="text/javascript">
 	function goBack(){
 		location.href="/action_report_list";
-	}
+	};
 	
 	$(function() {
 		$('#waterCategorySelect').change(function() {
@@ -101,7 +101,7 @@
 					var options = "";
 					
 					options += '<select id="wrCodeSelect" name="facility_code">';
-					options += '<option>전체</option>';
+					options += '<option value="전체">전체</option>';
 					
 					for(var i = 0; i < rtndata.length; i++) {
 						options += '<option value="' + rtndata[i].facility_code + '">' + rtndata[i].facility_code + '</option>';
@@ -143,14 +143,43 @@
 			});
 		});
 	});
+	
+	
+	function ErrorRpt() {
+		
+		var facility_category = $('#waterCategorySelect').val();
+		var facility_code = $('#wrCodeSelect').val();
+		
+		const facility = {
+			facility_category : facility_category,
+			facility_code : facility_code
+		}
+		
+ 		if (facility_category != '전체' && facility_code != '전체') {
+			// alert(facility_category + facility_code);
+			$.ajax({
+				url		: "/choice_error_report_list",
+				data	: facility,
+				dataType: 'json',
+				success : function(data) {
+					console.log(data);
+					
+					
+					
+				}
+			});
+			
+		} else {
+			alert('조회할 시설물 종류와 코드를 선택하세요');
+			return false;
+		}
+		
+	};
 
 </script>
 </head>
 <body>
-
-
-<header id="header" style="margin-top: 3%"></header>
-
+	<header id="header" style="margin-top: 3%"></header>
 
 	<div class="container">
 		<div class="row">
@@ -164,7 +193,7 @@
 								<th>시설물 종류</th>
 								<td>
 									<select id="waterCategorySelect" name="facility_category">
-										<option>전체</option>
+										<option value="전체">전체</option>
 										<c:forEach var="water" items="${waterCategory }">
 											<option value="${water.facility_category }">${water.facility_category }</option>
 										</c:forEach>
@@ -231,7 +260,7 @@
 						</table>
 						<div class="btns">
 							<input type="button" class="btn btn-dark btn-sm buttons" onclick="goBack()" value="돌아가기"/>
-							<input type="button" class="btn btn-dark btn-sm actionRead" value="고장보고서 보기">
+							<input type="button" class="btn btn-dark btn-sm actionRead" onclick="ErrorRpt()" value="고장보고서 보기">
 							<input type="submit" class="btn btn-dark btn-sm buttons" value="저장">
 						</div>
 					</form>
@@ -239,12 +268,10 @@
 			</div>
 		</div>
 	</div>
+	
 	<footer class="footer py-2">
 		<div id="footer" class="container">
 		</div>
 	</footer>
-
-
-
 </body>
 </html>

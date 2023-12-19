@@ -23,7 +23,7 @@
 			</button>
 
 			<button class="btn btn-secondary" onclick="goto('/main')">
-				<a class="navbar-brand" style="margin-left:10px" href="/action_report_list"><b>고장/조치결과보고</b></a>
+				<a class="navbar-brand" style="margin-left:10px" href="/error_report_list"><b>고장/조치결과보고</b></a>
 			</button>
 
 		</div>

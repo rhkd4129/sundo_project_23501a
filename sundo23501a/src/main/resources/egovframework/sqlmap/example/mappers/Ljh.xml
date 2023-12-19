@@ -2,15 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.postgres.sample.service.impl.dao.ljh.LjhDAO">
 
-	<!-- 고장/조치결과보고 > 고장 보고서 목록 -->
-	<select id="ljhGetErrorRptList" resultType="breakReport">
-		SELECT	br.doc_no, TO_CHAR(br.create_datetime, 'yyyy-MM-dd') AS create_datetime,
-				br.facility_category, br.subject, u.user_name
-		FROM	break_report br, user_info u
-		WHERE	u.user_id = br.user_id
-		ORDER BY doc_no desc
+	<!-- 고장 보고서 목록 페이징 작업용 전체 보고서 개수 SELECT -->
+	<select id="ljhGetBreakRptCount" resultType="Integer">
+		SELECT	count(*)
+		FROM	break_report
 	</select>
-
+	
 	<!-- 고장/조치결과보고 > 고장 보고서 목록 페이징 작업용 -->
 	<select id="ljhGetBreakRptListPage" parameterType="breakReport" resultType="breakReport">
 		<![CDATA[
@@ -121,16 +118,54 @@
 		WHERE	break_report_no = #{doc_no}
 	</update>
 	
+	<!-- 고장 보고서 검색 totalCount -->
+	<select id="ljhSearchErrCnt" parameterType="breakReport" resultType="Integer">
+		SELECT	count(*) as total
+		FROM	(
+					SELECT	br.doc_no, TO_CHAR(br.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+							br.facility_category, br.subject, u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+					FROM	break_report br, user_info u
+					WHERE	u.user_id = br.user_id
+					<if test="facility_category != ''">
+						AND		br.facility_category = #{facility_category}
+					</if>
+					<if test="user_name != ''">
+						AND		u.user_name LIKE '%' || #{user_name} || '%'
+					</if>
+					<if test="create_datetime != ''">
+					    AND TO_CHAR(br.create_datetime, 'yyyy-MM-dd') = #{create_datetime}
+					</if>
+				)
+	</select>
+	
+	<!-- 고장보고서 검색 -->
+	<select id="ljhSearchError" parameterType="breakReport" resultType="breakReport">
+		SELECT	*
+		FROM	(
+					SELECT	br.doc_no, TO_CHAR(br.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+							br.facility_category, br.subject, u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+					FROM	break_report br, user_info u
+					WHERE	u.user_id = br.user_id
+					<if test="facility_category != ''">
+						AND		br.facility_category = #{facility_category}
+					</if>
+					<if test="user_name != ''">
+						AND		u.user_name LIKE '%' || #{user_name} || '%'
+					</if>
+					<if test="create_datetime != ''">
+					    AND TO_CHAR(br.create_datetime, 'yyyy-MM-dd') = #{create_datetime}
+					</if>
+				)
+		WHERE	rn between #{start} and #{end}
+	</select>
+	
+
 	
 <!-- ////////////////////////////////////////////////////////////////////////////////////// -->	
-	<!-- 고장/조치결과보고 > 조치 결과 보고서 목록 -->
-	<select id="ljhGetActionRptList" resultType="actionReport">
-		SELECT	ar.doc_no, ar.facility_category, ar.action_date,
-				TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') AS create_datetime,
-				u.user_name
-		FROM	action_report ar, user_info u
-		WHERE	u.user_id = ar.user_id
-		ORDER BY doc_no desc
+	<!-- 조치 결과 보고서 목록 페이징 작업용 전체 보고서 개수 SELECT -->
+	<select id="ljhGetActionRptCount" resultType="Integer">
+		SELECT	count(*)
+		FROM	action_report
 	</select>
 	
 	<!-- 고장/조치결과보고 > 조치 결과 보고서 목록 페이징 작업용 -->
@@ -177,11 +212,74 @@
 		WHERE	doc_no = #{doc_no}
 	</update>
 	
+	<!-- 조치 결과 보고서 삭제 -->
 	<delete id="ljhDeleteActionRpt" parameterType="Integer">
 		DELETE	FROM	action_report
 		WHERE	doc_no = #{doc_no}
 	</delete>
 	
+	<!-- 조치 결과 보고서 검색 totalCount -->
+	<select id="ljhSearchActCnt" parameterType="actionReport" resultType="Integer">
+		SELECT	count(*) as total
+		FROM	(
+					SELECT	ar.doc_no, ar.facility_category, ar.action_date,
+							TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+							u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+					FROM	action_report ar, user_info u
+					WHERE	u.user_id = ar.user_id
+					<if test="facility_category != ''">
+						AND		ar.facility_category = #{facility_category}
+					</if>
+					<if test="user_name != ''">
+						AND		u.user_name LIKE '%' || #{user_name} || '%'
+					</if>
+					<if test="create_datetime != ''">
+						AND 	TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') = #{create_datetime}
+					</if>
+					<if test="action_date != ''">
+						AND		TO_CHAR(ar.action_date, 'yyyy-MM-dd') = #{action_date}
+					</if>
+				)
+	</select>
+	
+	<!-- 조치 결과 보고서 검색 -->
+	<select id="ljhSearchAction" parameterType="actionReport" resultType="actionReport">
+		SELECT	*
+		FROM	(
+					SELECT	ar.doc_no, ar.facility_category, ar.action_date,
+							TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+							u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+					FROM	action_report ar, user_info u
+					WHERE	u.user_id = ar.user_id
+					<if test="facility_category != ''">
+						AND		ar.facility_category = #{facility_category}
+					</if>
+					<if test="user_name != ''">
+						AND		u.user_name LIKE '%' || #{user_name} || '%'
+					</if>
+					<if test="create_datetime != ''">
+						AND 	TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') = #{create_datetime}
+					</if>
+					<if test="action_date != ''">
+						AND		TO_CHAR(ar.action_date, 'yyyy-MM-dd') = #{action_date}
+					</if>
+				)
+		WHERE	rn between #{start} and #{end}	
+	</select>
+	
+	<!-- 조치 결과 보고서 작성 > 고장보고서 보기 -->
+	<select id="ljhChoiceErrRptList" parameterType="actionReport" resultType="breakReport">
+		SELECT	*
+		FROM	(
+					SELECT	br.doc_no, TO_CHAR(br.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+							br.facility_category, br.facility_code, br.subject, u.user_name,
+							ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+					FROM	break_report br, user_info u
+					WHERE	u.user_id = br.user_id
+				)
+		WHERE	facility_category = #{facility_category}
+		AND		facility_code = #{facility_code}
+	</select>
 	
 	
 </mapper>

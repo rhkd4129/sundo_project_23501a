@@ -143,6 +143,18 @@
 			});
 		});
 	});
+	
+	
+	// form 입력값 체크
+	function chk() {
+
+		if (!errorForm.facility_category.value) {
+			alert("시설물 종류를 선택하세요.");
+			return false;
+		}
+		
+	};
+	
 
 </script>
 </head>
@@ -155,7 +167,7 @@
 				<div id="center">
 					<div>
 						<p class="title">고장 보고서 작성</p>
-						<form action="error_report_write" method="post">
+						<form action="error_report_write" method="post" name="errorForm" onsubmit="return chk()">
 							<table class="rptTbl">
 								<thead>
 								<tr>

@@ -1,5 +1,6 @@
 package com.postgres.sample.service.impl.ljh;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -26,16 +27,26 @@ public class LjhServiceImpl extends EgovAbstractServiceImpl implements LjhServic
 	private final LjhDAO ljhDAO;
 	
 	
-	// 고장/조치결과보고 > 고장 보고서 목록
+	// 고장/조치결과보고 > 고장 보고서 목록 페이징 작업용 전체 보고서 개수 SELECT
 	@Override
-	public List<BreakReport> getErrorRptList() {
-		System.out.println("LjhServiceImpl getErrorReportList Start");
+	public int breakRptCount() {
 		
-		List<BreakReport> breakReportList = null;
-		breakReportList = ljhDAO.ljhGetErrorRptList();
-		System.out.println("LjhServiceImpl getErrorReportList breakReportList.size() : " + breakReportList.size());
+		int count = ljhDAO.ljhGetBreakRptCount();
+		System.out.println("LjhServiceImpl breakRptCount breakRptCount -> " + count);
 		
-		return breakReportList;
+		return count;
+	}
+
+	
+	// 고장/조치결과보고 > 고장 보고서 목록 페이징 작업용
+	@Override
+	public List<BreakReport> getBreakRptListPage(BreakReport breakRpt) {
+		System.out.println("LjhServiceImpl getBreakRptListPage Start");
+		
+		List<BreakReport> breakRptList = ljhDAO.ljhGetBreakRptListPage(breakRpt);
+		System.out.println("LjhServiceImpl getBreakRptListPage breakRptList.size() -> " + breakRptList.size());
+		
+		return breakRptList;
 	}
 	
 	// 수자원 시설물 종류 SELECT
@@ -210,17 +221,55 @@ public class LjhServiceImpl extends EgovAbstractServiceImpl implements LjhServic
 		return rptResult + alarmResult;
 	}
 	
-	// 고장/조치결과보고 > 조치 결과 보고서 목록
+	// 고장 보고서 검색 totalCount
 	@Override
-	public List<ActionReport> getActionRptList() {
-		System.out.println("LjhServiceImpl getActionRptList Start");
+	public int searchErrCnt(BreakReport breakReport) {
 		
-		List<ActionReport> actionReportList = null;
-		actionReportList = ljhDAO.ljhGetActionRptList();
-		System.out.println("LjhServiceImpl getActionRptList actionReportList.size() : " + actionReportList.size());
+		int total = ljhDAO.ljhSearchErrCnt(breakReport);
+		// System.out.println("searchErrCnt total : " + total);
 		
-		return actionReportList;
+		return total;
 	}
+	
+	// 고장 보고서 검색
+	@Override
+	public List<BreakReport> searchError(BreakReport breakReport) {
+		System.out.println("LjhServiceImpl searchError Start");
+		
+		List<BreakReport> breakRptList = null;
+		breakRptList = ljhDAO.ljhSearchError(breakReport);
+		System.out.println("LjhServiceImpl searchError breakRptList.size() : " + breakRptList.size());
+		
+		return breakRptList;
+	}
+
+
+	
+	
+	
+	
+//-----------------------------------------------------------------------------------------------
+	// 고장/조치결과보고 > 조치 결과 보고서 목록 페이징 작업용 전체 보고서 개수 SELECT
+	@Override
+	public int actionRptCount() {
+		
+		int count = ljhDAO.ljhGetActionRptCount();
+		System.out.println("LjhServiceImpl breakRptCount actionRptCount -> " + count);
+		
+		return count;
+	}
+	
+	// 고장/조치결과보고 > 조치 결과 보고서 목록 페이징 작업용
+	@Override
+	public List<ActionReport> getActionRptListPage(ActionReport actionRpt) {
+		System.out.println("LjhServiceImpl getActionRptListPage Start");
+		
+		List<ActionReport> actionRptList = ljhDAO.ljhGetActionRptListPage(actionRpt);
+		System.out.println("LjhServiceImpl getActionRptListPage actionRptList.size() -> " + actionRptList.size());
+		
+		return actionRptList;
+	}
+	
 
 	// 조치 결과 보고서 INSERT
 	@Override
@@ -268,26 +317,54 @@ public class LjhServiceImpl extends EgovAbstractServiceImpl implements LjhServic
 		return result;
 	}
 
+	// 조치 결과 보고서 검색 totalCount
 	@Override
-	public List<BreakReport> getBreakRptListPage(BreakReport breakRpt) {
-		System.out.println("LjhServiceImpl getBreakRptListPage Start");
+	public int searchActCnt(ActionReport actionReport) {
 		
-		List<BreakReport> breakRptList = ljhDAO.ljhGetBreakRptListPage(breakRpt);
-		System.out.println("LjhServiceImpl getBreakRptListPage breakRptList.size() -> " + breakRptList.size());
+		int total = ljhDAO.ljhSearchActCnt(actionReport);
+		// System.out.println("searchActCnt total : " + total);
 		
-		return breakRptList;
+		return total;
 	}
 
+	// 조치 결과 보고서 검색
 	@Override
-	public List<ActionReport> getActionRptListPage(ActionReport actionRpt) {
-		System.out.println("LjhServiceImpl getActionRptListPage Start");
+	public List<ActionReport> searchAction(ActionReport actionReport) {
+		System.out.println("LjhServiceImpl searchAction Start");
 		
-		List<ActionReport> actionRptList = ljhDAO.ljhGetActionRptListPage(actionRpt);
-		System.out.println("LjhServiceImpl getActionRptListPage actionRptList.size() -> " + actionRptList.size());
+		List<ActionReport> actionRptList = null;
+		actionRptList = ljhDAO.ljhSearchAction(actionReport);
 		
 		return actionRptList;
 	}
+
+	// 조치 결과 보고서 작성 > 고장보고서 보기
+	@Override
+	public List<BreakReport> choiceErrRptList(ActionReport actionReport) {
+		System.out.println("LjhServiceImpl choiceErrRptList Start");
+		
+		List<BreakReport> breakRptList = null;
+		breakRptList = ljhDAO.ljhChoiceErrRptList(actionReport);
+		
+		System.out.println("LjhServiceImpl choiceErrRptList breakRptList.size() : " + breakRptList.size());
+		
+		return breakRptList;
+	}
 	
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
 	
 	
 	
