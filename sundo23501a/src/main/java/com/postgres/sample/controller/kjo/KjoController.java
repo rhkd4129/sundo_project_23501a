@@ -168,50 +168,60 @@ public class KjoController {
         List<WaterResources> wrctgList = kjoService.findFacilityCategory();
         List<OrgArea> orgList = kjoService.findAllOrgArea();
         List<Organization> organizationList = kjoService.findAllOrgList();
-        CheckReport crt = kjoService.cntAllReport();
-        Paging page = new Paging(crt.getTotal(), currentPage, 10);
-        crt.setStart(page.getStart());
-        crt.setEnd(page.getEnd());
+//        CheckReport crt = kjoService.cntAllReport();
+//        Paging page = new Paging(crt.getTotal(), currentPage, 10);
+//        crt.setStart(page.getStart());
+//        crt.setEnd(page.getEnd());
+//
+//        List<CheckReport> crList = kjoService.pageChkReport(crt);
 
-        List<CheckReport> crList = kjoService.pageChkReport(crt);
+        WaterResources wr = new WaterResources();
+        //	페이징 위한 수자원시설물 개수
+        wr.setTotal(kjoService.cntWaterResource().getTotal());
+        Paging page = new Paging(wr.getTotal(), currentPage,10);
+        wr.setStart(page.getStart());
+        wr.setEnd(page.getEnd());
 
 
-        for ( CheckReport cr: crList){
-            cr.setModify_datetime(cr.getModify_datetime().substring(0,10));
+        List<WaterResources> wrList = kjoService.PaingWaterResourceAndCheckReport(wr);
 
-        }
+//        for ( CheckReport cr: crList){
+//            cr.setModify_datetime(cr.getModify_datetime().substring(0,10));
+//
+//        }
 
 
         model.addAttribute("wrctgList",wrctgList);
+        model.addAttribute("wrList",wrList);
         model.addAttribute("organizationList",organizationList);
         model.addAttribute("orgList",orgList);
-        model.addAttribute("crList",crList);
+//        model.addAttribute("crList",crList);
         model.addAttribute("page",page);
         return "/system3/kjo/check/selectCheckReportList";
     }
 
     @ResponseBody
     @GetMapping("/getcheckresultform")
-    public KjoResponse getcheckresultform(CheckReport cr,  Model model){
+    public KjoResponse getcheckresultform(WaterResources wr,  Model model){
         System.out.println("checkresult");
 //        if (cr.get)
-        if (cr.getFacility_category().equals("전체")) {
-            cr.setFacility_category("");
+        if (wr.getFacility_category().equals("전체")) {
+            wr.setFacility_category("");
         }
-        if (cr.getOrg_name().equals("전체")) {
-            cr.setOrg_name("");
+        if (wr.getOrg_name().equals("전체")) {
+            wr.setOrg_name("");
         }
-        if (cr.getOrg_area().equals("전체")) {
-            cr.setOrg_area("");
+        if (wr.getOrg_area().equals("전체")) {
+            wr.setOrg_area("");
         }
 
-        cr.setTotal(kjoService.cntSearchChkReport(cr).getTotal());
+        wr.setTotal(kjoService.searchCntWRAndCR(wr).getTotal());
 
-        Paging page = new Paging(cr.getTotal(), cr.getCurrentPage(),10);
-        cr.setStart(page.getStart());
-        cr.setEnd(page.getEnd());
+        Paging page = new Paging(wr.getTotal(), wr.getCurrentPage(),10);
+        wr.setStart(page.getStart());
+        wr.setEnd(page.getEnd());
 
-        List<CheckReport> CRList =  kjoService.pageSearchChkReport(cr);
+        List<WaterResources> CRList =  kjoService.searchWRAndCR(wr);
         KjoResponse response = new KjoResponse();
         response.setObj(page);
         response.setObjList(CRList);

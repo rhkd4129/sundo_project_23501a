@@ -152,4 +152,19 @@ public class KjoServiceImpl extends EgovAbstractServiceImpl implements KjoServic
     public List<CheckList> findCheckListAndCodeByDocNo(CheckList cl) {
         return KjoDao.findCheckListAndCodeByDocNo(cl);
     }
+
+    @Override
+    public List<WaterResources> PaingWaterResourceAndCheckReport(WaterResources wr) {
+        return KjoDao.PaingWaterResourceAndCheckReport(wr);
+    }
+
+    @Override
+    public WaterResources searchCntWRAndCR(WaterResources wr) {
+        return KjoDao.searchCntWRAndCR(wr);
+    }
+
+    @Override
+    public List<WaterResources> searchWRAndCR(WaterResources wr) {
+        return KjoDao.searchWRAndCR(wr);
+    }
 }

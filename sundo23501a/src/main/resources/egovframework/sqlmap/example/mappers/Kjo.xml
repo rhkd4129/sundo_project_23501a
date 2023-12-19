@@ -211,6 +211,115 @@
               order by facility_code) offset #{start}-1 limit 10
     </select>
 
+    <select id="PaingWaterResourceAndCheckReport" parameterType="waterResources" resultType="waterResources">
+
+        select ROW_NUMBER() over() as rn, tab.facility_category,tab.facility_code,tab.facility_addr,tab.org_area_name,
+               to_char(tab.modify_datetime,'yyyy-MM-dd') as modify_datetime,tab.check_result,ui.user_name,tab.org_name, ui.user_department from
+            (
+                select wr.facility_category,wr.facility_code,wr.facility_addr,oz.org_area_name, cr.modify_datetime,cr.check_result,cr.user_id, org.org_name
+                from water_resources wr
+                         left outer join (select distinct max(modify_datetime) as modify_datetime, facility_code ,check_result ,user_id
+                                          from check_report group by facility_code,check_result,user_id)cr
+                                         on	wr.facility_code = cr.facility_code
+                         left join org_area oz
+                                   on wr.org_area = oz.org_area
+                         left join organization org
+                                   on wr.org_area = org.org_area
+            ) tab
+                left join user_info ui
+                          on tab.user_id = ui.user_id
+        offset ${start}-1 limit 10
+    </select>
+    <select id="searchCntWRAndCR" parameterType="waterResources" resultType="waterResources">
+
+        select count(*) as total from
+            (
+                select wr.facility_category,wr.facility_code,wr.facility_addr,oz.org_area_name, cr.modify_datetime,cr.check_result,cr.user_id, org.org_name
+                from water_resources wr
+                    left outer join (select distinct max(modify_datetime) as modify_datetime, facility_code ,check_result ,user_id
+                        from check_report group by facility_code,check_result,user_id)cr
+                    on	wr.facility_code = cr.facility_code
+                    left join org_area oz
+                    on wr.org_area = oz.org_area
+                    left join organization org
+                    on wr.org_area = org.org_area
+            ) tab
+        left join user_info ui
+        on tab.user_id = ui.user_id
+        where tab.facility_category like '%' || #{facility_category} || '%'
+            and tab.org_area_name like '%' || #{org_area} || '%'
+            and tab.org_name like '%' || #{org_name} || '%'
+        <if test="user_department != '' ">
+            and ui.user_department like '%' || #{user_department} || '%'
+        </if>
+            and tab.facility_code like '%' || #{facility_code} || '%'
+
+        <choose>
+            <when test="secdate eq '' and firstdate eq ''">
+                <![CDATA[ order by tab.modify_datetime ]]>
+            </when>
+            <when test="firstdate eq ''">
+                <![CDATA[ and tab.modify_datetime <= #{secdate} ]]>
+            </when>
+            <when test="secdate eq ''">
+                <![CDATA[ and tab.modify_datetime >= #{firstdate} ]]>
+            </when>
+            <otherwise>
+                <![CDATA[ and tab.modify_datetime between #{firstdate} and #{secdate} ]]>
+            </otherwise>
+        </choose>
+
+
+    </select>
+    <select id="searchWRAndCR" parameterType="waterResources" resultType="waterResources">
+
+        select ROW_NUMBER() over() as rn, tab.facility_category,tab.facility_code,tab.facility_addr,tab.org_area_name,
+        to_char(tab.modify_datetime,'yyyy-MM-dd') as modify_datetime,tab.check_result,ui.user_name, tab.org_name,ui.user_department from
+        (
+        select wr.facility_category,wr.facility_code,wr.facility_addr,oz.org_area_name, cr.modify_datetime,cr.check_result,cr.user_id, org.org_name
+        from water_resources wr
+        left outer join (select distinct max(modify_datetime) as modify_datetime, facility_code ,check_result ,user_id
+        from check_report group by facility_code,check_result,user_id)cr
+        on	wr.facility_code = cr.facility_code
+        left join org_area oz
+        on wr.org_area = oz.org_area
+        left join organization org
+        on wr.org_area = org.org_area
+        ) tab
+        left join user_info ui
+        on tab.user_id = ui.user_id
+        where tab.facility_category like '%' || #{facility_category} || '%'
+        and tab.org_area like '%' || #{org_area} || '%'
+        and tab.org_name like '%' || #{org_name} || '%'
+        <if test="user_department != null">
+            and ui.user_department like '%' || #{user_department} || '%'
+        </if>
+        and tab.facility_code like '%' || #{facility_code} || '%'
+
+        <choose>
+            <when test="secdate eq '' and firstdate eq ''">
+                <![CDATA[ order by rn
+                ]]>
+            </when>
+            <when test="firstdate eq ''">
+                <![CDATA[ and tab.modify_datetime <= #{secdate}
+                    order by rn
+                ]]>
+            </when>
+            <when test="secdate eq ''">
+                <![CDATA[ and tab.modify_datetime >= #{firstdate}
+                    order by rn
+                ]]>
+            </when>
+            <otherwise>
+                <![CDATA[ and tab.modify_datetime between #{firstdate} and #{secdate}
+                    order by rn
+                ]]>
+            </otherwise>
+        </choose>
+    </select>
+
+
     <select id="findFacilityAddrbyCategory" parameterType="waterResources" resultType="waterResources">
         select *
         from (select wr.facility_addr

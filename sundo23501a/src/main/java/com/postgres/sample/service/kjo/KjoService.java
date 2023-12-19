@@ -43,4 +43,10 @@ public interface KjoService {
     List<CheckList> findCheckListByDocNo(CheckList cl);
 
     List<CheckList> findCheckListAndCodeByDocNo(CheckList cl);
+
+    List<WaterResources> PaingWaterResourceAndCheckReport(WaterResources wr);
+
+    WaterResources searchCntWRAndCR(WaterResources wr);
+
+    List<WaterResources> searchWRAndCR(WaterResources wr);
 }

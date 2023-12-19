@@ -24,6 +24,14 @@ public class WaterResources {
 
     private String first_area;
     private String second_area;
+	private String check_result;
+	private String user_name;
+	private String currentPage;
+	//	검색용
+	private String 		firstdate;
+	private String 		secdate;
+	private String 		user_department;
+
 
 	private String org_area_name;// 행정기관 이름
 	private String cate_name; 		// ex) 목재댐

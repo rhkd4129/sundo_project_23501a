@@ -68,7 +68,7 @@
         function searchCheckReportList(currentPage) {
 
 
-            const cr = {
+            const wr = {
                 currentPage : currentPage,
                 facility_category : $("#facility_category_List").val(),
                 org_area : $("#org_area_List").val(),  //  행정기관
@@ -80,10 +80,10 @@
                 facility_code : $("#facility_code").val(),
                 research : $("#research").val()
             }
-            console.log(cr);
+            console.log(wr);
             $.ajax({
                 url: "/getcheckresultform",
-                data: cr,
+                data: wr,
 
                 success(data) {
                     let table_body = $("#table_body");
@@ -215,18 +215,39 @@
                     </tr>
 
                     <tbody id="table_body">
-                    <c:forEach items="${crList}" var="CheckReport" varStatus="loop">
-                        <tr class="cont" data-doc-no="${CheckReport.doc_no}">
-                            <td>${CheckReport.rn}</td>
-                            <td>${CheckReport.facility_category}</td>
-                            <td>${CheckReport.facility_code}</td>
-                            <td>${CheckReport.org_area_name}</td>
-                            <td>${CheckReport.org_name}</td>
-                            <td>${CheckReport.modify_datetime}</td>
-                            <td>${CheckReport.check_result}</td>
-                            <td>${CheckReport.user_name}</td>
+
+<%--                    <tbody id="table_body">--%>
+                    <c:forEach items="${wrList}" var="list">
+                        <tr>
+                            <td>${list.rn}</td>
+                            <td>${list.facility_category}</td>
+                            <td>${list.facility_code}</td>
+                            <td>${list.org_name}</td>
+                            <td>${list.org_area_name}</td>
+                            <c:if test="${list.modify_datetime == null}">
+                                <td>점검없음</td>
+                            </c:if>
+                            <c:if test="${list.modify_datetime != null}">
+                                <td>${list.modify_datetime}</td>
+                            </c:if>
+
+                            <c:if test="${list.modify_datetime == null}">
+                                <td>점검결과없음</td>
+                            </c:if>
+                            <c:if test="${list.modify_datetime != null}">
+                                <td>${list.check_result}</td>
+                            </c:if>
+
+                            <c:if test="${list.modify_datetime == null}">
+                                <td>점검자없음</td>
+                            </c:if>
+                            <c:if test="${list.modify_datetime != null}">
+                                <td>${list.user_name}</td>
+                            </c:if>
+
                         </tr>
                     </c:forEach>
+
 
                     </tbody>
 
