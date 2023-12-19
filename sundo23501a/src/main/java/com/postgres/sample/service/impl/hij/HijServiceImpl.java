@@ -1,5 +1,6 @@
 package com.postgres.sample.service.impl.hij;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -9,6 +10,7 @@ import com.postgres.sample.dto.CategoryVO;
 import com.postgres.sample.dto.Code;
 import com.postgres.sample.dto.Observation;
 import com.postgres.sample.dto.Organization;
+import com.postgres.sample.dto.RainFall;
 import com.postgres.sample.dto.WaterGate;
 import com.postgres.sample.dto.WaterLevel;
 import com.postgres.sample.service.hij.HijService;
@@ -101,7 +103,7 @@ public class HijServiceImpl extends EgovAbstractServiceImpl implements HijServic
 		return obDelete;
 	}
 	
-	
+//---------------------------------------------------------------------------------	
 	// 시자료 목록
 	@Override
 	public List<WaterLevel> waterLevelList(WaterLevel waterLevel) {
@@ -109,12 +111,59 @@ public class HijServiceImpl extends EgovAbstractServiceImpl implements HijServic
 		List<WaterLevel> waterLevelList = hd.ijWaterLevelList(waterLevel);
 		return waterLevelList;
 	}
-
+	// 수위 전체값
 	@Override
 	public int waterLevelTotal() {
 		int totalCount = hd.ijWaterLevelTotal();
 		System.out.println("HijServiceImpl totalCount START");
 		return totalCount;
 	}
+	
+	// 수위 pk에 따른 값
+	@Override
+	public WaterLevel getWaterLevel(WaterLevel waterLevel) {
+		System.out.println("HijServiceImpl getWaterLevel START");
+		
+		waterLevel = hd.ijGetWaterLevel(waterLevel);
+		return waterLevel;
+	}
+	
+	// 수위 수정
+	@Override
+	public int tEdit(WaterLevel waterLevel) {
+		System.out.println("HijServiceImpl tEdit START");
+		int tEdit = hd.ijTEdit(waterLevel);
+		return tEdit;
+	}
+//-------------------------------------------------------------------------
+	@Override
+	public int rainFallTotal() {
+		int totalCount = hd.ijRainFallTotal();
+		System.out.println("HijServiceImpl rainFallTotal START");
+		return totalCount;
+	}
+
+	@Override
+	public List<RainFall> rainFallList(RainFall rainFall) {
+		System.out.println("HijServiceImpl waterLevelList START");
+		List<RainFall> rainFallList = hd.ijRainFallList(rainFall);
+		return rainFallList;
+	}
+
+	@Override
+	public RainFall getRainFall(RainFall rainFall) {
+		System.out.println("HijServiceImpl getRainFall START");
+		rainFall = hd.ijGetRainFall(rainFall);
+		return rainFall;
+	}
+
+	@Override
+	public int tEditR(RainFall rainFall) {
+		System.out.println("HijServiceImpl tEditR START");
+		int tEditR = hd.ijTEditR(rainFall);
+		return tEditR;
+	}
+
+	
 
 }

@@ -1,11 +1,13 @@
 package com.postgres.sample.service.hij;
 
+import java.sql.Date;
 import java.util.List;
 
 import com.postgres.sample.dto.CategoryVO;
 import com.postgres.sample.dto.Code;
 import com.postgres.sample.dto.Observation;
 import com.postgres.sample.dto.Organization;
+import com.postgres.sample.dto.RainFall;
 import com.postgres.sample.dto.WaterGate;
 import com.postgres.sample.dto.WaterLevel;
 
@@ -23,10 +25,19 @@ public interface HijService {
 	int obEdit(Observation observation);	// 수정시행
 	int obDelete(Observation observation);	// 삭제시행
 	
-	// 2. 관측소 - 시자료
+	// 2. 관측소 - 시자료 - 수위
 	
-	List<WaterLevel> waterLevelList(WaterLevel waterLevel);//시자료 목록
-	int waterLevelTotal();
+	List<WaterLevel> waterLevelList(WaterLevel waterLevel);//수위 목록
+	int waterLevelTotal();				// 수위 총 갯수
+	WaterLevel getWaterLevel(WaterLevel waterLevel); //조회
+	int tEdit(WaterLevel waterLevel);	// 수위 수정
+	
+	// 2. 관측소 - 시자료 - 강우량
+	int rainFallTotal();
+	List<RainFall> rainFallList(RainFall rainFall);
+	RainFall getRainFall(RainFall rainFall);
+	int tEditR(RainFall rainFall);
+	
 
 
 }

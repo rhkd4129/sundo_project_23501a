@@ -128,7 +128,6 @@
 					<c:if test="${page.startPage > page.pageBlock }">
 						<li class="page-item"><a class="page-link" href="observation_find?currentPage=${page.startPage - page.pageBlock }" tabindex="-1" aria-disabled="true">이전</a></li>
 					</c:if>
-
 					<c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
 						<c:choose>
 							<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>

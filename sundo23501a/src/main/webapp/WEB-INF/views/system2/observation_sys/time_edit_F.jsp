@@ -8,6 +8,5 @@
 </head>
 <body>
 
-<h1>checkresult</h1>
 </body>
 </html>

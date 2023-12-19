@@ -122,20 +122,22 @@
 	</delete>
 	
 	
-	<!-- 2. 관측소 - 시자료 -->
+	<!-- 2. 관측소 - 시자료 - 수위 -->
 	
-	<!-- 시자료 리스트 -->
+	<!-- 시자료 수위 리스트 -->
 	<select id="ijWaterLevelList" parameterType="WaterLevel" resultType="WaterLevel">
 			SELECT *
 			FROM(
-				SELECT (row_number() over()) AS rn, a.*	
+				SELECT (row_number() over()) AS rn, a.*
 				FROM(
-					SELECT W.*, T.observe_post, T.observe_code
+					SELECT W.*, T.observe_post, T.observe_code, T.observe_type,
+						(SELECT cate_name FROM code WHERE field_name = 'observe_type' AND cate_code = T.observe_Type) observe_type_name
 						FROM 
 						   water_level W
 						   LEFT OUTER JOIN Observation T
 						   ON W.river_code = T.river_code
 						   WHERE W.river_code=#{river_code}
+						   ORDER BY observe_date DESC
 						  )a
 				)
 		WHERE rn BETWEEN #{start} and #{end}
@@ -147,5 +149,121 @@
 		SELECT COUNT(*)
 		FROM Water_Level
 	</select>
+	
+	
+	<!-- 수위 조회 -->
+	
+	<select id="ijGetWaterLevel" parameterType="WaterLevel" resultType="WaterLevel">
+		SELECT W.*, T.observe_post, T.observe_code, T.observe_type,
+				(SELECT cate_name FROM code WHERE field_name = 'observe_type' AND cate_code = T.observe_Type) observe_type_name
+		FROM 
+				water_level W
+				LEFT OUTER JOIN Observation T
+				 ON W.river_code = T.river_code
+		WHERE W.river_code=#{river_code} AND W.observe_date=#{observe_date}
+	</select>
+	
+	<!-- 수위 수정 -->
+	<update id="ijTEdit" parameterType="WaterLevel">
+		UPDATE water_level SET
+			hour_01=#{hour_01},
+			hour_02=#{hour_02},
+			hour_03=#{hour_03},
+			hour_04=#{hour_04},
+			hour_05=#{hour_05},
+			hour_06=#{hour_06},
+			hour_07=#{hour_07},
+			hour_08=#{hour_08},
+			hour_09=#{hour_09},
+			hour_10=#{hour_10},
+			hour_11=#{hour_11},
+			hour_12=#{hour_12},
+			hour_13=#{hour_13},
+			hour_14=#{hour_14},
+			hour_15=#{hour_15},
+			hour_16=#{hour_16},
+			hour_17=#{hour_17},
+			hour_18=#{hour_18},
+			hour_19=#{hour_19},
+			hour_20=#{hour_20},
+			hour_21=#{hour_21},
+			hour_22=#{hour_22},
+			hour_23=#{hour_23},
+			hour_24=#{hour_24}
+		WHERE river_code=#{river_code} AND observe_date=#{observe_date}
+
+	</update>
+
+<!-- 3. 관측소 - 시자료 - 강우량 -->
+
+	<!-- 시자료 강우량 리스트 -->
+	<select id="ijRainFallList" parameterType="RainFall" resultType="RainFall">
+			SELECT *
+			FROM(
+				SELECT (row_number() over()) AS rn, a.*
+				FROM(
+					SELECT R.*, T.observe_post, T.observe_code, T.observe_type,
+						(SELECT cate_name FROM code WHERE field_name = 'observe_type' AND cate_code = T.observe_Type) observe_type_name
+						FROM 
+						   rainfall R
+						   LEFT OUTER JOIN Observation T
+						   ON R.river_code = T.river_code
+						   WHERE R.river_code=#{river_code}
+						   ORDER BY observe_date DESC
+						  )a
+				)
+		WHERE rn BETWEEN #{start} and #{end}
+				
+	</select>
+	
+	<!-- waterLevel Total -->
+	<select id="ijRainFallTotal" resultType="int">
+		SELECT COUNT(*)
+		FROM rainfall
+	</select>
+	
+	
+	<!-- 수위 조회 -->
+	
+	<select id="ijGetRainFall" parameterType="RainFall" resultType="RainFall">
+		SELECT R.*, T.observe_post, T.observe_code, T.observe_type,
+				(SELECT cate_name FROM code WHERE field_name = 'observe_type' AND cate_code = T.observe_Type) observe_type_name
+		FROM 
+				rainfall R
+				LEFT OUTER JOIN Observation T
+				 ON R.river_code = T.river_code
+		WHERE R.river_code=#{river_code} AND R.observe_date=#{observe_date}
+	</select>
+	
+	<!-- 수위 수정 -->
+	<update id="ijTEditR" parameterType="RainFall">
+		UPDATE rainfall SET
+			hour_01=#{hour_01},
+			hour_02=#{hour_02},
+			hour_03=#{hour_03},
+			hour_04=#{hour_04},
+			hour_05=#{hour_05},
+			hour_06=#{hour_06},
+			hour_07=#{hour_07},
+			hour_08=#{hour_08},
+			hour_09=#{hour_09},
+			hour_10=#{hour_10},
+			hour_11=#{hour_11},
+			hour_12=#{hour_12},
+			hour_13=#{hour_13},
+			hour_14=#{hour_14},
+			hour_15=#{hour_15},
+			hour_16=#{hour_16},
+			hour_17=#{hour_17},
+			hour_18=#{hour_18},
+			hour_19=#{hour_19},
+			hour_20=#{hour_20},
+			hour_21=#{hour_21},
+			hour_22=#{hour_22},
+			hour_23=#{hour_23},
+			hour_24=#{hour_24}
+		WHERE river_code=#{river_code} AND observe_date=#{observe_date}
+
+	</update>
 
 </mapper>

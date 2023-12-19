@@ -27,4 +27,10 @@ public class Flow {
 	private Double december;
 	
 
+	
+	//페이징작업
+		private String rn;
+		private String search;   	private String keyword;
+		private String pageNum;		private int total;
+		private int start; 		 	private int end;
 }

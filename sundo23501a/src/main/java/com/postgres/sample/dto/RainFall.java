@@ -2,7 +2,9 @@ package com.postgres.sample.dto;
 
 
 
-import java.util.Date;
+
+
+import java.sql.Date;
 
 import lombok.Data;
 
@@ -39,6 +41,17 @@ public class RainFall {
 	private Double hour_23;
 	private Double hour_24;
 	
+	
+	
+	//페이징작업
+	private String rn;
+	private String search;   	private String keyword;
+	private String pageNum;		private int total;
+	private int start; 		 	private int end;
+
+	//조회용
+	private String 	observe_post;
+	private Integer observe_code;
 	
 //	RAINFALL
 //	observe_no(PK)	N/A	Double
