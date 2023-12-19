@@ -87,10 +87,20 @@
                 <h2>실시간 수문정보 관리 시스템</h2>
                 <h3>레이어 부분</h3>
 
+                <div style="border: solid 1px black; margin: 3%">
+                    <button id="activateLayerButton">서울 한강 </button>
+                    <button id="sumun">경기 한강 </button>
+                    <button id="sumun2">수문위치 </button>
+                    <button id="sumun3"> 관측소 위치</button>
+                </div>
 
+                <div style="border: solid 1px black; margin: 3%">
 
+                    <button id="dam">댐 </button>
+                    <button id="waterway_pos">관개수로 </button>
+                    <button id="pump"> 펌프장</button>
+                </div>
                 <div id="map">
-
 
                 </div>
                 <form>
@@ -118,8 +128,6 @@
     </footer>
 
     <script type="text/javascript">
-        // OpenLayers map setup
-        // 기존 코드
         var map = new ol.Map({
             target: 'map',
             layers: [
@@ -130,11 +138,68 @@
                     source: new ol.source.ImageWMS({
                         url: 'http://localhost:8090/geoserver/wms',
                         params: {
-                            'LAYERS':'lee:SEOUL_HANGANG_HACUN',
+                            'LAYERS': 'lee:SEOUL_HANGANG_HACUN',
                             'TILED': true
                         },
                         serverType: 'geoserver'
-                    })
+                    }),
+                    visible: false // 초기에는 레이어를 숨겨둠
+                }),
+
+                new ol.layer.Image({
+                    source: new ol.source.ImageWMS({
+                        url: 'http://localhost:8090/geoserver/wms',
+                        params: {
+                            'LAYERS':'lee:GYEONGGI_HANGANG_HACUN',
+                            'TILED': true
+                        },
+                        serverType: 'geoserver'
+                    }),
+                    visible: false // 초기에는 레이어를 숨겨둠
+                }),
+                new ol.layer.Image({
+                    source: new ol.source.ImageWMS({
+                        url: 'http://localhost:8090/geoserver/wms',
+                        params: {
+                            'LAYERS':'lee:sumun_pos',
+                            'TILED': true
+                        },
+                        serverType: 'geoserver'
+                    }),
+                    visible: false // 초기에는 레이어를 숨겨둠
+                }),
+                new ol.layer.Image({
+                    source: new ol.source.ImageWMS({
+                        url: 'http://localhost:8090/geoserver/wms',
+                        params: {
+                            'LAYERS':'lee:observation_pos',
+                            'TILED': true
+                        },
+                        serverType: 'geoserver'
+                    }),
+                    visible: false // 초기에는 레이어를 숨겨둠
+                }),
+                new ol.layer.Image({
+                    source: new ol.source.ImageWMS({
+                        url: 'http://localhost:8090/geoserver/wms',
+                        params: {
+                            'LAYERS':'lee:dam_pos',
+                            'TILED': true
+                        },
+                        serverType: 'geoserver'
+                    }),
+                    visible: false // 초기에는 레이어를 숨겨둠
+                }),
+                new ol.layer.Image({
+                    source: new ol.source.ImageWMS({
+                        url: 'http://localhost:8090/geoserver/wms',
+                        params: {
+                            'LAYERS':'lee:waterway_pos',
+                            'TILED': true
+                        },
+                        serverType: 'geoserver'
+                    }),
+                    visible: false // 초기에는 레이어를 숨겨둠
                 })
             ],
             view: new ol.View({
@@ -143,6 +208,31 @@
             })
         });
 
+        $('#activateLayerButton').on('click', function () {
+            toggleLayerVisibility(1); // 두 번째 레이어의 가시성 토글
+        });
+
+        $('#sumun').on('click', function () {
+            toggleLayerVisibility(2); // 세 번째 레이어의 가시성 토글
+        });
+
+        $('#sumun2').on('click', function () {
+            toggleLayerVisibility(3); // 세 번째 레이어의 가시성 토글
+        });
+        $('#sumun3').on('click', function () {
+            toggleLayerVisibility(4); // 세 번째 레이어의 가시성 토글
+        });
+        $('#dam').on('click', function () {
+            toggleLayerVisibility(5); // 세 번째 레이어의 가시성 토글
+        });
+        $('#waterway_pos').on('click', function () {
+            toggleLayerVisibility(6); // 세 번째 레이어의 가시성 토글
+        });
+
+        function toggleLayerVisibility(layerIndex) {
+            var layer = map.getLayers().getArray()[layerIndex];
+            layer.setVisible(!layer.getVisible());
+        }
     </script>
 </body>
 </html>
