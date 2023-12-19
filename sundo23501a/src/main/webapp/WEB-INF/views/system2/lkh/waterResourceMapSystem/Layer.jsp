@@ -11,7 +11,33 @@
         <link rel="stylesheet" href="http://localhost:8090/geoserver/openlayers3/ol.css" type="text/css">
     </script>
     <script src="http://localhost:8090/geoserver/openlayers3/ol.js" type="text/javascript"></script>
+    <script>
+        $(function() {
+
+            $.ajax({
+                url			: '/main_header_2',
+                dataType 	: 'html',
+                success		: function(data) {
+                    $('#header').html(data);
+                }
+            });
+
+            $.ajax({
+                url			: '/main_footer',
+                dataType 	: 'html',
+                success		: function(data) {
+                    $('#footer').html(data);
+                }
+            });
+        });
+
+    </script>
     <style>
+
+        header {
+            height: 55px;
+        }
+
         body {
             font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
             font-size: small;
@@ -52,32 +78,44 @@
     </style>
 </head>
 <body>
-    <button type="button"  class="btn btn-sm btn-secondary " onclick="location.href='/waterResourcesList' ">목록</button>
-    <button type="button"  class="btn btn-sm btn-secondary " onclick="location.href='/realTimeSystem/layer' ">지도</button>
-    <h2>실시간 수문정보 관리 시스템</h2>
-    <h3>레이어 부분</h3>
+    <header id="header"></header>
+
+    <div class="container">
+        <div class="row">
+            <div id="center">
+
+                <h2>실시간 수문정보 관리 시스템</h2>
+                <h3>레이어 부분</h3>
 
 
 
-    <div id="map">
+                <div id="map">
 
 
+                </div>
+                <form>
+                    <label>Projection </label> <select id="projection">
+                    <option value="EPSG:4326">EPSG:4326</option>
+                    <option value="EPSG:900913">EPSG:900913</option>
+                    <option value="EPSG:3857">EPSG:3857</option>
+                </select> <label>Precision </label> <input id="precision" type="number" min="0"
+                                                           max="12" value="4" />
+                    <div id = "mouse-position"></div>
+                </form>
+                <div id="wrapper">
+                    <div id="location"></div>
+
+
+                </div>
+            </div>
+        </div>
     </div>
-    <form>
-        <label>Projection </label> <select id="projection">
-        <option value="EPSG:4326">EPSG:4326</option>
-        <option value="EPSG:900913">EPSG:900913</option>
-        <option value="EPSG:3857">EPSG:3857</option>
-       </select> <label>Precision </label> <input id="precision" type="number" min="0"
-                                               max="12" value="4" />
-        <div id = "mouse-position"></div>
-    </form>
-    <div id="wrapper">
-        <div id="location"></div>
 
 
-    </div>
-
+    <footer class="footer py-2">
+        <div id="footer" class="container">
+        </div>
+    </footer>
 
     <script type="text/javascript">
         // OpenLayers map setup

@@ -17,8 +17,7 @@ import com.postgres.sample.dto.OrgArea;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.Paging;
 import com.postgres.sample.dto.WaterResources;
-import com.postgres.sample.service.impl.dao.lkh.LKH_WaterResourcesDAO;
-import com.postgres.sample.service.kjo.BoardService;
+
 import com.postgres.sample.service.lkh.WaterResourcesService;
 
 import lombok.RequiredArgsConstructor;

@@ -25,7 +25,7 @@
 		<typeAlias alias="waterGate" type="com.postgres.sample.dto.WaterGate"/>
 		<typeAlias alias="waterLevel" type="com.postgres.sample.dto.WaterLevel"/>
 		<typeAlias alias="waterResources" type="com.postgres.sample.dto.WaterResources"/>
-		 <typeAlias alias="orgArea" type="com.postgres.sample.dto.OrgArea"/>
+		<typeAlias alias="orgArea" type="com.postgres.sample.dto.OrgArea"/>
 		<typeAlias alias="LKH_WaterResources" type="com.postgres.sample.dto.LKH_WaterResources"/>
 		<typeAlias alias="categoryVO" type="com.postgres.sample.dto.CategoryVO"/>
     </typeAliases>
