@@ -136,4 +136,56 @@ public class KjoServiceImpl extends EgovAbstractServiceImpl implements KjoServic
     public WaterResources findWaterResourcesById(WaterResources wr) {
         return KjoDao.findWaterResourcesById(wr);
     }
+
+    @Override
+    public CheckReport findCheckReportByDocNo(CheckReport cr) {
+        return KjoDao.findCheckReportByDocNo(cr);
+
+    }
+
+    @Override
+    public List<CheckList> findCheckListByDocNo(CheckList cl) {
+        return KjoDao.findCheckListByDocNo(cl);
+    }
+
+    @Override
+    public List<CheckList> findCheckListAndCodeByDocNo(CheckList cl) {
+        return KjoDao.findCheckListAndCodeByDocNo(cl);
+    }
+
+    @Override
+    public List<WaterResources> PaingWaterResourceAndCheckReport(WaterResources wr) {
+        return KjoDao.PaingWaterResourceAndCheckReport(wr);
+    }
+
+    @Override
+    public WaterResources searchCntWRAndCR(WaterResources wr) {
+        return KjoDao.searchCntWRAndCR(wr);
+    }
+
+    @Override
+    public List<WaterResources> searchWRAndCR(WaterResources wr) {
+        return KjoDao.searchWRAndCR(wr);
+    }
+
+    @Override
+    public List<CheckReport> findCheckReportByFcCode(CheckReport checkReport) {
+        return KjoDao.findCheckReportByFcCode(checkReport);
+
+    }
+
+    @Override
+    public CheckReport cntCheckReportByFcCode(CheckReport checkReport) {
+        return KjoDao.cntCheckReportByFcCode(checkReport);
+    }
+
+    @Override
+    public Observation CntObservationAll() {
+        return KjoDao.CntObservationAll();
+    }
+
+    @Override
+    public List<Observation> findObservationAll(Observation ov) {
+        return KjoDao.findObservationAll(ov);
+    }
 }

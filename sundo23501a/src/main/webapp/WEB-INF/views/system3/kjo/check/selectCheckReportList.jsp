@@ -23,6 +23,10 @@
     </style>
 
     <script type="text/javascript">
+        $(function (){
+            doubliClickEvents();
+        })
+
         $(function() {
 
             $.ajax({
@@ -42,39 +46,28 @@
             });
         });
 
-
-        $(function (){
+        function doubliClickEvents(){
             var trElements = document.querySelectorAll('.cont');
 
             console.log(trElements.length);
             trElements.forEach(function (trElement) {
                 console.log("fdsfds");
                 trElement.addEventListener('dblclick', function () {
-                    // 더블클릭할 때 수행할 동작을 여기에 추가합니다.
-                    console.log("fds");
-
-                    var doc_no = trElement.getAttribute('data-doc-no');
+                    var facility_code = trElement.getAttribute('data-doc-no');
+                    window.location.href = "/selectcheckReportlist2?facility_code=" + facility_code+"&currentPage=1";
                     // getcheckresultform
                 });
             });
+        }
 
-
-        })
 
         function searchCheckReportList(currentPage) {
-            let facility_category = $("#facility_category_List").val();
-            let org_area_name = $("#org_area_List").val();  //  행정기관
-            let org_name = $("#org_name_List").val();       //  관리기관
-            let user_department = $("#user_department").val();      //  소속
-            let firstdate = $("#find_date1").val();
-            let secdate = $("#find_date2").val();
-            let cate_name = $("#cate_name").val();
-            let facility_code = $("#facility_code").val();
-            let research = $("#research").val();
 
-            const cr = {
+
+            const wr = {
+                currentPage : currentPage,
                 facility_category : $("#facility_category_List").val(),
-                org_area_name : $("#org_area_List").val(),  //  행정기관
+                org_area : $("#org_area_List").val(),  //  행정기관
                 org_name : $("#org_name_List").val(),       //  관리기관
                 user_department : $("#user_department").val(),      //  소속
                 firstdate : $("#find_date1").val(),
@@ -83,23 +76,70 @@
                 facility_code : $("#facility_code").val(),
                 research : $("#research").val()
             }
-            console.log(cr);
+
+            console.log(wr);
             $.ajax({
                 url: "/getcheckresultform",
-                data: cr,
+                data: wr,
 
                 success(data) {
                     let table_body = $("#table_body");
+                    const CRList = data.objList;
+                    const obj = data.obj;
+                    table_body.empty();
 
-                    console.log("data");
-                    console.log(data);
-                    const page = JSON.parse(data.Obj);
-                    console.log("page");
-                    console.log(page);
-                    const CRList = JSON.parse(data.ObjList);
-                    console.log("CRList");
-                    console.log(CRList);
+                    $.each(CRList, function (key, values) {
+                        const newtr = $('<tr></tr>');
+                        newtr.addClass("cont");
+                        newtr.attr('data-doc-no', values.doc_no); // jQuery를 사용하여 data-doc-no 속성 추가
+                        newtr.append('<td>' + values.rn + '</td>');
+                        newtr.append('<td>' + values.facility_category + '</td>');
+                        newtr.append('<td>' + values.facility_code + '</td>');
+                        newtr.append('<td>' + values.org_name + '</td>');
+                        newtr.append('<td>' + values.org_area_name + '</td>');
+// 가정: list는 JavaScript 객체이며, modify_datetime, check_result, user_name 등의 속성을 가지고 있다고 가정합니다.
 
+                        if (values.firstdate === null) {
+                            newtr.append('<td>점검없음</td>');
+                        } else {
+                            newtr.append('<td>' + values.firstdate + '</td>');
+                        }
+
+                        if (values.check_result === null) {
+                            newtr.append('<td>점검결과없음</td>');
+                        } else {
+                            newtr.append('<td>' + values.check_result + '</td>');
+                        }
+
+                        if (values.user_name === null) {
+                            newtr.append('<td>점검자없음</td>');
+                        } else {
+                            newtr.append('<td>' + values.user_name + '</td>');
+                        }
+
+                        table_body.append(newtr);
+                    });
+                    var paginationDiv = $('#paging'); // 페이지네이션을 표시할 div
+                    paginationDiv.empty(); // 페이지네이션을 초기화
+
+                    var jspPagination = '';
+
+                    if (obj.startPage > obj.pageBlock) {
+                        jspPagination += '<div class="page-link" onclick="searchCheckReportList(' + (obj.startPage - obj.pageBlock) + ')">이전</div>';
+                    }
+
+                    for (var i = obj.startPage; i <= obj.endPage; i++) {
+                        jspPagination += '<div class="page-item" onclick="searchCheckReportList(' + i + ')"><div class="page-link">' + i + '</div></div>';
+                    }
+
+                    if (obj.endPage >= obj.pageBlock) {
+                        jspPagination += '<div class="page-link" onclick="searchCheckReportList(' + (obj.startPage + obj.pageBlock) + ')">다음</div>';
+                    }
+                    jspPagination += '</div>';
+                    paginationDiv.html(jspPagination); // JSP 페이지 네비게이션 코드를 추가
+
+
+                    doubliClickEvents();
                 }
             })
 
@@ -136,7 +176,7 @@
                             <td>
                                 <select class="form-select" id="org_area_List">
                                     <c:forEach items="${orgList}" var="list">
-                                        <option name="org_area" value="${list.org_area}">${list.org_area_name}</option>
+                                        <option name="org_area" value="${list.org_area_name}">${list.org_area_name}</option>
                                     </c:forEach>
                                     <option name="org_area"
                                             value="전체" selected>전체
@@ -189,18 +229,39 @@
                     </tr>
 
                     <tbody id="table_body">
-                    <c:forEach items="${crList}" var="CheckReport" varStatus="loop">
-                        <tr class="cont" data-doc-no="${CheckReport.doc_no}">
-                            <td>${CheckReport.rn}</td>
-                            <td>${CheckReport.facility_category}</td>
-                            <td>${CheckReport.facility_code}</td>
-                            <td>${CheckReport.org_area_name}</td>
-                            <td>${CheckReport.org_name}</td>
-                            <td>${CheckReport.modify_datetime}</td>
-                            <td>${CheckReport.check_result}</td>
-                            <td>${CheckReport.user_name}</td>
+
+<%--                    <tbody id="table_body">--%>
+                    <c:forEach items="${wrList}" var="list">
+                        <tr class="cont" data-doc-no="${list.facility_code}">
+                            <td>${list.rn}</td>
+                            <td>${list.facility_category}</td>
+                            <td>${list.facility_code}</td>
+                            <td>${list.org_name}</td>
+                            <td>${list.org_area_name}</td>
+                            <c:if test="${list.firstdate == null}">
+                                <td>점검없음</td>
+                            </c:if>
+                            <c:if test="${list.firstdate != null}">
+                                <td>${list.firstdate}</td>
+                            </c:if>
+
+                            <c:if test="${list.check_result == null}">
+                                <td>점검결과없음</td>
+                            </c:if>
+                            <c:if test="${list.check_result != null}">
+                                <td>${list.check_result}</td>
+                            </c:if>
+
+                            <c:if test="${list.user_name == null}">
+                                <td>점검자없음</td>
+                            </c:if>
+                            <c:if test="${list.user_name != null}">
+                                <td>${list.user_name}</td>
+                            </c:if>
+
                         </tr>
                     </c:forEach>
+
 
                     </tbody>
 
@@ -209,6 +270,7 @@
                 <div id="paging" class="pagination justify-content-center">
                     <c:if test="${page.startPage > page.pageBlock}">
                         <div class="page-link" onclick="searchCheckReportList(${page.startPage - page.pageBlock})">
+
                             이전
                         </div>
                     </c:if>
@@ -217,7 +279,7 @@
                             <div class="page-link" style="cursor:pointer">${i}</div>
                         </div>
                     </c:forEach>
-                    <c:if test="${page.endPage <= page.pageBlock}">
+                    <c:if test="${page.endPage >= page.pageBlock}">
                         <div class="page-link" onclick="searchCheckReportList(${page.startPage + page.pageBlock})">
                             다음
                         </div>

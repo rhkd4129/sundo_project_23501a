@@ -8,7 +8,7 @@
     <title>수자원 등록 </title>
     <script>
         <link rel="stylesheet"  href="http://localhost:8090/geoserver/openlayers3/ol.css"   type="text/css">
-            <link rel="stylesheet" href="http://localhost:8090/geoserver/openlayers3/ol.css" type="text/css">
+        <link rel="stylesheet" href="http://localhost:8090/geoserver/openlayers3/ol.css" type="text/css">
     </script>
     <script src="http://localhost:8090/geoserver/openlayers3/ol.js" type="text/javascript"></script>
     <script>
@@ -76,11 +76,55 @@
             font-size: 10pt;
         }
         #layer{
+            /*background-color: dimgray;*/
+            display: flex;
             position: absolute;
-            width: 30%;
+            width: 24%;
             height: 100%;
+            z-index: 5;
 
         }
+        #left_layer{
+            background-color: #2c0b0e;
+            width: 25%;
+            height: 84%;
+        }
+        #right_layer{
+            width: 75%;
+            height: 84%;
+            background-color: whitesmoke;
+        }
+
+        #obsrv_box{
+            width: 100%;
+            height: 10%;
+            background-color: red;
+
+        }
+        #layer_box{
+            width: 100%;
+            height: 10%;
+            background-color: yellow;
+        }
+        #bookmark_box{
+            width: 100%;
+            height: 10%;
+            background-color: green;
+        }
+        #layer_top {
+            display: flex;
+            justify-content: center;
+
+        }
+        #layer_mid{
+            display: flex;
+            justify-content: space-around;
+        }
+        #layer_mid2{
+            display: flex;
+            justify-content: space-around;
+        }
+
     </style>
 </head>
 <body style="
@@ -102,23 +146,65 @@
 </div>
 <div id="map">
     <div id="layer">
-        <div>
+        <div id="left_layer">
+            <div id="obsrv_box" onclick="layerClick(1 ,'obsrvlist')">
+                <input type="button" class="btn" value="관측소" style="width: 100%; height: 100%">
+
+            </div>
+            <div id="layer_box" onclick="layerClick(1,'obsrvlist')">
+                <input type="button" class="btn" value="레이어" style="width: 100%; height: 100%">
+
+            </div>
+            <div id="bookmark_box" onclick="layerClick(1,'obsrvlist')">
+                <input type="button" class="btn" value="북마크" style="width: 100%; height: 100%">
+
+            </div>
+
+        </div>
+        <div id="right_layer" style="display: none">
+            <div id="layer_top">
+                <select>
+                    <option>전체</option>
+                </select>
+                <input placeholder="관측소명을 입력하세요" >
+                <input type="button" value="검색" id="search">
+            </div>
+            <div id="layer_mid">
+                <div>관측소</div>
+                <div id="total">total</div>
+
+
+            </div>
+            <div id="layer_mid2">
+                <div>
+                    관측소명
+                </div>
+                <div>
+                    누적강우량
+                </div>
+            </div>
+            <div id="list">
+
+            </div>
+            <div id="layer_bot">
+                <div id="paging"></div>
+
+            </div>
 
         </div>
 
-
     </div>
-
 </div>
 
 
 
-<footer class="footer py-2">
-    <div id="footer" class="container">
-    </div>
-</footer>
+    <footer class="footer py-2">
+        <div id="footer" class="container">
+        </div>
+    </footer>
 
 <script type="text/javascript">
+
     var map = new ol.Map({
         target: 'map',
         layers: [
@@ -152,7 +238,7 @@
                 source: new ol.source.ImageWMS({
                     url: 'http://localhost:8090/geoserver/wms',
                     params: {
-                        'LAYERS':'lee:SUMUN_POS',
+                        'LAYERS':'lee:sumun_pos',
                         'TILED': true
                     },
                     serverType: 'geoserver'
@@ -163,7 +249,7 @@
                 source: new ol.source.ImageWMS({
                     url: 'http://localhost:8090/geoserver/wms',
                     params: {
-                        'LAYERS':'lee:OBSERVATION_POS',
+                        'LAYERS':'lee:observation_pos',
                         'TILED': true
                     },
                     serverType: 'geoserver'
@@ -224,8 +310,11 @@
         var layer = map.getLayers().getArray()[layerIndex];
         layer.setVisible(!layer.getVisible());
     }
+
+
 </script>
 </body>
 </html>
+
 
 
