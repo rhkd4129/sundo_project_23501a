@@ -16,9 +16,17 @@
             background-color: #f5f5f5;
             cursor: pointer;
         }
+        #table_body tr:hover {
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+
 
         header {
             height: 55px;
+        }
+        table{
+            width: 100%;
         }
     </style>
 
@@ -91,7 +99,7 @@
                     $.each(CRList, function (key, values) {
                         const newtr = $('<tr></tr>');
                         newtr.addClass("cont");
-                        newtr.attr('data-doc-no', values.doc_no); // jQuery를 사용하여 data-doc-no 속성 추가
+                        newtr.attr('data-doc-no', values.facility_code); // jQuery를 사용하여 data-doc-no 속성 추가
                         newtr.append('<td>' + values.rn + '</td>');
                         newtr.append('<td>' + values.facility_category + '</td>');
                         newtr.append('<td>' + values.facility_code + '</td>');
@@ -150,151 +158,151 @@
 </head>
 <body>
 
-    <header id="header"></header>
+<header id="header"></header>
 
 
 
 
-    <div class="container" style="margin-top: 3%">
-        <div class="row">
-            <div id="center">
-                <form action="" id="">
-                    <table>
-                        <tr>
-                            <td>시설물 종류:</td>
-                            <td>
-                                <select class="form-select" id="facility_category_List">
-                                    <c:forEach items="${wrctgList}" var="list">
-                                        <option name="facility_category"
-                                                value="${list.facility_category}">${list.facility_category}</option>
-                                    </c:forEach>
-                                    <option name="facility_category"
-                                            value="전체" selected>전체
-                                    </option>
-                                </select></td>
-                            <td>행정구역:</td>
-                            <td>
-                                <select class="form-select" id="org_area_List">
-                                    <c:forEach items="${orgList}" var="list">
-                                        <option name="org_area" value="${list.org_area_name}">${list.org_area_name}</option>
-                                    </c:forEach>
-                                    <option name="org_area"
-                                            value="전체" selected>전체
-                                    </option>
-                                </select>
-                            </td>
-                            <td>관리기관:</td>
-
-                            <td>
-                                <select class="form-select" id="org_name_List">
-                                    <c:forEach items="${organizationList}" var="list">
-                                        <option name="org_name" value="${list.org_name}">${list.org_name}</option>
-                                    </c:forEach>
-                                    <option name="org_name"
-                                            value="전체" selected>전체
-                                    </option>
-                                </select>
-                            </td>
-                            <td>점검자 소속:</td>
-                            <td><input type="text" id="user_department"></td>
-
-                        </tr>
-                        <tr>
-                            <td>조회기간:</td>
-                            <td><input type="date" name="find_date1" id="find_date1"></td>
-                            <td>~</td>
-                            <td><input type="date" name="find_date2" id="find_date2"></td>
-
-                            <td>시설물 명칭:</td>
-                            <td><input type="text" name="cate_name" id="cate_name"></td>
-                            <td>시설물 코드:</td>
-                            <td><input type="text" name="facility_code" id="facility_code"></td>
-
-                            <td><input type="button" onclick="searchCheckReportList()" value="조회"></td>
-                            <td><input type="checkbox" id="research">결과 내 재검색</td>
-
-                        </tr>
-                    </table>
-                </form>
+<div class="container" style="margin-top: 3%">
+    <div class="row">
+        <div id="center">
+            <form action="" id="">
                 <table>
                     <tr>
-                        <th>연번</th>
-                        <th>시설물 종류</th>
-                        <th>시설물 코드</th>
-                        <th>행정구역</th>
-                        <th>관리기관</th>
-                        <th>최종점검일</th>
-                        <th>최종점검결과</th>
-                        <th>점검자</th>
+                        <td>시설물 종류:</td>
+                        <td>
+                            <select class="form-select" id="facility_category_List">
+                                <c:forEach items="${wrctgList}" var="list">
+                                    <option name="facility_category"
+                                            value="${list.facility_category}">${list.facility_category}</option>
+                                </c:forEach>
+                                <option name="facility_category"
+                                        value="전체" selected>전체
+                                </option>
+                            </select></td>
+                        <td>행정구역:</td>
+                        <td>
+                            <select class="form-select" id="org_area_List">
+                                <c:forEach items="${orgList}" var="list">
+                                    <option name="org_area" value="${list.org_area_name}">${list.org_area_name}</option>
+                                </c:forEach>
+                                <option name="org_area"
+                                        value="전체" selected>전체
+                                </option>
+                            </select>
+                        </td>
+                        <td>관리기관:</td>
+
+                        <td>
+                            <select class="form-select" id="org_name_List">
+                                <c:forEach items="${organizationList}" var="list">
+                                    <option name="org_name" value="${list.org_name}">${list.org_name}</option>
+                                </c:forEach>
+                                <option name="org_name"
+                                        value="전체" selected>전체
+                                </option>
+                            </select>
+                        </td>
+                        <td>점검자 소속:</td>
+                        <td><input type="text" id="user_department" class="form-control"></td>
+
                     </tr>
+                    <tr>
+                        <td>조회기간:</td>
+                        <td><input type="date" name="find_date1" id="find_date1" class="form-control"></td>
+                        <td><p style="text-align: center">~</p></td>
+                        <td><input type="date" name="find_date2" id="find_date2" class="form-control"></td>
 
-                    <tbody id="table_body">
+                        <td>시설물 명칭:</td>
+                        <td><input type="text" name="cate_name" id="cate_name" class="form-control"></td>
+                        <td>시설물 코드:</td>
+                        <td><input type="text" name="facility_code" id="facility_code" class="form-control"></td>
 
-<%--                    <tbody id="table_body">--%>
-                    <c:forEach items="${wrList}" var="list">
-                        <tr class="cont" data-doc-no="${list.facility_code}">
-                            <td>${list.rn}</td>
-                            <td>${list.facility_category}</td>
-                            <td>${list.facility_code}</td>
-                            <td>${list.org_name}</td>
-                            <td>${list.org_area_name}</td>
-                            <c:if test="${list.firstdate == null}">
-                                <td>점검없음</td>
-                            </c:if>
-                            <c:if test="${list.firstdate != null}">
-                                <td>${list.firstdate}</td>
-                            </c:if>
+                        <td><input type="button" onclick="searchCheckReportList()" value="조회" class="btn btn-dark"></td>
+                        <td><input type="checkbox" id="research">결과 내 재검색</td>
 
-                            <c:if test="${list.check_result == null}">
-                                <td>점검결과없음</td>
-                            </c:if>
-                            <c:if test="${list.check_result != null}">
-                                <td>${list.check_result}</td>
-                            </c:if>
-
-                            <c:if test="${list.user_name == null}">
-                                <td>점검자없음</td>
-                            </c:if>
-                            <c:if test="${list.user_name != null}">
-                                <td>${list.user_name}</td>
-                            </c:if>
-
-                        </tr>
-                    </c:forEach>
-
-
-                    </tbody>
-
+                    </tr>
                 </table>
+            </form>
+            <table class="table ">
+                <tr>
+                    <th>연번</th>
+                    <th>시설물 종류</th>
+                    <th>시설물 코드</th>
+                    <th>행정구역</th>
+                    <th>관리기관</th>
+                    <th>최종점검일</th>
+                    <th>최종점검결과</th>
+                    <th>점검자</th>
+                </tr>
 
-                <div id="paging" class="pagination justify-content-center">
-                    <c:if test="${page.startPage > page.pageBlock}">
-                        <div class="page-link" onclick="searchCheckReportList(${page.startPage - page.pageBlock})">
+                <tbody id="table_body">
 
-                            이전
-                        </div>
-                    </c:if>
-                    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-                        <div class="page-item" onclick="searchCheckReportList(${i})">
-                            <div class="page-link" style="cursor:pointer">${i}</div>
-                        </div>
-                    </c:forEach>
-                    <c:if test="${page.endPage >= page.pageBlock}">
-                        <div class="page-link" onclick="searchCheckReportList(${page.startPage + page.pageBlock})">
-                            다음
-                        </div>
-                    </c:if>
-                </div>
+                <%--                    <tbody id="table_body">--%>
+                <c:forEach items="${wrList}" var="list">
+                    <tr class="cont" data-doc-no="${list.facility_code}">
+                        <td>${list.rn}</td>
+                        <td>${list.facility_category}</td>
+                        <td>${list.facility_code}</td>
+                        <td>${list.org_name}</td>
+                        <td>${list.org_area_name}</td>
+                        <c:if test="${list.firstdate == null}">
+                            <td>점검없음</td>
+                        </c:if>
+                        <c:if test="${list.firstdate != null}">
+                            <td>${list.firstdate}</td>
+                        </c:if>
+
+                        <c:if test="${list.check_result == null}">
+                            <td>점검결과없음</td>
+                        </c:if>
+                        <c:if test="${list.check_result != null}">
+                            <td>${list.check_result}</td>
+                        </c:if>
+
+                        <c:if test="${list.user_name == null}">
+                            <td>점검자없음</td>
+                        </c:if>
+                        <c:if test="${list.user_name != null}">
+                            <td>${list.user_name}</td>
+                        </c:if>
+
+                    </tr>
+                </c:forEach>
+
+
+                </tbody>
+
+            </table>
+
+            <div id="paging" class="pagination justify-content-center">
+                <c:if test="${page.startPage > page.pageBlock}">
+                    <div class="page-link" onclick="searchCheckReportList(${page.startPage - page.pageBlock})">
+
+                        이전
+                    </div>
+                </c:if>
+                <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+                    <div class="page-item" onclick="searchCheckReportList(${i})">
+                        <div class="page-link" style="cursor:pointer">${i}</div>
+                    </div>
+                </c:forEach>
+                <c:if test="${page.endPage >= page.pageBlock}">
+                    <div class="page-link" onclick="searchCheckReportList(${page.startPage + page.pageBlock})">
+                        다음
+                    </div>
+                </c:if>
             </div>
         </div>
     </div>
+</div>
 
 
 
-    <footer class="footer py-2">
-        <div id="footer" class="container">
-        </div>
-    </footer>
+<footer class="footer py-2">
+    <div id="footer" class="container">
+    </div>
+</footer>
 
 </body>
 

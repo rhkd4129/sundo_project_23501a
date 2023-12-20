@@ -244,10 +244,10 @@
         </tr>
     </table>
 
-    <input type="button" value="목록">
-    <input type="button" value="삭제">
-    <input type="button" value="초기화">
-    <input type="button" value="저장" id="saveButton" onclick="updatebtnclick()">
+    <input class="btn btn-dark" type="button" value="목록" onclick="location.href='/selectCheckReportList'">
+    <input class="btn btn-dark" type="button" value="삭제">
+    <input class="btn btn-dark" onclick="window.location.reload()" type="button" value="초기화">
+    <input class="btn btn-dark" type="button" value="저장" id="saveButton">
 </container>
 
 <footer class="footer py-2">

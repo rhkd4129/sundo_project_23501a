@@ -20,6 +20,9 @@
         header {
             height: 55px;
         }
+        #contents{
+            margin: 0 3% 0 0;
+        }
     </style>
 
     <script type="text/javascript">
@@ -60,12 +63,12 @@
     <div class="container" style="margin-top: 3%">
         <div class="row">
             <div id="center">
-                <div>
-                    <p>시설물 명칭:</p>
-                    <p>${cate_name}</p>
+                <div style="display: flex">
+                    <div id="contents">시설물 명칭:</div>
+                    <div id="contents">${cate_name}</div>
 
-                    <p>시설물 코드:</p>
-                    <p>${facility_code}</p>
+                    <div id="contents">시설물 코드:</div>
+                    <div id="contents">${facility_code}</div>
                 </div>
                 <table>
                     <tr>
@@ -105,6 +108,9 @@
                             다음
                         </div>
                     </c:if>
+                    <div style="position: absolute; right: 15%;">
+                        <input onclick="location.href='/selectCheckReportList'" class="btn btn-dark" type="button" value="이전화면">
+                    </div>
                 </div>
             </div>
         </div>

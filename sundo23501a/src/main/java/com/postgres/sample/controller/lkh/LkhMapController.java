@@ -28,6 +28,7 @@ public class LkhMapController {
     public String waterResourceStatistics(Model model){
         return "system2/lkh/waterResourceMapSystem/Layer";
     }
+
     @ResponseBody
     @GetMapping("/obsrvlist")
     public KjoResponse obsrvlist(Observation ov){

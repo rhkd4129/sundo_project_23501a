@@ -255,7 +255,7 @@
             and ui.user_department like '%' || #{user_department} || '%'
         </if>
         <if test="facility_code != ''">
-            and ui.facility_code like '%' || #{facility_code} || '%'
+            and tab.facility_code like '%' || #{facility_code} || '%'
         </if>
 
 
@@ -303,7 +303,7 @@
             and ui.user_department like '%' || #{user_department} || '%'
         </if>
         <if test="facility_code != ''">
-            and ui.facility_code like '%' || #{facility_code} || '%'
+            and tab.facility_code like '%' || #{facility_code} || '%'
         </if>
 
 
