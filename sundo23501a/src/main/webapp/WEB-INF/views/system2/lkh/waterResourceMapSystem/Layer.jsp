@@ -152,7 +152,7 @@
                 source: new ol.source.ImageWMS({
                     url: 'http://localhost:8090/geoserver/wms',
                     params: {
-                        'LAYERS':'lee:sumun_pos',
+                        'LAYERS':'lee:SUMUN_POS',
                         'TILED': true
                     },
                     serverType: 'geoserver'
@@ -163,7 +163,7 @@
                 source: new ol.source.ImageWMS({
                     url: 'http://localhost:8090/geoserver/wms',
                     params: {
-                        'LAYERS':'lee:observation_pos',
+                        'LAYERS':'lee:OBSERVATION_POS',
                         'TILED': true
                     },
                     serverType: 'geoserver'
