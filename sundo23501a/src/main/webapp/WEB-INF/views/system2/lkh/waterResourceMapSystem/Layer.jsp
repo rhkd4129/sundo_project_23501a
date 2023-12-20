@@ -7,14 +7,16 @@
     <meta charset="UTF-8">
     <title>수자원 등록 </title>
 
-    <link rel="stylesheet"  href="http://localhost:8090/geoserver/openlayers3/ol.css"   type="text/css">
-    <link rel="stylesheet" href="http://localhost:8090/geoserver/openlayers3/ol.css" type="text/css">
-<%--    <script>--%>
-<%--        <link rel="stylesheet"  href="http://localhost:8090/geoserver/openlayers3/ol.css"   type="text/css">--%>
-<%--        <link rel="stylesheet" href="http://localhost:8090/geoserver/openlayers3/ol.css" type="text/css">--%>
-<%--    </script>--%>
+<%--    <link rel="stylesheet"  href="http://localhost:8090/geoserver/openlayers3/ol.css"   type="text/css">--%>
+<%--    <link rel="stylesheet" href="http://localhost:8090/geoserver/openlayers3/ol.css" type="text/css">--%>
+    <script>
+        <link rel="stylesheet"  href="http://localhost:8090/geoserver/openlayers3/ol.css"   type="text/css">
+        <link rel="stylesheet" href="http://localhost:8090/geoserver/openlayers3/ol.css" type="text/css">
+    </script>
     <script src="http://localhost:8090/geoserver/openlayers3/ol.js" type="text/javascript"></script>
     <script>
+
+
         $(function() {
 
             $.ajax({
@@ -32,6 +34,7 @@
                     $('#footer').html(data);
                 }
             });
+
         });
         function layerClick(currentPage, mapping){
 
@@ -56,14 +59,14 @@
 
                     list.empty();
                     $.each(objList, function (key, values) {
-                        const llll = $('<div></div>');
-                        llll.click(function () {
+                        const newcon = $('<div></div>');
+                        newcon.click(function () {
                             getLatLong(values.observe_code);
                         });
-                        llll.append(values.observe_post);
-                        llll.append('<input type="hidden" value="' + values.latitude + '" id="lat' + values.observe_code + '">');
-                        llll.append('<input type="hidden" value="' + values.longitude + '" id="long' + values.observe_code + '">');
-                        list.append(llll);
+                        newcon.append(values.observe_post);
+                        newcon.append('<input type="hidden" value="' + values.latitude + '" id="lat' + values.observe_code + '">');
+                        newcon.append('<input type="hidden" value="' + values.longitude + '" id="long' + values.observe_code + '">');
+                        list.append(newcon);
                     });
                 }
 
@@ -77,7 +80,25 @@
             // console.log(latvalue);
             // console.log(longvalue);
             alert("latvalue"+latvalue +"longvalue"+ longvalue);
+            const coordinates = [parseFloat(longvalue), parseFloat(latvalue)];  // 좌표를 배열로 변환
+            moveToCoordinates(coordinates,5)
 
+        }
+        function moveToCoordinates(coordinates, zoom) {
+            console.log("corr");
+            console.log(coordinates);
+            // let view = new ol.View();
+
+            map.view.animate({
+                center: ol.proj.fromLonLat(coordinates),
+                duration: 2000,  // 애니메이션 지속 시간 (2초)
+                zoom: zoom,
+            });
+
+            // view: new ol.View({
+            //     center: ol.proj.fromLonLat([126.9780, 37.5665]), // 서울 시청 좌표
+            //     zoom: 10
+            // })
         }
 
     </script>
@@ -253,6 +274,7 @@
 </footer>
 
 <script type="text/javascript">
+
     var map = new ol.Map({
         target: 'map',
         layers: [
@@ -358,6 +380,8 @@
         var layer = map.getLayers().getArray()[layerIndex];
         layer.setVisible(!layer.getVisible());
     }
+
+
 </script>
 </body>
 </html>
