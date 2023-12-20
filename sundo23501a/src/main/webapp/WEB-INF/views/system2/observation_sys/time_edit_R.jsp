@@ -13,6 +13,7 @@
 			<h1>시자료(강우량)</h1>
 			<input type="hidden" name="river_code" value="${rainFall.river_code}">
 			<input type="hidden" name="observe_date" value="${rainFall.observe_date}">
+		
 			<h4>관측소명 : ${rainFall.observe_post}</h4>
 			<h6>(단위:mm)</h6>
 			<table class="table table-hover">

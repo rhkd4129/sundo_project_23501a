@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.postgres.sample.dto.CategoryVO;
 import com.postgres.sample.dto.Code;
+import com.postgres.sample.dto.Flow;
+import com.postgres.sample.dto.HijResponse;
 import com.postgres.sample.dto.Observation;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.Paging;
@@ -172,7 +176,29 @@ public class HijController {
 
         return deleteResult;
     }
-    //--------------------------------------------------------------------------------------
+    
+    
+    // 관측소 검색
+    @ResponseBody
+    @RequestMapping(value="/searchObservation")
+    public HijResponse searchObservation(Observation observation, String currentPage ) {
+    	
+    	int totalCount = hs.searchTotalO(observation);	//검색 갯수
+    	
+    	Paging page = new Paging(totalCount, currentPage, 10);
+    	observation.setStart(page.getStart());
+    	observation.setEnd(page.getEnd());
+    	
+    	List<Observation> searchO = hs.searchO(observation);
+    	
+    	HijResponse hijResponse = new HijResponse();
+    	hijResponse.setObj(page);
+    	hijResponse.setList(searchO);
+    	
+    	return hijResponse;
+    }
+    
+//--------------------------------------------------------------------------------------
 // 2. 관측소 - 시자료 - 수위
 //--------------------------------------------------------------------------------------
     // 수위 목록
@@ -279,4 +305,66 @@ public class HijController {
       	return "redirect:/time_find_R?river_code="+rainFall.getRiver_code();
       }    
     
+  //--------------------------------------------------------------------------------------  
+  // 2. 관측소 - 시자료 - 우량
+  //--------------------------------------------------------------------------------------
+       // 우량 목록
+       @GetMapping("/time_find_F")
+       public String time_find_F(Flow flow,  String currentPage, Model model) {
+           System.out.println("HijController time_find_F START");
+           
+           int totalCount= hs.flowTotal();
+
+           Paging page = new Paging(totalCount, currentPage, 10);
+           flow.setStart(page.getStart());
+           flow.setEnd(page.getEnd());
+           List<Flow> flowYearList = hs.flowYearList(); // year 리스트
+           flow.setObserve_year(flowYearList.get(0).getObserve_year());
+           List<Flow> flowList = hs.flowList(flow);	// waterLevel 리스트
+           
+
+           model.addAttribute("totalCount", totalCount);
+           model.addAttribute("page", page);
+           model.addAttribute("flowList", flowList);
+           model.addAttribute("flowListSize", flowList.size());
+           model.addAttribute("flowYearList", flowYearList);
+           
+           System.out.println("년 : " + flowList.get(0).getObserve_year());
+           System.out.println("getJanuary 0 : " + flowList.get(0).getJanuary());
+           System.out.println("getJanuary 1: " + flowList.get(1).getJanuary());
+           
+           return "/system2/observation_sys/time_find_F";
+       }
+       
+       // 우량 수정 조회
+       @GetMapping("/time_edit_F")
+       public String time_edit_F(String river_code, int observe_year, int observe_day, Model model) {
+           System.out.println("HijController time_edit_R START");
+           Flow flow = new Flow();
+           flow.setRiver_code(river_code);
+           flow.setObserve_year(observe_year);
+           flow.setObserve_day(observe_day);
+           
+           Flow flowF = hs.getFlow(flow);
+           
+           model.addAttribute("flow", flowF);
+    
+           
+           return "/system2/observation_sys/time_edit_F";
+       }
+       
+       // 우량 수정
+       @PostMapping("/t_edit_F")
+       public String t_edit_F(Flow flow, Model model) {
+       	System.out.println("HijController t_edit_F START");
+       	
+       	int editResult = hs.tEditF(flow);
+          
+        model.addAttribute("flow", flow);  
+        
+        System.out.println("flow : " + flow.getObserve_day());
+        
+       	return "redirect:/time_find_F?river_code="+flow.getRiver_code()+"&observe_year()=" + flow.getObserve_year();
+       }    
+         
 }

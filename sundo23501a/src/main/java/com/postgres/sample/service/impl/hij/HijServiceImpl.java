@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.postgres.sample.dto.CategoryVO;
 import com.postgres.sample.dto.Code;
+import com.postgres.sample.dto.Flow;
 import com.postgres.sample.dto.Observation;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.RainFall;
@@ -103,6 +104,24 @@ public class HijServiceImpl extends EgovAbstractServiceImpl implements HijServic
 		return obDelete;
 	}
 	
+	// 검색 갯수
+	@Override
+	public int searchTotalO(Observation observation) {
+		int totalCount = hd.ijSearchTotalO();
+		System.out.println("HijServiceImpl searchTotalO START");
+		return totalCount;
+	}
+	
+	// 관측소 검색
+	@Override
+	public List<Observation> searchO(Observation observation) {
+		System.out.println("HijServiceImpl searchO START");
+		List<Observation> searchO = hd.ijSearchO(observation);
+		
+		System.out.println("searchO 사이즈 : " + searchO.size());
+		return searchO;
+	}
+
 //---------------------------------------------------------------------------------	
 	// 시자료 목록
 	@Override
@@ -163,7 +182,44 @@ public class HijServiceImpl extends EgovAbstractServiceImpl implements HijServic
 		int tEditR = hd.ijTEditR(rainFall);
 		return tEditR;
 	}
+//-------------------------------------------------------------------------
+	@Override
+	public int flowTotal() {
+		int totalCount = hd.ijFlowTotal();
+		System.out.println("HijServiceImpl flowTotal START");
+		return totalCount;
+	}
 
+	@Override
+	public List<Flow> flowList(Flow flow) {
+		System.out.println("HijServiceImpl flowList START");
+		List<Flow> flowList = hd.ijFlowList(flow);
+		return flowList;
+	}
 	
+
+	@Override
+	public Flow getFlow(Flow flow) {
+		System.out.println("HijServiceImpl getFlow START");
+		flow = hd.ijGetFlow(flow);
+		return flow;
+	}
+
+	@Override
+	public int tEditF(Flow flow) {
+		System.out.println("HijServiceImpl tEditF START");
+		int tEditF = hd.ijTEditF(flow);
+		return tEditF;
+	}
+
+	@Override
+	public List<Flow> flowYearList() {
+		System.out.println("HijServiceImpl flowYearList START");
+		List<Flow> flowYearList = hd.ijFlowYearList();
+		return flowYearList;
+	}
+
+
+
 
 }

@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
 </head>
 <body>
 <div class="container">
@@ -28,7 +29,7 @@
 						<tr>
 							<th><a href="/time_find?river_code=${rainFallList.get(0).river_code}">수위정보</a></th>
 							<th><a href="/time_find_R?river_code=${rainFallList.get(0).river_code}">강우량정보</a></th>
-							<th><a href="location.href='/time_find'">우량정보</a></th>
+							<th><a href="/time_find_F?river_code=${rainFallList.get(0).river_code}">우량정보</a></th>
 						</tr>
 				</span>
 			</div>

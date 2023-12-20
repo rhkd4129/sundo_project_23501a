@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.postgres.sample.dto.CategoryVO;
 import com.postgres.sample.dto.Code;
+import com.postgres.sample.dto.Flow;
 import com.postgres.sample.dto.Observation;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.RainFall;
@@ -24,6 +25,8 @@ public interface HijService {
 	Observation getObservation(Observation observation);	//관측소 정보
 	int obEdit(Observation observation);	// 수정시행
 	int obDelete(Observation observation);	// 삭제시행
+	int searchTotalO(Observation observation); // 검색 갯수
+	List<Observation> searchO(Observation observation); // 관측소 검색
 	
 	// 2. 관측소 - 시자료 - 수위
 	
@@ -32,11 +35,24 @@ public interface HijService {
 	WaterLevel getWaterLevel(WaterLevel waterLevel); //조회
 	int tEdit(WaterLevel waterLevel);	// 수위 수정
 	
-	// 2. 관측소 - 시자료 - 강우량
+	// 3. 관측소 - 시자료 - 강우량
 	int rainFallTotal();
 	List<RainFall> rainFallList(RainFall rainFall);
 	RainFall getRainFall(RainFall rainFall);
 	int tEditR(RainFall rainFall);
+	
+	// 4. 관측소 - 시자료 - 우량
+	int flowTotal();
+	List<Flow> flowList(Flow flow);
+	Flow getFlow(Flow flow);
+	int tEditF(Flow flow);
+	List<Flow> flowYearList();
+	
+	
+	
+	
+
+	
 	
 
 

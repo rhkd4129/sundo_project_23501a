@@ -7,33 +7,96 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-	<style>
-		header {
-			height: 55px;
-		}
-	</style>
-	<script>
+<style>
+	header {
+		height: 55px;
+	}
+</style>
+<script>
 
-		$(function() {
+	$(function() {
 
-			$.ajax({
-				url			: '/main_header_21',
-				dataType 	: 'html',
-				success		: function(data) {
-					$('#header').html(data);
-				}
-			});
-
-			$.ajax({
-				url			: '/main_footer',
-				dataType 	: 'html',
-				success		: function(data) {
-					$('#footer').html(data);
-				}
-			});
+		$.ajax({
+			url			: '/main_header_21',
+			dataType 	: 'html',
+			success		: function(data) {
+				$('#header').html(data);
+			}
 		});
 
-	</script>
+		$.ajax({
+			url			: '/main_footer',
+			dataType 	: 'html',
+			success		: function(data) {
+				$('#footer').html(data);
+			}
+		});
+	});
+
+	function ob_search(){
+		var observe_method = $('#observe_method').val();
+		var org_code = $('#org_code').val();
+		var observe_post = $('#observe_post').val();
+		
+		const ob = {
+				observe_method : observe_method,
+				org_code	   : org_code,
+				observe_post   : observe_post
+		};
+		
+		console.log(ob);
+		
+		$.ajax({
+			url:"/searchObservation",
+			data: ob,
+			dataType: 'json',
+			success: function(data){
+				console.log(data);
+				
+				var table_body = $('#searchO');
+				table_body.empty();
+				
+				$.each(data.list, function (key, values){
+					const newtr=$('<tr></tr>');
+					
+					newtr.append('<td>' + values.rn + '</td>');
+					newtr.append('<td onclick="location.href=' + "'/observation_detail?observe_code=" + values.observe_post + "'" + '">' + values.observe_post + '</td>');
+					newtr.append('<td>' + values.river_code + '</td>');
+					newtr.append('<td>' + values.latitude + '</td>');
+					newtr.append('<td>' + values.longitude + '</td>');
+					newtr.append('<td>' + values.observe_method_name + '</td>');
+					newtr.append('<td>' + values.org_name + '</td>');
+					newtr.append('<td onclick="location.href=' + "'/time_find?river_code=" + values.river_code + "'" + '"><img src="/images/egovframework/cmmn/search.svg"></td>');
+					
+					table_body.append(newtr);
+				})
+				table_body.html();
+				
+				const obj = data.obj;
+
+                var paginationDiv = $('#paging'); // 페이지네이션을 표시할 div
+                paginationDiv.empty(); // 페이지네이션을 초기화
+                // <div id="c_b" className="pagination">
+                var jspPagination = '';
+
+                if (obj.startPage > obj.pageBlock) {
+                    jspPagination += '<div class="page-link" onclick="/searchObservation(' + (obj.startPage - obj.pageBlock) + ')"><p>이전</p></div>';
+                }
+
+                for (var i = obj.startPage; i <= obj.endPage; i++) {
+                    jspPagination += '<div class="page-item" onclick="/searchObservation(' + i + ')"><div class="page-link">' + i + '</div></div>';
+                }
+
+                if (obj.endPage >= obj.pageBlock) {
+                    jspPagination += '<div class="page-link" onclick="/searchObservation(' + (obj.startPage + obj.pageBlock) + ')"><p>다음</p></div>';
+                }
+                jspPagination += '</div>';
+                paginationDiv.html(jspPagination); // JSP 페이지 네비게이션 코드를 추가
+			}
+		})
+		
+	}
+</script>
 
 </head>
 <body>
@@ -43,7 +106,7 @@
 <div class="container">
 	<div class="row">
 		<div id="center">
-			<form action="/observation_create" method="get">
+			
 				<input type="hidden" name="observe_code" value="${observation.observe_code}">
 				<input type="hidden" name="river_code" value="${observation.river_code}">
 
@@ -51,33 +114,28 @@
 					<h2>관측소 목록</h2>
 				</div>
 				<div>
-			<span class="border border-secondary border-2" style="padding:20px; margin:30px" >
-				<th>관측방식</th>
-				<td><select id="observe_method" >
-					<option value="all" selected>전체</option>
-						<c:forEach var="code" items="${CodeObserveMethod}">
-							<option value="${code.cate_code}">${code.cate_name}</option>
-						</c:forEach>
-					</select></td>
-				<th>운영기관</th>
-				<td><select id="org_name">
-					<option value="all" selected>전체</option>
-						<c:forEach var="org" items="${OrgList}">
-							<option value="${org.org_code}">${org.org_name}</option>
-						</c:forEach>
-					</select></td>
-				<th>행정구역</th>
-				<td><select id="org_area">
-					<option value="all" selected>전체</option>
-						<c:forEach var="org" items="${categoryList}">
-							<option value="${org.org_area}">${org.org_area}</option>
-						</c:forEach>
-					</select></td>
-
-				<th>관측소명</th><input type="text">
-				<button onclick="ob_search()">검색</button>
-			</span>
+			<!-- <span class="border border-secondary border-2" style="padding:20px; margin:30px" > -->
+				<table>
+					<tr>
+					<th>관측방식</th>
+					<td><select id="observe_method" >
+							<c:forEach var="code" items="${CodeObserveMethod}">
+								<option value="${code.cate_code}">${code.cate_name}</option>
+							</c:forEach>
+						</select></td>
+					<th>운영기관</th>
+					<td><select id="org_code">
+							<c:forEach var="org" items="${OrgList}">
+								<option value="${org.org_code}">${org.org_name}</option>
+							</c:forEach>
+						</select></td>
+					<th>관측소명</th><td><input id="observe_post" type="text"></td>
+					<td><button onclick="ob_search()">검색</button></td>
+					</tr>
+				</table>
+			<!-- </span> -->
 				</div>
+				<form action="/observation_create" method="get">
 				<div align="right" style="margin-top: 20px; margin:30px">
 					<button type="submit">등록</button>
 					<button onclick="ob_save()">저장</button>
@@ -105,6 +163,7 @@
 							<th>운영기관</th>
 							<th>조회</th>
 						</tr>
+						<tbody id="searchO">
 						<c:forEach var="Observation" items="${observationList}" varStatus="status">
 							<tr>
 								<td>${status.count}</td>
@@ -117,12 +176,31 @@
 								<td onclick="location.href='/time_find?river_code=${Observation.river_code}'"><img src="/images/egovframework/cmmn/search.svg"></td>
 							</tr>
 						</c:forEach>
+						</tbody>
 					</table>
 				</div>
 			</form>
-
-
-			<nav aria-label="Page navigation example">
+			
+			
+			<div id="paging" class="pagination justify-content-center">
+			    <c:if test="${page.startPage > page.pageBlock}">
+			        <div class="page-link" onclick="location.href='/observation_find?currentPage=${page.startPage - page.pageBlock}'">
+			            이전
+			        </div>
+			    </c:if>
+			    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+			        <div class="page-item" onclick="location.href='/observation_find?currentPage=${i}'">
+			            <div class="page-link" style="cursor:pointer">${i}</div>
+			        </div>
+			    </c:forEach>
+			    <c:if test="${page.endPage < page.totalPage}">
+			        <div class="page-link" onclick="location.href='/observation_find?currentPage=${page.startPage + page.pageBlock}'">
+			            다음
+			        </div>
+			    </c:if>
+			</div>
+                 
+<%-- 			
 				<ul class="pagination justify-content-center">
 
 					<c:if test="${page.startPage > page.pageBlock }">
@@ -140,7 +218,9 @@
 						<li class="page-item"><a class="page-link" href="observation_find?currentPage=${page.startPage + page.pageBlock }')">다음</a></li>
 					</c:if>
 				</ul>
-			</nav>
+				
+			</nav> --%>
+	
 
 		</div>
 	</div>

@@ -7,6 +7,7 @@ import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 
 import com.postgres.sample.dto.CategoryVO;
 import com.postgres.sample.dto.Code;
+import com.postgres.sample.dto.Flow;
 import com.postgres.sample.dto.Observation;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.RainFall;
@@ -27,6 +28,8 @@ public interface HijDao {
 	public List<WaterGate> ijWaterGateList();
 	public int ijObEdit(Observation observation);	//관측소 수정시행
 	public int ijObDelete(Observation observation);	// 관측소 삭제
+	public int ijSearchTotalO(); // 검색 갯수
+	public List<Observation> ijSearchO(Observation observation); //검색목록
 	
 	// 2. 관측소 - 시자료 - 수위
 	public List<WaterLevel> ijWaterLevelList(WaterLevel waterLevel);//수위정보
@@ -40,6 +43,16 @@ public interface HijDao {
 	public RainFall ijGetRainFall(RainFall rainFall);
 	public int ijTEditR(RainFall rainFall);
 	
+	//4. 관측소 - 시자료 - 우량
+	public int ijFlowTotal();
+	public List<Flow> ijFlowList(Flow flow);
+	public Flow ijGetFlow(Flow flow);
+	public int ijTEditF(Flow flow);
+	public List<Flow> ijFlowYearList();
 	
+	
+
+	
+
 	
 }

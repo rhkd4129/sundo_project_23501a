@@ -27,8 +27,6 @@ public class KjoController {
 	
     private final KjoService kjoService;
 
-    
-
     @GetMapping("/water_resourcesList")
     public String waterResoucesList(@RequestParam(defaultValue = "1") String currentPage, Model model) {
     	System.out.println("water_resourcesList");
