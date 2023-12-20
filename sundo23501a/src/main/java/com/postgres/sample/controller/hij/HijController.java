@@ -181,7 +181,7 @@ public class HijController {
     // 관측소 검색
     @ResponseBody
     @RequestMapping(value="/searchObservation")
-    public HijResponse searchObservation(Observation observation, String currentPage ) {
+    public HijResponse searchObservation(Observation observation, String currentPage) {
     	
     	int totalCount = hs.searchTotalO(observation);	//검색 갯수
     	
@@ -195,6 +195,7 @@ public class HijController {
     	hijResponse.setObj(page);
     	hijResponse.setList(searchO);
     	
+    	System.out.println("totalCountO : "+ totalCount);
     	return hijResponse;
     }
     
@@ -251,6 +252,28 @@ public class HijController {
         
     	return "redirect:/time_find?river_code="+waterLevel.getRiver_code();
     }
+    
+    // 시자료 - 수위 - 검색
+    @ResponseBody
+    @RequestMapping(value="/searchWaterLevel")
+    public HijResponse searchWaterLevel(WaterLevel waterLevel, String currentPage) {
+    	
+    	int totalCount = hs.searchTotalW(waterLevel);	//검색 갯수
+    	
+    	Paging page = new Paging(totalCount, currentPage, 10);
+    	waterLevel.setStart(page.getStart());
+    	waterLevel.setEnd(page.getEnd());
+    	
+    	List<WaterLevel> searchW = hs.searchW(waterLevel);
+    	
+    	HijResponse hijResponse = new HijResponse();
+    	hijResponse.setObj(page);
+    	hijResponse.setList(searchW);
+    	
+    	System.out.println("totalCountW : "+ totalCount);
+    	return hijResponse;
+    }
+    
  //--------------------------------------------------------------------------------------  
  // 2. 관측소 - 시자료 - 강우량
  //--------------------------------------------------------------------------------------
@@ -305,6 +328,26 @@ public class HijController {
       	return "redirect:/time_find_R?river_code="+rainFall.getRiver_code();
       }    
     
+      // 시자료 - 강우량 - 검색
+      @ResponseBody
+      @RequestMapping(value="/searchRainFall")
+      public HijResponse searchRainFall(RainFall rainFall, String currentPage) {
+      	
+      	int totalCount = hs.searchTotalR(rainFall);	//검색 갯수
+      	
+      	Paging page = new Paging(totalCount, currentPage, 10);
+      	rainFall.setStart(page.getStart());
+      	rainFall.setEnd(page.getEnd());
+      	
+      	List<RainFall> searchR = hs.searchR(rainFall);
+      	
+      	HijResponse hijResponse = new HijResponse();
+      	hijResponse.setObj(page);
+      	hijResponse.setList(searchR);
+      	
+      	System.out.println("totalCountR : "+ totalCount);
+      	return hijResponse;
+      }
   //--------------------------------------------------------------------------------------  
   // 2. 관측소 - 시자료 - 우량
   //--------------------------------------------------------------------------------------
@@ -366,5 +409,25 @@ public class HijController {
         
        	return "redirect:/time_find_F?river_code="+flow.getRiver_code()+"&observe_year()=" + flow.getObserve_year();
        }    
-         
+       
+       // 시자료 - 우량 - 검색
+       @ResponseBody
+       @RequestMapping(value="/searchFlow")
+       public HijResponse searchRainFall(Flow flow, String currentPage) {
+       	
+       	int totalCount = hs.searchTotalF(flow);	//검색 갯수
+       	
+       	Paging page = new Paging(totalCount, currentPage, 10);
+       	flow.setStart(page.getStart());
+       	flow.setEnd(page.getEnd());
+       	
+       	List<Flow> searchF = hs.searchF(flow);
+       	
+       	HijResponse hijResponse = new HijResponse();
+       	hijResponse.setObj(page);
+       	hijResponse.setList(searchF);
+       	
+       	System.out.println("totalCountF : "+ totalCount);
+       	return hijResponse;
+       }
 }

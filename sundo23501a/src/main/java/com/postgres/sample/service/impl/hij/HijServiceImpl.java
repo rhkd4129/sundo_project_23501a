@@ -218,6 +218,58 @@ public class HijServiceImpl extends EgovAbstractServiceImpl implements HijServic
 		List<Flow> flowYearList = hd.ijFlowYearList();
 		return flowYearList;
 	}
+	
+	
+	//----------------------------------------------------------------------------
+	
+
+	// 수위 검색 갯수
+	@Override
+	public int searchTotalW(WaterLevel waterLevel) {
+		int totalCount = hd.ijSearchTotalW();
+		System.out.println("HijServiceImpl searchTotalW START");
+		return totalCount;
+	}
+	// 수위 검색
+	@Override
+	public List<WaterLevel> searchW(WaterLevel waterLevel) {
+		System.out.println("HijServiceImpl searchW START");
+		List<WaterLevel> searchW = hd.ijSearchW(waterLevel);
+		
+		System.out.println("searchW 사이즈 : " + searchW.size());
+		return searchW;
+	}
+	
+	// 강우량 검색 갯수
+	@Override
+	public int searchTotalR(RainFall rainFall) {
+		int totalCount = hd.ijSearchTotalR();
+		System.out.println("HijServiceImpl searchTotalR START");
+		return totalCount;
+	}
+	// 강우량 검색
+	@Override
+	public List<RainFall> searchR(RainFall rainFall) {
+		System.out.println("HijServiceImpl searchR START");
+		List<RainFall> searchR = hd.ijSearchR(rainFall);
+		System.out.println("searchR 사이즈 : " + searchR.size());
+		return searchR;
+	}
+	//우량 검색 갯수
+	@Override
+	public int searchTotalF(Flow flow) {
+		int totalCount = hd.ijSearchTotalF();
+		System.out.println("HijServiceImpl searchTotalF START");
+		return totalCount;
+	}
+	// 우량 검색
+	@Override
+	public List<Flow> searchF(Flow flow) {
+		System.out.println("HijServiceImpl searchF START");
+		List<Flow> searchF = hd.ijSearchF(flow);
+		System.out.println("searchF 사이즈 : " + searchF.size());
+		return searchF;
+	}
 
 
 

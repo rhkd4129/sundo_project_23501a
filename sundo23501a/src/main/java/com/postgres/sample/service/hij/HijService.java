@@ -34,12 +34,16 @@ public interface HijService {
 	int waterLevelTotal();				// 수위 총 갯수
 	WaterLevel getWaterLevel(WaterLevel waterLevel); //조회
 	int tEdit(WaterLevel waterLevel);	// 수위 수정
+	int searchTotalW(WaterLevel waterLevel); //검색갯수
+	List<WaterLevel> searchW(WaterLevel waterLevel); //수위 검색
 	
 	// 3. 관측소 - 시자료 - 강우량
 	int rainFallTotal();
 	List<RainFall> rainFallList(RainFall rainFall);
 	RainFall getRainFall(RainFall rainFall);
 	int tEditR(RainFall rainFall);
+	int searchTotalR(RainFall rainFall); //검색갯수
+	List<RainFall> searchR(RainFall rainFall); //강우량 검색
 	
 	// 4. 관측소 - 시자료 - 우량
 	int flowTotal();
@@ -47,13 +51,8 @@ public interface HijService {
 	Flow getFlow(Flow flow);
 	int tEditF(Flow flow);
 	List<Flow> flowYearList();
+	int searchTotalF(Flow flow);	// 검색 갯수
+	List<Flow> searchF(Flow flow);  // 우량 검색
 	
 	
-	
-	
-
-	
-	
-
-
 }

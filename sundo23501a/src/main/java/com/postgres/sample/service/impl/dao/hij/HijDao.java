@@ -36,12 +36,16 @@ public interface HijDao {
 	public int ijWaterLevelTotal();
 	public WaterLevel ijGetWaterLevel(WaterLevel waterLevel); //수위 조회
 	public int ijTEdit(WaterLevel waterLevel);	// 수위 수정
+	public int ijSearchTotalW();	//수위 검색 갯수
+	public List<WaterLevel> ijSearchW(WaterLevel waterLevel); // 수위 검색
 	
 	//3. 관측소 - 시자료 - 강우량
 	public List<RainFall> ijRainFallList(RainFall rainFall);
 	public int ijRainFallTotal();
 	public RainFall ijGetRainFall(RainFall rainFall);
 	public int ijTEditR(RainFall rainFall);
+	public int ijSearchTotalR(); // 강우량 검색 갯수
+	public List<RainFall> ijSearchR(RainFall rainFall); //강우량 검색
 	
 	//4. 관측소 - 시자료 - 우량
 	public int ijFlowTotal();
@@ -49,6 +53,8 @@ public interface HijDao {
 	public Flow ijGetFlow(Flow flow);
 	public int ijTEditF(Flow flow);
 	public List<Flow> ijFlowYearList();
+	public int ijSearchTotalF(); // 우량 검색 갯수
+	public List<Flow> ijSearchF(Flow flow); // 우량 검색
 	
 	
 

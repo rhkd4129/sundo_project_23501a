@@ -324,27 +324,26 @@
 <!-- 관측소 검색 갯수 **************-->
 	<select id="ijSearchTotalO" parameterType="Observation" resultType="int">
 		SELECT COUNT(*)
-			FROM(
-				SELECT T.*, C.cate_name observe_method_name, O.org_name, O.org_area
-				FROM 
-				   Observation T
-				   LEFT OUTER JOIN Code C
-					  ON T.observe_method = C.cate_code
-					  AND C.field_name = 'observe_method'
-				   LEFT OUTER JOIN Organization O
-					  ON T.org_code = O.org_code
-					  )a
-		 WHERE 1 =1
-	     <if test="observe_method != ''">
-	 	 AND a.observe_method = #{observe_method}
-	 	 </if>
-	 	 <if test="org_code != ''">
-	     AND a.org_code = #{org_code}
-	     </if> 
-	     <if test="observe_post != ''">
-	     AND a.observe_post like '%' || #{observe_post} || '%'
-	     </if> 	
-				
+			   FROM(
+			      SELECT T.*, C.cate_name observe_method_name, O.org_name, O.org_area
+			      FROM 
+			         Observation T
+			         LEFT OUTER JOIN Code C
+			           ON T.observe_method = C.cate_code
+			          AND C.field_name     = 'observe_method'
+			         LEFT OUTER JOIN Organization O
+			           ON T.org_code = O.org_code
+			      ) a
+			     WHERE 1 =1
+			     <if test="observe_method != ''">
+			 	 AND a.observe_method = #{observe_method}
+			 	 </if>
+			 	 <if test="org_code != ''">
+			     AND a.org_code = #{org_code}
+			 	 </if> 
+			     <if test="observe_post != ''">
+			     AND a.observe_post like '%' || #{observe_post} || '%'	
+				 </if> 
 	   
 	</select>
 	<!-- 관측소 검색 -->
@@ -378,5 +377,7 @@
 			WHERE rn BETWEEN #{start} and #{end}
 			
 	</select>
+	
+	<!-- 시자료 - 수위 검색 -->
 
 </mapper>
