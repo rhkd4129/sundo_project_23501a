@@ -6,100 +6,30 @@
 <head>
     <meta charset="UTF-8">
     <title>수자원 등록 </title>
-
-<%--    <link rel="stylesheet"  href="http://localhost:8090/geoserver/openlayers3/ol.css"   type="text/css">--%>
-<%--    <link rel="stylesheet" href="http://localhost:8090/geoserver/openlayers3/ol.css" type="text/css">--%>
     <script>
         <link rel="stylesheet"  href="http://localhost:8090/geoserver/openlayers3/ol.css"   type="text/css">
         <link rel="stylesheet" href="http://localhost:8090/geoserver/openlayers3/ol.css" type="text/css">
     </script>
     <script src="http://localhost:8090/geoserver/openlayers3/ol.js" type="text/javascript"></script>
     <script>
-
-
         $(function() {
 
             $.ajax({
-                url			: '/main_header_2',
-                dataType 	: 'html',
-                success		: function(data) {
+                url         : '/main_header_2',
+                dataType    : 'html',
+                success      : function(data) {
                     $('#header').html(data);
                 }
             });
 
             $.ajax({
-                url			: '/main_footer',
-                dataType 	: 'html',
-                success		: function(data) {
+                url         : '/main_footer',
+                dataType    : 'html',
+                success      : function(data) {
                     $('#footer').html(data);
                 }
             });
-
         });
-        function layerClick(currentPage, mapping){
-
-            console.log("fd");
-            var con = document.getElementById("right_layer");
-
-            // var con = $('#right_layer');
-            if(con.style.display=='none'){
-                con.style.display = 'block';
-            }else{
-                con.style.display = 'none';
-            }
-            $.ajax({
-                url: mapping,
-                data: currentPage,
-                success: function (data) {
-                    console.log("succ");
-                    console.log(data);
-                    const objList = data.objList;
-                    let list = $('#list');
-                    let newdiv = $('<div></div>');
-
-                    list.empty();
-                    $.each(objList, function (key, values) {
-                        const newcon = $('<div></div>');
-                        newcon.click(function () {
-                            getLatLong(values.observe_code);
-                        });
-                        newcon.append(values.observe_post);
-                        newcon.append('<input type="hidden" value="' + values.latitude + '" id="lat' + values.observe_code + '">');
-                        newcon.append('<input type="hidden" value="' + values.longitude + '" id="long' + values.observe_code + '">');
-                        list.append(newcon);
-                    });
-                }
-
-            })
-        }
-        function getLatLong(observe_code){
-            console.log(observe_code);
-            let latvalue = $('#lat' + observe_code).val();
-            let longvalue = $('#long' + observe_code).val();
-
-            // console.log(latvalue);
-            // console.log(longvalue);
-            alert("latvalue"+latvalue +"longvalue"+ longvalue);
-            const coordinates = [parseFloat(longvalue), parseFloat(latvalue)];  // 좌표를 배열로 변환
-            moveToCoordinates(coordinates,5)
-
-        }
-        function moveToCoordinates(coordinates, zoom) {
-            console.log("corr");
-            console.log(coordinates);
-            // let view = new ol.View();
-
-            map.view.animate({
-                center: ol.proj.fromLonLat(coordinates),
-                duration: 2000,  // 애니메이션 지속 시간 (2초)
-                zoom: zoom,
-            });
-
-            // view: new ol.View({
-            //     center: ol.proj.fromLonLat([126.9780, 37.5665]), // 서울 시청 좌표
-            //     zoom: 10
-            // })
-        }
 
     </script>
     <style>
@@ -268,10 +198,10 @@
 
 
 
-<footer class="footer py-2">
-    <div id="footer" class="container">
-    </div>
-</footer>
+    <footer class="footer py-2">
+        <div id="footer" class="container">
+        </div>
+    </footer>
 
 <script type="text/javascript">
 
