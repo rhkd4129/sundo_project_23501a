@@ -178,4 +178,14 @@ public class KjoServiceImpl extends EgovAbstractServiceImpl implements KjoServic
     public CheckReport cntCheckReportByFcCode(CheckReport checkReport) {
         return KjoDao.cntCheckReportByFcCode(checkReport);
     }
+
+    @Override
+    public Observation CntObservationAll() {
+        return KjoDao.CntObservationAll();
+    }
+
+    @Override
+    public List<Observation> findObservationAll(Observation ov) {
+        return KjoDao.findObservationAll(ov);
+    }
 }

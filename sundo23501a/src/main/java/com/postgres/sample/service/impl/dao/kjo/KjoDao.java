@@ -47,4 +47,8 @@ public interface KjoDao {
     List<CheckReport> findCheckReportByFcCode(CheckReport checkReport);
 
     CheckReport cntCheckReportByFcCode(CheckReport checkReport);
+
+    Observation CntObservationAll();
+
+    List<Observation> findObservationAll(Observation ov);
 }

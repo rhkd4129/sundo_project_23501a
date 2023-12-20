@@ -25,11 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class KjoController {
 	private static final Logger Logger = LoggerFactory.getLogger(KjoController.class);
-	
-	
     private final KjoService kjoService;
-
-    
 
     @GetMapping("/water_resourcesList")
     public String waterResoucesList(@RequestParam(defaultValue = "1") String currentPage, Model model) {
@@ -274,6 +270,8 @@ public class KjoController {
         model.addAttribute("IpqList", IpqList);
         return "system3/kjo/check/getcheckresult";
     }
+
+
 
 
 

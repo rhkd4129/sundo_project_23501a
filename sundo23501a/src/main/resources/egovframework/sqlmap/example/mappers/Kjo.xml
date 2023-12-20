@@ -233,18 +233,18 @@
     <select id="searchCntWRAndCR" parameterType="waterResources" resultType="waterResources">
         select count(*) as total from
         (
-        select wr.facility_category,wr.facility_code,wr.facility_addr,oz.org_area_name,
-        cr.firstdate,cr.check_result,cr.user_id, org.org_name
-        from water_resources wr
-        left outer join (select distinct to_char(max(modify_datetime),'yyyy-MM-dd') as firstdate,
-        facility_code ,check_result ,user_id
-        from check_report
-        group by facility_code,check_result,user_id)cr
-        on   wr.facility_code = cr.facility_code
-        left join org_area oz
-        on wr.org_area = oz.org_area
-        left join organization org
-        on wr.org_area = org.org_area
+            select wr.facility_category,wr.facility_code,wr.facility_addr,oz.org_area_name,
+                cr.firstdate,cr.check_result,cr.user_id, org.org_name
+            from water_resources wr
+                left outer join (select distinct to_char(max(modify_datetime),'yyyy-MM-dd') as firstdate,
+                    facility_code ,check_result ,user_id
+                    from check_report
+                    group by facility_code,check_result,user_id)cr
+                on   wr.facility_code = cr.facility_code
+                left join org_area oz
+                on wr.org_area = oz.org_area
+                left join organization org
+                on wr.org_area = org.org_area
         ) as tab
         left join user_info ui
         on tab.user_id = ui.user_id
@@ -278,20 +278,21 @@
     <select id="searchWRAndCR" parameterType="waterResources" resultType="waterResources">
 
         select ROW_NUMBER() over() as rn, tab.facility_category,tab.facility_code,tab.facility_addr,tab.org_area_name,
-        tab.firstdate,tab.check_result,ui.user_name, tab.org_name,ui.user_department from
+        tab.firstdate,tab.check_result,ui.user_name, tab.org_name,ui.user_department
+        from
         (
-        select wr.facility_category,wr.facility_code,wr.facility_addr,oz.org_area_name,
-        cr.firstdate,cr.check_result,cr.user_id, org.org_name
-        from water_resources wr
-        left outer join (select distinct to_char(max(modify_datetime),'yyyy-MM-dd') as firstdate,
-        facility_code ,check_result ,user_id
-        from check_report
-        group by facility_code,check_result,user_id)cr
-        on   wr.facility_code = cr.facility_code
-        left join org_area oz
-        on wr.org_area = oz.org_area
-        left join organization org
-        on wr.org_area = org.org_area
+            select wr.facility_category,wr.facility_code,wr.facility_addr,oz.org_area_name,
+                cr.firstdate,cr.check_result,cr.user_id, org.org_name
+            from water_resources wr
+                left outer join (select distinct to_char(max(modify_datetime),'yyyy-MM-dd') as firstdate,
+                    facility_code ,check_result ,user_id
+                    from check_report
+                    group by facility_code,check_result,user_id)cr
+                on   wr.facility_code = cr.facility_code
+                left join org_area oz
+                on wr.org_area = oz.org_area
+                left join organization org
+                on wr.org_area = org.org_area
         ) as tab
         left join user_info ui
         on tab.user_id = ui.user_id
@@ -447,6 +448,15 @@
              )
     </select>
 
+
+    <select id="findObservationAll" parameterType="observation" resultType="observation">
+        select * from observation
+        order by observe_post
+        offset #{start}-1 limit 30
+    </select>
+    <select id="CntObservationAll" resultType="observation">
+        select count(*) as total from observation
+    </select>
 
 
 
