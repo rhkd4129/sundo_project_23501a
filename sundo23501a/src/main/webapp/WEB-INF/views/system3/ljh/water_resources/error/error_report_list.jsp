@@ -48,6 +48,20 @@
 		height: 55px;
 	}
 
+	.searchBox {
+		border: solid gray 1px;
+		border-radius: 10px;
+		padding: 20px;
+	}
+	
+	.searchTbl td {
+ 		padding: 0px 30px 0px 10px; 
+	}
+	
+	#paging {
+		margin: 30px;
+	}
+	
 </style>
 <script>
 
@@ -158,14 +172,14 @@
 				<div>
 					<p class="title">고장/조치 결과 보고 목록</p>
 					<div class="btn-group tapBtn">
-						<button type="button" id="errorBtn" class="btn btn-outline-dark" onclick="location.href='/error_report_list'">고장 보고서</button>
+						<button type="button" id="errorBtn" class="btn btn-dark" onclick="location.href='/error_report_list'">고장 보고서</button>
 						<button type="button" id="actionBtn" class="btn btn-outline-dark" onclick="location.href='/action_report_list'">조치 결과 보고서</button>
 					</div>
 					
-					<div>
-						<table>
+					<div class="searchBox">
+						<table class="searchTbl">
 							<tr>
-								<td>시설물 종류</td>
+								<th>시설물 종류</th>
 								<td>
 									<select id="facility_category_list">
 										<c:forEach var="wcList" items="${waterCategory }">
@@ -173,9 +187,9 @@
 										</c:forEach>
 									</select>
 								</td>
-								<td>작성자</td>
+								<th>작성자</th>
 								<td><input type="text" name="user_name" id="user_name"></td>
-								<td>등록일자</td>
+								<th>등록일자</th>
 								<td><input type="date" name="create_datetime" id="create_datetime"></td>
 		                        <td>
 		                            <input class="btn btn-dark btn-sm" type="button" value="검색" onclick="searchError()">
@@ -203,24 +217,21 @@
 
 					<div id="paging" class="pagination justify-content-center">
 						<c:if test="${page.startPage > page.pageBlock}">
-							<div class="page-link" onclick="searchError(${page.startPage - page.pageBlock})">
+							<div class="page-link" onclick="location.href='error_report_list?currentPage=${page.startPage - page.pageBlock}'">
 	                            이전
 	                        </div>
-							<%-- <a href="error_report_list?currentPage=${page.startPage - page.pageBlock}">[이전]</a> --%>
 						</c:if>
 
 						<c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-							<div class="page-item" onclick="searchError(${i})">
+							<div class="page-item" onclick="location.href='error_report_list?currentPage=${i}'">
 	                            <div class="page-link" style="cursor:pointer">${i}</div>
 	                        </div>
-							<%-- <a href="error_report_list?currentPage=${i}">[${i}]</a> --%>
 						</c:forEach>
 
 						<c:if test="${page.endPage < page.totalPage}">
-							<div class="page-link" onclick="searchError(${page.startPage + page.pageBlock})">
+							<div class="page-link" onclick="location.href='error_report_list?currentPage=${page.startPage + page.pageBlock}'">
 	                            다음
 	                        </div>
-							<%-- <a href="error_report_list?currentPage=${page.startPage + page.pageBlock}">[다음]</a> --%>
 						</c:if>
 					</div>
 				</div>

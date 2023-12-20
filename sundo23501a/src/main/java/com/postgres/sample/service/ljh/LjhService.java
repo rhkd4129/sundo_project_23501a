@@ -34,6 +34,7 @@ public interface LjhService {
 	int 					searchActCnt(ActionReport actionReport);
 	List<ActionReport> 		searchAction(ActionReport actionReport);
 	List<BreakReport> 		choiceErrRptList(ActionReport actionReport);
+	int 					choiceErrRptCnt(ActionReport actionReport);
 	
 	
 	

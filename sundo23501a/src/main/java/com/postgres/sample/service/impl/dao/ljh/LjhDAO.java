@@ -97,6 +97,9 @@ public interface LjhDAO {
 	// 조치 결과 보고서 작성 > 고장보고서 보기
 	public List<BreakReport> ljhChoiceErrRptList(ActionReport actionReport);
 
+	// 조치 결과 보고서 작성 > 고장보고서 보기 totalCount
+	public int ljhChoiceErrRptCnt(ActionReport actionReport);
+
 	
 	
 

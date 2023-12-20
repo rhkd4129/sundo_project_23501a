@@ -95,7 +95,7 @@
 				url		: sendurl,
 				dataType: 'json',
 				success : function(rtndata) {
-					console.log(rtndata);
+					// console.log(rtndata);
 					
 					var wrCodeOption = $('#wrCodeOption');
 					var options = "";
@@ -120,7 +120,7 @@
 							url		: sendurl,
 							dataType: 'json',
 							success	: function(rtndata) {
-								console.log(rtndata);
+								// console.log(rtndata);
 								
 								var alarmBox = $('#alarmBox');
 								var alarms = "";
@@ -145,6 +145,35 @@
 	});
 	
 	
+	// form 입력값 체크
+	function chk() {
+		if (actionForm.facility_category.value == '전체') {
+			alert("시설물 종류를 선택하세요.");
+			return false;
+		}
+		
+		if (actionForm.facility_code.value == '전체') {
+			alert("시설물 코드를 선택하세요.");
+			return false;
+		}
+		
+		if (actionForm.check_target.value == '전체') {
+			alert("점검대상을 선택하세요.");
+			return false;
+		}
+		
+		if (actionForm.m_category.value == '전체') {
+			alert("중분류를 선택하세요.");
+			return false;
+		}
+		
+		if (actionForm.s_category.value == '전체') {
+			alert("소분류를 선택하세요.");
+			return false;
+		}
+	};
+	
+	
 	function ErrorRpt() {
 		
 		var facility_category = $('#waterCategorySelect').val();
@@ -157,17 +186,17 @@
 		
  		if (facility_category != '전체' && facility_code != '전체') {
 			// alert(facility_category + facility_code);
-			$.ajax({
-				url		: "/choice_error_report_list",
-				data	: facility,
-				dataType: 'json',
-				success : function(data) {
-					console.log(data);
-					
-					
-					
-				}
-			});
+			
+			var _width = '800';
+			var _height = '700';
+			var _left = Math.ceil(( window.screen.width - _width )/2);
+			var _top = Math.ceil(( window.screen.height - _height )/2);
+			
+			window.open(
+				'/choice_error_report_list?facility_category=' + facility_category + '&facility_code=' + facility_code,
+				'_blank',
+				'width=' + _width + ', height=' + _height + ', top=' + _top + ', left=' + _left
+			);
 			
 		} else {
 			alert('조회할 시설물 종류와 코드를 선택하세요');
@@ -176,6 +205,7 @@
 		
 	};
 
+	
 </script>
 </head>
 <body>
@@ -186,7 +216,7 @@
 			<div id="center">
 				<div>
 					<p class="title">조치 결과 보고서 작성</p>
-					<form action="action_report_write" method="post">
+					<form action="action_report_write" method="post" name="actionForm" onsubmit="return chk()">
 						<table>
 							<thead>
 							<tr>
@@ -203,18 +233,18 @@
 								<td>
 									<div id="wrCodeOption">
 										<select id="wrCodeSelect" name="facility_code">
-											<option>전체</option>
+											<option value="전체">전체</option>
 										</select>
 									</div>
 								</td>
-								<th>작성자</th><td><input type="text" name="user_id"></td>	<!-- 로그인한 사용자 이름 자동 표출 필요 -->
+								<th>작성자</th><td><input type="text" name="user_id" required="required"></td>	<!-- 로그인한 사용자 이름 자동 표출 필요 -->
 							</tr>
 
 							<tr>
 								<th>점검대상</th>
 								<td>
 									<select name="check_target">
-										<option>전체</option>
+										<option value="전체">전체</option>
 										<c:forEach var="checkCode" items="${checkCodeList }">
 											<c:if test="${checkCode.field_name == 'check_target' }">
 												<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
@@ -225,7 +255,7 @@
 								<th>중분류</th>
 								<td>
 									<select name="m_category">
-										<option>전체</option>
+										<option value="전체">전체</option>
 										<c:forEach var="checkCode" items="${checkCodeList }">
 											<c:if test="${checkCode.field_name == 'm_category' }">
 												<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
@@ -236,7 +266,7 @@
 								<th>소분류</th>
 								<td>
 									<select name="s_category">
-										<option>전체</option>
+										<option value="전체">전체</option>
 										<c:forEach var="checkCode" items="${checkCodeList }">
 											<c:if test="${checkCode.field_name == 's_category' }">
 												<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
@@ -248,14 +278,14 @@
 							</thead>
 							<tbody>
 							<tr>
-								<th>고장/발생 일자</th><td colspan="2"><input type="date" name="break_date"></td>
-								<th>조치/복구 일자</th><td colspan="2"><input type="date" name="action_date"></td>
+								<th>고장/발생 일자</th><td colspan="2"><input type="date" name="break_date" required="required"></td>
+								<th>조치/복구 일자</th><td colspan="2"><input type="date" name="action_date" required="required"></td>
 							</tr>
-							<tr><th>고장내역</th><td colspan="5"><textarea name="break_content"></textarea></td></tr>
-							<tr><th>조치내역</th><td colspan="5"><textarea name="action_content"></textarea></td></tr>
+							<tr><th>고장내역</th><td colspan="5"><textarea name="break_content" required="required"></textarea></td></tr>
+							<tr><th>조치내역</th><td colspan="5"><textarea name="action_content" required="required"></textarea></td></tr>
 							<tr><th>특이사항</th><td colspan="5"><textarea name="spec_memo"></textarea></td></tr>
 							<tr><th>향후계획</th><td colspan="5"><textarea name="future_plan"></textarea></td></tr>
-							<tr><th>파일첨부</th><td colspan="5"></td></tr>
+							<!-- <tr><th>파일첨부</th><td colspan="5"></td></tr> -->
 							</tbody>
 						</table>
 						<div class="btns">

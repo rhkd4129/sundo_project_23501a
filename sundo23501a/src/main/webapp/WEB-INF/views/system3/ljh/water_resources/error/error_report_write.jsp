@@ -101,7 +101,7 @@
 					var options = "";
 					
 					options += '<select id="wrCodeSelect" name="facility_code">';
-					options += '<option>전체</option>';
+					options += '<option value="전체">전체</option>';
 					
 					for(var i = 0; i < rtndata.length; i++) {
 						options += '<option value="' + rtndata[i].facility_code + '">' + rtndata[i].facility_code + '</option>';
@@ -147,15 +147,32 @@
 	
 	// form 입력값 체크
 	function chk() {
-
-		if (!errorForm.facility_category.value) {
+		if (errorForm.facility_category.value == '전체') {
 			alert("시설물 종류를 선택하세요.");
 			return false;
 		}
 		
+		if (errorForm.facility_code.value == '전체') {
+			alert("시설물 코드를 선택하세요.");
+			return false;
+		}
+		
+		if (errorForm.check_target.value == '전체') {
+			alert("점검대상을 선택하세요.");
+			return false;
+		}
+		
+		if (errorForm.m_category.value == '전체') {
+			alert("중분류를 선택하세요.");
+			return false;
+		}
+		
+		if (errorForm.s_category.value == '전체') {
+			alert("소분류를 선택하세요.");
+			return false;
+		}
 	};
 	
-
 </script>
 </head>
 <body>
@@ -174,7 +191,7 @@
 									<th class="cate">시설물 종류</th>
 									<td>
 										<select id="waterCategorySelect" name="facility_category">
-											<option>전체</option>
+											<option value="전체">전체</option>
 											<c:forEach var="water" items="${waterCategory }">
 												<option value="${water.facility_category }">${water.facility_category }</option>
 											</c:forEach>
@@ -184,17 +201,17 @@
 									<td>
 										<div id="wrCodeOption">
 											<select id="wrCodeSelect" name="facility_code">
-												<option>전체</option>
+												<option value="전체">전체</option>
 											</select>
 										</div>
 									</td>
-									<th class="cate">작성자</th><td><input type="text" name="user_id"></td>	<!-- 로그인한 사용자 이름 자동 표출 필요 -->
+									<th class="cate">작성자</th><td><input type="text" name="user_id" required="required"></td>	<!-- 로그인한 사용자 이름 자동 표출 필요 -->
 								</tr>
 								<tr>
 									<th class="cate">점검대상</th>
 									<td>
 										<select name="check_target">
-											<option>전체</option>
+											<option value="전체">전체</option>
 											<c:forEach var="checkCode" items="${checkCodeList }">
 												<c:if test="${checkCode.field_name == 'check_target' }">
 													<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
@@ -205,7 +222,7 @@
 									<th class="cate">중분류</th>
 									<td>
 										<select name="m_category">
-											<option>전체</option>
+											<option value="전체">전체</option>
 											<c:forEach var="checkCode" items="${checkCodeList }">
 												<c:if test="${checkCode.field_name == 'm_category' }">
 													<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
@@ -216,7 +233,7 @@
 									<th class="cate">소분류</th>
 									<td>
 										<select name="s_category">
-											<option>전체</option>
+											<option value="전체">전체</option>
 											<c:forEach var="checkCode" items="${checkCodeList }">
 												<c:if test="${checkCode.field_name == 's_category' }">
 													<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
@@ -227,14 +244,14 @@
 								</tr>
 								</thead>
 								<tbody>
-								<tr><th class="cate">제목</th><td colspan="5"><input type="text" name="subject"></td></tr>
-								<tr><th class="cate">고장일자</th><td colspan="5"><input type="date" name="break_date"></td></tr>
+								<tr><th class="cate">제목</th><td colspan="5"><input type="text" name="subject" required="required"></td></tr>
+								<tr><th class="cate">고장일자</th><td colspan="5"><input type="date" name="break_date" required="required"></td></tr>
 								<tr><th class="cate">고장원인</th><td colspan="5"><textarea name="break_cause"></textarea></td></tr>
 								<tr><th class="cate">현재상황</th><td colspan="5"><textarea name="current_state"></textarea></td></tr>
 								<tr><th class="cate">즉시처리</th><td colspan="5"><input type="checkbox" name="handling_flag" value="Y">
 									<input type="text" name="handling_content"></td></tr>
 								<tr><th class="cate">향후계획</th><td colspan="5"><textarea name="future_plan"></textarea></td></tr>
-								<tr><th class="cate">파일첨부</th><td colspan="5"><!-- <input type="file" name="file1"> --></td></tr>
+								<!-- <tr><th class="cate">파일첨부</th><td colspan="5"><input type="file" name="file1"></td></tr> -->
 								</tbody>
 							</table>
 							<table class="alarmTbl">

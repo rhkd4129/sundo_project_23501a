@@ -43,10 +43,24 @@
 		border-bottom: solid lightgray 1px;
 		height: 40px;
 	}
+	
 	header {
 		height: 55px;
 	}
+	
+	.searchBox {
+		border: solid gray 1px;
+		border-radius: 10px;
+		padding: 20px;
+	}
+	
+	.searchTbl td {
+ 		padding: 0px 30px 0px 10px; 
+	}
 
+	#paging {
+		margin: 30px;
+	}
 </style>
 <script>
 
@@ -92,8 +106,8 @@
 			dataType: 'json',
 			success	: function(data) {
 				console.log(data);
-				console.log(data.list);
-				console.log(data.obj);
+				//console.log(data.list);
+				//console.log(data.obj);
 				
 				var arTable = $('#arTable');
 				arTable.empty();
@@ -159,11 +173,11 @@
 				<p class="title">고장/조치 결과 보고 목록</p>
 				<div class="btn-group tapBtn">
 					<button type="button" class="btn btn-outline-dark" onclick="location.href='/error_report_list'">고장 보고서</button>
-					<button type="button" class="btn btn-outline-dark" onclick="location.href='/action_report_list'">조치 결과 보고서</button>
+					<button type="button" class="btn btn-dark" onclick="location.href='/action_report_list'">조치 결과 보고서</button>
 				</div>
 				
-				<div>
-					<table>
+				<div class="searchBox">
+					<table class="searchTbl">
 						<tr>
 							<td>시설물 종류</td>
 							<td>

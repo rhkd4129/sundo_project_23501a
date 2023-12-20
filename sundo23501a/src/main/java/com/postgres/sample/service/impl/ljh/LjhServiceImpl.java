@@ -350,6 +350,16 @@ public class LjhServiceImpl extends EgovAbstractServiceImpl implements LjhServic
 		
 		return breakRptList;
 	}
+
+	// 조치 결과 보고서 작성 > 고장보고서 보기 totalCount
+	@Override
+	public int choiceErrRptCnt(ActionReport actionReport) {
+		
+		int total = ljhDAO.ljhChoiceErrRptCnt(actionReport);
+		System.out.println("searchErrCnt total : " + total);
+		
+		return total;
+	}
 	
 
 

@@ -115,7 +115,7 @@ public class LjhController {
 	
 	// 고장 보고서 상세
 	@RequestMapping("/error_report_read")
-	public String errorRptRead(Integer doc_no, Model model) {
+	public String errorRptRead(Integer doc_no, Model model, String popup) {
 		System.out.println("LjhController errorRptRead Start");
 		
 		BreakReport breakReport = new BreakReport();
@@ -127,7 +127,12 @@ public class LjhController {
 		model.addAttribute("breakReport", breakReport);
 		model.addAttribute("alarmList", alarmList);
 		
-		return "/system3/ljh/water_resources/error/error_report_read";
+		if ("Y".equals(popup)) {
+			// popup=Y (조치 결과 보고서 작성 페이지 > 고장보고서 보기 클릭 시)
+			return "/system3/ljh/water_resources/error/choice_error_report_read";
+		} else {
+			return "/system3/ljh/water_resources/error/error_report_read";
+		}
 	}
 	
 	// 고장 보고서 수정
@@ -350,18 +355,31 @@ public class LjhController {
 	}
 	
 	// 조치 결과 보고서 작성 > 고장보고서 보기
-	@ResponseBody
 	@RequestMapping("/choice_error_report_list")
-	public List<BreakReport> choiceErrRpt(ActionReport actionReport) {
+	public String choiceErrRpt(@RequestParam(defaultValue = "1") String currentPage, ActionReport actionReport, Model model) {
 		System.out.println("LjhController choiceErrRpt Start");
 		
+		int total = ljhService.choiceErrRptCnt(actionReport);
+		
+		Paging page = new Paging(total, currentPage, 10);
+		actionReport.setStart(page.getStart());
+		actionReport.setEnd(page.getEnd());
+
 		List<BreakReport> breakRptList = new ArrayList<BreakReport>();
 		breakRptList = ljhService.choiceErrRptList(actionReport);
 		
+		model.addAttribute("breakRptList", breakRptList);
+		model.addAttribute("page", page);
 		
-		
-		return breakRptList;
+		return "/system3/ljh/water_resources/error/choice_error_report_list";
 	}
+	
+	@RequestMapping("/chart")
+	public String chart() {
+		
+		return "/system3/ljh/chart/chart";
+	}
+	
 	
 	
 	

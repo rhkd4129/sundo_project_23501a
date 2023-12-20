@@ -276,9 +276,24 @@
 							ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
 					FROM	break_report br, user_info u
 					WHERE	u.user_id = br.user_id
+					AND		facility_category = #{facility_category}
+					AND		facility_code = #{facility_code}
 				)
-		WHERE	facility_category = #{facility_category}
-		AND		facility_code = #{facility_code}
+		WHERE	rn between #{start} and #{end}
+	</select>
+	
+	<!-- 조치 결과 보고서 작성 > 고장보고서 보기 totalCount -->
+	<select id="ljhChoiceErrRptCnt" parameterType="actionReport" resultType="Integer">
+		SELECT	count(*) as total
+		FROM	(
+					SELECT	br.doc_no, TO_CHAR(br.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+							br.facility_category, br.facility_code, br.subject, u.user_name,
+							ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+					FROM	break_report br, user_info u
+					WHERE	u.user_id = br.user_id
+					AND		facility_category = #{facility_category}
+					AND		facility_code = #{facility_code}
+				)
 	</select>
 	
 	
