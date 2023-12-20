@@ -53,12 +53,8 @@
             trElements.forEach(function (trElement) {
                 console.log("fdsfds");
                 trElement.addEventListener('dblclick', function () {
-                    // 더블클릭할 때 수행할 동작을 여기에 추가합니다.
-                    console.log("fds");
-
-                    var doc_no = trElement.getAttribute('data-doc-no');
-
-                    window.location.href = "/getcheckresult?doc_no=" + doc_no;
+                    var facility_code = trElement.getAttribute('data-doc-no');
+                    window.location.href = "/selectcheckReportlist2?facility_code=" + facility_code+"&currentPage=1";
                     // getcheckresultform
                 });
             });
@@ -80,6 +76,7 @@
                 facility_code : $("#facility_code").val(),
                 research : $("#research").val()
             }
+
             console.log(wr);
             $.ajax({
                 url: "/getcheckresultform",
@@ -98,11 +95,28 @@
                         newtr.append('<td>' + values.rn + '</td>');
                         newtr.append('<td>' + values.facility_category + '</td>');
                         newtr.append('<td>' + values.facility_code + '</td>');
-                        newtr.append('<td>' + values.org_area_name + '</td>');
                         newtr.append('<td>' + values.org_name + '</td>');
-                        newtr.append('<td>' + values.check_date + '</td>');
-                        newtr.append('<td>' + values.check_result + '</td>');
-                        newtr.append('<td>' + values.user_name + '</td>');
+                        newtr.append('<td>' + values.org_area_name + '</td>');
+// 가정: list는 JavaScript 객체이며, modify_datetime, check_result, user_name 등의 속성을 가지고 있다고 가정합니다.
+
+                        if (values.firstdate === null) {
+                            newtr.append('<td>점검없음</td>');
+                        } else {
+                            newtr.append('<td>' + values.firstdate + '</td>');
+                        }
+
+                        if (values.check_result === null) {
+                            newtr.append('<td>점검결과없음</td>');
+                        } else {
+                            newtr.append('<td>' + values.check_result + '</td>');
+                        }
+
+                        if (values.user_name === null) {
+                            newtr.append('<td>점검자없음</td>');
+                        } else {
+                            newtr.append('<td>' + values.user_name + '</td>');
+                        }
+
                         table_body.append(newtr);
                     });
                     var paginationDiv = $('#paging'); // 페이지네이션을 표시할 div
@@ -162,7 +176,7 @@
                             <td>
                                 <select class="form-select" id="org_area_List">
                                     <c:forEach items="${orgList}" var="list">
-                                        <option name="org_area" value="${list.org_area}">${list.org_area_name}</option>
+                                        <option name="org_area" value="${list.org_area_name}">${list.org_area_name}</option>
                                     </c:forEach>
                                     <option name="org_area"
                                             value="전체" selected>전체
@@ -218,30 +232,30 @@
 
 <%--                    <tbody id="table_body">--%>
                     <c:forEach items="${wrList}" var="list">
-                        <tr>
+                        <tr class="cont" data-doc-no="${list.facility_code}">
                             <td>${list.rn}</td>
                             <td>${list.facility_category}</td>
                             <td>${list.facility_code}</td>
                             <td>${list.org_name}</td>
                             <td>${list.org_area_name}</td>
-                            <c:if test="${list.modify_datetime == null}">
+                            <c:if test="${list.firstdate == null}">
                                 <td>점검없음</td>
                             </c:if>
-                            <c:if test="${list.modify_datetime != null}">
-                                <td>${list.modify_datetime}</td>
+                            <c:if test="${list.firstdate != null}">
+                                <td>${list.firstdate}</td>
                             </c:if>
 
-                            <c:if test="${list.modify_datetime == null}">
+                            <c:if test="${list.check_result == null}">
                                 <td>점검결과없음</td>
                             </c:if>
-                            <c:if test="${list.modify_datetime != null}">
+                            <c:if test="${list.check_result != null}">
                                 <td>${list.check_result}</td>
                             </c:if>
 
-                            <c:if test="${list.modify_datetime == null}">
+                            <c:if test="${list.user_name == null}">
                                 <td>점검자없음</td>
                             </c:if>
-                            <c:if test="${list.modify_datetime != null}">
+                            <c:if test="${list.user_name != null}">
                                 <td>${list.user_name}</td>
                             </c:if>
 
@@ -256,6 +270,7 @@
                 <div id="paging" class="pagination justify-content-center">
                     <c:if test="${page.startPage > page.pageBlock}">
                         <div class="page-link" onclick="searchCheckReportList(${page.startPage - page.pageBlock})">
+
                             이전
                         </div>
                     </c:if>

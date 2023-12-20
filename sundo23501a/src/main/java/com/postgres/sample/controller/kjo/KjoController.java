@@ -1,6 +1,7 @@
 package com.postgres.sample.controller.kjo;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -228,6 +229,28 @@ public class KjoController {
 
         return response;
     }
+
+    @GetMapping("/selectcheckReportlist2")
+    public String selectcheckReportlist2(CheckReport checkReport,Model model) {
+        checkReport.setTotal(kjoService.cntCheckReportByFcCode(checkReport).getTotal());
+        Paging page = new Paging(checkReport.getTotal(), checkReport.getCurrentPage(),10);
+        checkReport.setStart(page.getStart());
+        checkReport.setEnd(page.getEnd());
+        WaterResources wr = new WaterResources();
+        wr.setFacility_code(checkReport.getFacility_code());
+
+        checkReport.setCate_name( kjoService.findWaterResourcesById(wr).getCate_name());
+        List<CheckReport> CRList = kjoService.findCheckReportByFcCode(checkReport);
+
+        model.addAttribute("CRList", CRList);
+        model.addAttribute("facility_code", checkReport.getFacility_code());
+        model.addAttribute("cate_name", checkReport.getFacility_code());
+        model.addAttribute("page",page);
+
+        return "system3/kjo/check/selectCheckReportList2";
+    }
+
+
 
     @GetMapping("/getcheckresult")
     public String getcheckresult(CheckReport cr,Model model) {

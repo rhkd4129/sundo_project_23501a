@@ -43,4 +43,8 @@ public interface KjoDao {
     WaterResources searchCntWRAndCR(WaterResources wr);
 
     List<WaterResources> searchWRAndCR(WaterResources wr);
+
+    List<CheckReport> findCheckReportByFcCode(CheckReport checkReport);
+
+    CheckReport cntCheckReportByFcCode(CheckReport checkReport);
 }
