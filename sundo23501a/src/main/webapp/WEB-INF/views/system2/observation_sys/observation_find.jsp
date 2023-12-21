@@ -7,10 +7,43 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<style>
+<style type="text/css">
 	header {
 		height: 55px;
 	}
+	
+	.listTable {
+		width: 100%;
+		text-align: center;
+	}
+
+	.tableCate {
+		border-top: solid gray 2px;
+		background: #EAEAEA;
+		height: 40px;
+	}
+	
+		.tableCate th {
+		border-left: solid white 1px;
+		border-right: solid white 1px;
+	}
+
+	.tableRow {
+		border-bottom: solid lightgray 1px;
+		height: 40px;
+	}
+	
+	#paging {
+		margin: 30px;
+	}
+	
+	.pagination {
+		--bs-pagination-border-color: white;
+		--bs-pagination-color: gray;
+		--bs-pagination-hover-color: black;
+ 		--bs-pagination-hover-bg: white;
+	}
+	
 </style>
 <script>
 
@@ -58,7 +91,7 @@
 				table_body.empty();
 				
 				$.each(data.list, function (key, values){
-					const newtr=$('<tr></tr>');
+					const newtr=$('<tr class="tableRow"></tr>');
 					
 					newtr.append('<td>' + values.rn + '</td>');
 					newtr.append('<td onclick="location.href=' + "'/observation_detail?observe_code=" + values.observe_post + "'" + '">' + values.observe_post + '</td>');
@@ -104,6 +137,7 @@
 </head>
 <body>
 
+<i class="bi bi-clipboard2-check-fill"></i>
 <header id="header"></header>
 
 <div class="container">
@@ -116,59 +150,69 @@
 				<div style="margin: 30px">
 					<h2>관측소 목록</h2>
 				</div>
-				<div>
-			<!-- <span class="border border-secondary border-2" style="padding:20px; margin:30px" > -->
-				<table>
-					<tr>
-					<th>관측방식</th>
-					<td><select id="observe_method" >
-							<c:forEach var="code" items="${CodeObserveMethod}">
-								<option value="${code.cate_code}">${code.cate_name}</option>
-							</c:forEach>
-						</select></td>
-					<th>운영기관</th>
-					<td><select id="org_code">
-							<c:forEach var="org" items="${OrgList}">
-								<option value="${org.org_code}">${org.org_name}</option>
-							</c:forEach>
-						</select></td>
-					<th>관측소명</th><td><input id="observe_post" type="text"></td>
-					<td><button onclick="ob_search()">검색</button></td>
-					</tr>
-				</table>
-			<!-- </span> -->
+				
+				<div class="card">
+		            <div class="card-body">
+						<table>
+							<tr>
+								<th width="10%">관측방식</th>
+								<td width="20%">
+									<select id="observe_method"  class="form-select form-select-sm">
+										<c:forEach var="code" items="${CodeObserveMethod}">
+											<option value="${code.cate_code}">${code.cate_name}</option>
+										</c:forEach>
+									</select></td>
+								<th width="10%">운영기관</th>
+								<td width="20%">
+									<select id="org_code" class="form-select form-select-sm">
+										<c:forEach var="org" items="${OrgList}">
+											<option value="${org.org_code}">${org.org_name}</option>
+										</c:forEach>
+									</select></td>
+								<th width="10%">관측소명</th>
+								<td><input id="observe_post" type="text" class="form-control"></td>
+								<td width="20%">
+								<button onclick="ob_search()" class="btn btn-dark">검색</button></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+				
+			
 				</div>
 				<form action="/observation_create" method="get">
 				<div align="right" style="margin-top: 20px; margin:30px">
-					<button type="submit">등록</button>
-					<button onclick="ob_save()">저장</button>
+					<button type="submit" class="btn btn-dark pull-right">
+		                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard2" viewBox="0 0 16 16">
+		                <path d="M3.5 2a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-12a.5.5 0 0 0-.5-.5H12a.5.5 0 0 1 0-1h.5A1.5 1.5 0 0 1 14 2.5v12a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-12A1.5 1.5 0 0 1 3.5 1H4a.5.5 0 0 1 0 1z"/>
+		                <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5"/></svg>
+		                등록
+	              </button>
+	              <button type="button" class="btn btn-secondary pull-right" onclick="ob_save()">
+		                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard2-check-fill" viewBox="0 0 16 16">
+		                <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5"/>
+		                <path d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585c.055.156.085.325.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5c0-.175.03-.344.085-.5m6.769 6.854-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/></svg>
+		                저장
+	              </button>
 				</div>
 				<div style="margin:30px">
 					<hr>
-					<table  class="table table-hover">
-						<colgroup>
-							<col width="5%"></col>
-							<col width="20%"></col>
-							<col width="10%"></col>
-							<col width="10%"></col>
-							<col width="10%"></col>
-							<col width="10%"></col>
-							<col width="10%"></col>
-							<col width="10%"></col>
-						</colgroup>
-						<tr>
-							<th>연번</th>
-							<th>관측소명</th>
-							<th>표준코드</th>
-							<th>위도(dd)</th>
-							<th>경도(dd)</th>
-							<th>관측방식</th>
-							<th>운영기관</th>
-							<th>조회</th>
-						</tr>
+			
+						<table class="listTable">
+							<tr class="tableCate">
+								<th>연번</th>
+								<th>관측소명</th>
+								<th>표준코드</th>
+								<th>위도(dd)</th>
+								<th>경도(dd)</th>
+								<th>관측방식</th>
+								<th>운영기관</th>
+								<th>조회</th>
+							</tr>
 						<tbody id="searchO">
 						<c:forEach var="Observation" items="${observationList}" varStatus="status">
-							<tr>
+							<tr class="tableRow">
 								<td>${status.count}</td>
 								<td onclick="location.href='/observation_detail?observe_code=${Observation.observe_code}'">${Observation.observe_post}</td>
 								<td>${Observation.river_code} </td>
@@ -185,11 +229,9 @@
 			</form>
 			
 			
-			 <div id="paging" class="pagination justify-content-center">
+			 <div id="paging" class="pagination pagination-sm justify-content-center">
 			    <c:if test="${page.startPage > page.pageBlock}">
-			        <div class="page-link" onclick="location.href='/observation_find?currentPage=${page.startPage - page.pageBlock}'">
-			            이전
-			        </div>
+			        <div class="page-link" onclick="location.href='/observation_find?currentPage=${page.startPage - page.pageBlock}'">&laquo;</div>
 			    </c:if>
 			    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
 			        <div class="page-item" onclick="location.href='/observation_find?currentPage=${i}'">
@@ -197,15 +239,9 @@
 			        </div>
 			    </c:forEach>
 			    <c:if test="${page.endPage < page.totalPage}">
-			        <div class="page-link" onclick="location.href='/observation_find?currentPage=${page.startPage + page.pageBlock}'">
-			            다음
-			        </div>
+			        <div class="page-link" onclick="location.href='/observation_find?currentPage=${page.startPage + page.pageBlock}'">&raquo;</div>
 			    </c:if>
 			</div>              
-		
-
-		</div>
-	</div>
 </div>
 <footer class="footer py-2">
 	<div id="footer" class="container">

@@ -483,6 +483,7 @@
 			FROM(
 				SELECT R.*, T.observe_post, T.observe_code, T.observe_type,
 					(SELECT cate_name FROM code WHERE field_name = 'observe_type' AND cate_code = T.observe_Type) observe_type_name
+					, TO_CHAR(R.observe_date, 'YYYY-MM-DD') observe_date_str
 					FROM 
 					   rainfall R
 					   LEFT OUTER JOIN Observation T
