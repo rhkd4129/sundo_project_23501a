@@ -68,31 +68,45 @@
             });
         }
 
+        let facility_category;
+        let org_area;
+        let org_name;
+        let user_department;
+        let firstdate;
+        let secdate;
+        let cate_name;
+        let facility_code;
+        let research;
 
         function searchCheckReportList(currentPage, search) {
 
             let wr;
 
+
             if (search) {
-                console.log("true");
-                wr = {
-                    currentPage: currentPage,
-                    facility_category: $("#facility_category_List").val(),
-                    org_area: $("#org_area_List").val(),
-                    org_name: $("#org_name_List").val(),
-                    user_department: $("#user_department").val(),
-                    firstdate: $("#find_date1").val(),
-                    secdate: $("#find_date2").val(),
-                    cate_name: $("#cate_name").val(),
-                    facility_code: $("#facility_code").val(),
-                    research: $("#research").val()
-                };
-            } else {
-                console.log("false");
-                wr = {
-                    currentPage: currentPage
-                };
+                facility_category= $("#facility_category_List").val();
+                org_area= $("#org_area_List").val();
+                org_name= $("#org_name_List").val();
+                user_department=$("#user_department").val();
+                firstdate= $("#find_date1").val();
+                secdate= $("#find_date2").val();
+                cate_name= $("#cate_name").val();
+                facility_code= $("#facility_code").val();
+                research= $("#research").val();
             }
+
+            wr = {
+                currentPage: currentPage,
+                facility_category: facility_category,
+                org_area: org_area,
+                org_name: org_name,
+                user_department: user_department,
+                firstdate: firstdate,
+                secdate: secdate,
+                cate_name: cate_name,
+                facility_code: facility_code,
+                research: research
+            };
 
             console.log(wr);
             $.ajax({
@@ -225,7 +239,7 @@
                         <td>시설물 코드:</td>
                         <td><input type="text" name="facility_code" id="facility_code" class="form-control"></td>
 
-                        <td><input type="button" onclick="searchCheckReportList()" value="조회" class="btn btn-dark"></td>
+                        <td><input type="button" onclick="searchCheckReportList(1,true)" value="조회" class="btn btn-dark"></td>
                         <td><input type="checkbox" id="research">결과 내 재검색</td>
 
                     </tr>
