@@ -57,4 +57,6 @@ public interface KjoService {
     Observation CntObservationAll();
 
     List<Observation> findObservationAll(Observation ov);
+
+    WaterResources nullcheck(WaterResources wr);
 }

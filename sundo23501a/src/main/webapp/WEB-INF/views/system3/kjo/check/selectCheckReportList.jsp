@@ -69,87 +69,94 @@
         }
 
 
-        function searchCheckReportList(currentPage) {
+        function searchCheckReportList(currentPage, search) {
 
+            let wr;
 
-            const wr = {
-                currentPage : currentPage,
-                facility_category : $("#facility_category_List").val(),
-                org_area : $("#org_area_List").val(),  //  행정기관
-                org_name : $("#org_name_List").val(),       //  관리기관
-                user_department : $("#user_department").val(),      //  소속
-                firstdate : $("#find_date1").val(),
-                secdate : $("#find_date2").val(),
-                cate_name : $("#cate_name").val(),
-                facility_code : $("#facility_code").val(),
-                research : $("#research").val()
+            if (search) {
+                console.log("true");
+                wr = {
+                    currentPage: currentPage,
+                    facility_category: $("#facility_category_List").val(),
+                    org_area: $("#org_area_List").val(),
+                    org_name: $("#org_name_List").val(),
+                    user_department: $("#user_department").val(),
+                    firstdate: $("#find_date1").val(),
+                    secdate: $("#find_date2").val(),
+                    cate_name: $("#cate_name").val(),
+                    facility_code: $("#facility_code").val(),
+                    research: $("#research").val()
+                };
+            } else {
+                console.log("false");
+                wr = {
+                    currentPage: currentPage
+                };
             }
 
             console.log(wr);
             $.ajax({
                 url: "/getcheckresultform",
                 data: wr,
-
                 success(data) {
-                    let table_body = $("#table_body");
-                    const CRList = data.objList;
-                    const obj = data.obj;
+                    console.log(data);
+                    const table_body = $("#table_body");
                     table_body.empty();
 
-                    $.each(CRList, function (key, values) {
-                        const newtr = $('<tr></tr>');
-                        newtr.addClass("cont");
-                        newtr.attr('data-doc-no', values.facility_code); // jQuery를 사용하여 data-doc-no 속성 추가
-                        newtr.append('<td>' + values.rn + '</td>');
-                        newtr.append('<td>' + values.facility_category + '</td>');
-                        newtr.append('<td>' + values.facility_code + '</td>');
-                        newtr.append('<td>' + values.org_name + '</td>');
-                        newtr.append('<td>' + values.org_area_name + '</td>');
-// 가정: list는 JavaScript 객체이며, modify_datetime, check_result, user_name 등의 속성을 가지고 있다고 가정합니다.
+                    const { objList, obj } = data;
+                    function addCell(value) {
+                        let result = $('<td></td>');
+                        if (value == null) {
+                            result.append('없음');
 
-                        if (values.firstdate === null) {
-                            newtr.append('<td>점검없음</td>');
-                        } else {
-                            newtr.append('<td>' + values.firstdate + '</td>');
+                        }else {
+                            result.append(value);
                         }
 
-                        if (values.check_result === null) {
-                            newtr.append('<td>점검결과없음</td>');
-                        } else {
-                            newtr.append('<td>' + values.check_result + '</td>');
-                        }
 
-                        if (values.user_name === null) {
-                            newtr.append('<td>점검자없음</td>');
-                        } else {
-                            newtr.append('<td>' + values.user_name + '</td>');
-                        }
+                        return result;
+                    }
+                    console.log("obj");
+                    console.log(obj);
+
+                    objList.forEach((values) => {
+                        const newtr = $('<tr></tr>').addClass("cont").attr('data-doc-no', values.facility_code);
+
+                        newtr.append(addCell(values.rn));
+                        newtr.append(addCell(values.facility_category));
+                        newtr.append(addCell(values.facility_code));
+                        newtr.append(addCell(values.org_name));
+                        newtr.append(addCell(values.org_area_name));
+                        newtr.append(addCell(values.firstdate));
+                        newtr.append(addCell(values.check_result));
+                        newtr.append(addCell(values.user_name));
 
                         table_body.append(newtr);
                     });
-                    var paginationDiv = $('#paging'); // 페이지네이션을 표시할 div
-                    paginationDiv.empty(); // 페이지네이션을 초기화
 
-                    var jspPagination = '';
+                    const paginationDiv = $('#paging');
+                    paginationDiv.empty();
+
+                    let jspPagination = '';
 
                     if (obj.startPage > obj.pageBlock) {
-                        jspPagination += '<div class="page-link" onclick="searchCheckReportList(' + (obj.startPage - obj.pageBlock) + ')">이전</div>';
+                        jspPagination += '<div class="page-link" onclick="searchCheckReportList(' + (obj.startPage - obj.pageBlock) + ',false)">이전</div>';
                     }
 
                     for (var i = obj.startPage; i <= obj.endPage; i++) {
-                        jspPagination += '<div class="page-item" onclick="searchCheckReportList(' + i + ')"><div class="page-link">' + i + '</div></div>';
+                        jspPagination += '<div class="page-item" onclick="searchCheckReportList(' + i + ',false)"><div class="page-link">' + i + '</div></div>';
                     }
 
                     if (obj.endPage >= obj.pageBlock) {
-                        jspPagination += '<div class="page-link" onclick="searchCheckReportList(' + (obj.startPage + obj.pageBlock) + ')">다음</div>';
+                        jspPagination += '<div class="page-link" onclick="searchCheckReportList(' + (obj.startPage + obj.pageBlock) + ',false)">다음</div>';
                     }
                     jspPagination += '</div>';
-                    paginationDiv.html(jspPagination); // JSP 페이지 네비게이션 코드를 추가
 
-
+                    paginationDiv.html(jspPagination);
                     doubliClickEvents();
                 }
-            })
+            });
+
 
         }
 
@@ -277,20 +284,21 @@
 
             <div id="paging" class="pagination justify-content-center">
                 <c:if test="${page.startPage > page.pageBlock}">
-                    <div class="page-link" onclick="location.href='/selectCheckReportList?currentPage=${page.startPage - page.pageBlock}'">
+<%--                    <div class="page-link" onclick="location.href='/selectCheckReportList?currentPage=${page.startPage - page.pageBlock}'">--%>
+                        <div class="page-link" onclick="searchCheckReportList(${page.startPage - page.pageBlock}, false)">
 
                         이전
                     </div>
                 </c:if>
                 <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-                    <div class="page-item" onclick="location.href='/selectCheckReportList?currentPage=${i}'">
-<%--                    <div class="page-item" onclick="searchCheckReportList(${i})">--%>
+<%--                    <div class="page-item" onclick="location.href='/selectCheckReportList?currentPage=${i}'">--%>
+                    <div class="page-item" onclick="searchCheckReportList(${i},false)">
                         <div class="page-link" style="cursor:pointer">${i}</div>
                     </div>
                 </c:forEach>
                 <c:if test="${page.endPage >= page.pageBlock}">
-                    <div class="page-link" onclick="location.href='/selectCheckReportList?currentPage=${page.startPage + page.pageBlock}'">
-<%--                    <div class="page-link" onclick="searchCheckReportList(${page.startPage + page.pageBlock})">--%>
+<%--                    <div class="page-link" onclick="location.href='/selectCheckReportList?currentPage=${page.startPage + page.pageBlock}'">--%>
+                    <div class="page-link" onclick="searchCheckReportList(${page.startPage + page.pageBlock}, false)">
                         다음
                     </div>
                 </c:if>
