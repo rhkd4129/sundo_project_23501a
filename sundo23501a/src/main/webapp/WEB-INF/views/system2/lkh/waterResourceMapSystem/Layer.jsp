@@ -18,6 +18,9 @@
         let a;
         let init_pos;
         let map;
+        let datatype ="";
+        let getdatatype ="";
+        let standdatatype ="";
         $(function() {
             $.ajax({
                 url         : '/main_header_2',
@@ -139,50 +142,141 @@
 
         });
         function layerClick(currentPage, mapping){
-            console.log("fd");
+            console.log(currentPage);
+            // console.log(mapping);
+                const ov = {"currentPage": currentPage}
 
-            if(mapping == 'obsrvlist'){
+
                 $.ajax({
                     url: mapping,
-                    data: currentPage,
+                    data: ov,
                     success: function (data) {
-                        showobsrv();
-                        console.log("succ");
-                        console.log(data);
-                        const objList = data.objList;
-                        let list = $('#list');
-                        let newdiv = $('<div></div>');
+                        getdatatype = data.type;
+                        console.log("server get type: " + getdatatype);
+                        /*관측소 요청*/
+                        if (getdatatype == "Observation") {
+                            console.log(data.objList);
+                            showobsrv(getdatatype, data);   //  화면에 뿌리는 함수
 
-                        list.empty();
-                        $.each(objList, function (key, values) {
-                            const newcon = $('<div></div>');
-                            newcon.click(function () {
-                                getLatLong(values.observe_code);
-                            });
-                            newcon.append(values.observe_post);
-                            newcon.append('<input type="hidden" value="' + values.latitude + '" id="lat' + values.observe_code + '">');
-                            newcon.append('<input type="hidden" value="' + values.longitude + '" id="long' + values.observe_code + '">');
-                            list.append(newcon);
-                        });
+                        }
+                        /*관측소 요청*/
+
+                        /*레이어요청*/
+                        else if (getdatatype == "Layer") {
+                            console.log("Layer");
+                            showlayer(getdatatype, data);   //  화면에 뿌리는 함수
+                        }
+                        /*레이어요청*/
+                        /*북마크요청*/
+                        else if (getdatatype == "BookMark") {
+                            console.log("BookMark");
+                            showBookMark(getdatatype, data);   //  화면에 뿌리는 함수
+                        }
+                        /*북마크요청*/
+
+
                     }
                 })
-            }
+
 
         }
-        function showobsrv() {
+
+        let OPEN = false;
+        let CON = false;
+
+        //  좌측 레이어 클릭 시 팝업  ON / OFF
+        function rightlayerShow(getdatatype) {
             var rightLayer = document.getElementById('right_layer');
             if (!rightLayer) {
                 console.error("Element 'right_layer' not found.");
                 return;
             }
-            // rightLayer.style.display = 'block';
 
-            // var c    on = $('#right_layer');
-            if(rightLayer.style.display=='none'){
+            if(datatype != getdatatype || getdatatype == standdatatype){
+                console.log("elel");
+                console.log(standdatatype);
+                console.log(datatype);
+
+                datatype = getdatatype;
                 rightLayer.style.display = 'block';
-            }else{
-                rightLayer.style.display = 'none';
+                $('#layer_top').empty();
+                $('#layer_mid').empty();
+                $('#layer_mid2').empty();
+                $('#layer_mid3').empty();
+                $('#layer_bot').empty();
+                $('#list').empty();
+
             }
+            else if (datatype == getdatatype) {
+                datatype = getdatatype;
+                rightLayer.style.display = 'none';
+                standdatatype = getdatatype;
+                console.log("standdatatype");
+                console.log(standdatatype);
+                console.log(datatype);
+            }
+        }
+
+        function showBookMark(getdatatype, data) {
+            rightlayerShow(getdatatype);
+            let list = $('#list');
+
+            const newcon = $('<div></div>');
+            const newp = $('<p></p>');
+            newp.append(data.type);
+            newcon.append(newp);
+            list.append(newcon);
+
+
+        }
+
+        function showlayer(getdatatype, data) {
+            rightlayerShow(getdatatype);
+            // 새로운 div 요소 생성
+            var layerMid = $('#layer_mid3');
+
+
+
+
+
+
+            layerMid.append('<div id="list_level_1">하천도</div>');
+            layerMid.append('<div id="list_level_2">서울 한강</div>');
+            layerMid.append('<div id="list_level_2">경기도 한강</div>');
+            layerMid.append('<div id="list_level_2">서울 한강 수계</div>');
+            layerMid.append('<div id="list_level_2">경기 한강 수계</div>');
+
+            layerMid.append('<div id="list_level_1">수문</div>');
+
+            layerMid.append('<div id="list_level_1">관측소</div>');
+            layerMid.append('<div id="list_level_1">수자원 시설물</div>');
+
+            // 하위 항목에 대한 처리
+            layerMid.append('<div id="list_level_2">댐</div>');
+            layerMid.append('<div id="list_level_2">저수지</div>');
+            layerMid.append('<div id="list_level_2">펌프장</div>');
+            layerMid.append('<div id="list_level_2">취소문</div>');
+            layerMid.append('<div id="list_level_2">배소문</div>');
+
+            // 하위 항목을 수자원 시설물 아래에 추가
+
+
+
+        }
+
+
+
+        function showobsrv(getdatatype, data) {
+            console.log(data);
+            rightlayerShow(getdatatype);
+
+            var layerMid = $('#layer_mid');
+
+            layerMid.append('<div>관측소</div>');
+            layerMid.append('<input type="button" class="btn btn-dark" id = "total" value="'+ data.obj.total+' ">');
+
+            var layerMid = $('#layer_mid2');
+            layerMid.append('<div>관측소명</div>');
 
             var layerTop = document.getElementById('layer_top');
             if (!layerTop) {
@@ -193,23 +287,70 @@
 
             var selectElement = document.createElement('select');
             var optionElement = document.createElement('option');
+
             optionElement.text = '전체';
+            selectElement.classList.add('form-select');
+            selectElement.style.width = 'auto';
             selectElement.appendChild(optionElement);
             layerTop.appendChild(selectElement);
 
             var inputElement = document.createElement('input');
             inputElement.setAttribute('placeholder', '관측소명을 입력하세요');
+            inputElement.classList.add('form-control');
             layerTop.appendChild(inputElement);
 
             var searchButton = document.createElement('input');
             searchButton.setAttribute('type', 'button');
             searchButton.setAttribute('value', '검색');
             searchButton.setAttribute('id', 'search');
+            searchButton.classList.add('btn', 'btn-dark');
+
             layerTop.appendChild(searchButton);
+
+            const objList = data.objList;
+
+            let list = $('#list');
+
+            list.empty();
+            $.each(objList, function (key, values) {
+                const newcon = $('<div></div>');
+                newcon.click(function () {
+                    getLatLong(values.observe_code);
+                });
+                newcon.append(values.observe_post);
+                newcon.append('<input type="hidden" value="' + values.latitude + '" id="lat' + values.observe_code + '">');
+                newcon.append('<input type="hidden" value="' + values.longitude + '" id="long' + values.observe_code + '">');
+                list.append(newcon);
+            });
+            var layerBot = document.getElementById('layer_bot');
+            var paginationDiv = document.createElement('div');
+            paginationDiv.setAttribute('id', 'paging');
+            layerBot.appendChild(paginationDiv);
+
+            var jspPagination = '';
+            let obj = data.obj;
+            var newPath = 'obsrvlist'; // 적절한 경로로 변경
+
+            if (obj.startPage > obj.pageBlock) {
+                jspPagination += '<div id="page-link" onclick="layerClick(' + (obj.startPage - obj.pageBlock) + ', \'' + newPath + '\')">이전</div>';
+            }
+
+            for (var i = obj.startPage; i <= obj.endPage; i++) {
+                jspPagination += '<div id="page-item" onclick="layerClick(' + i + ', \'' + newPath + '\')"><div class="page-link">' + i + '</div></div>';
+            }
+
+            if (obj.endPage >= obj.pageBlock) {
+                jspPagination += '<div id="page-link" onclick="layerClick(' + (obj.startPage + obj.pageBlock) + ', \'' + newPath + '\')">다음</div>';
+            }
+            jspPagination += '</div>';
+
+
+            paginationDiv.innerHTML = jspPagination; // 페이징 코드 추가
+
         }
 
 
-        function getLatLong(observe_code){
+        function getLatLong(observe_code){  //  좌표 반환
             console.log(observe_code);
             let latvalue = $('#lat' + observe_code).val();
             let longvalue = $('#long' + observe_code).val();
@@ -220,7 +361,7 @@
             moveToCoordinates(coordinates,10)
         }
 
-        function moveToCoordinates(coordinates, zoom) {
+        function moveToCoordinates(coordinates, zoom) {     //  화면이동
             console.log("corr");
             console.log(coordinates);
             // let view = new ol.View();
@@ -230,8 +371,6 @@
                 duration: 2000,  // 애니메이션 지속 시간 (2초)
                 zoom: zoom,
             });
-
-
         }
     </script>
 </head>
@@ -258,11 +397,11 @@
                 <input type="button" class="btn" value="관측소" style="width: 100%; height: 100%">
 
             </div>
-            <div id="layer_box" onclick="layerClick(1,'layerList')">
+            <div id="layer_box" onclick="layerClick(1,'layerlist')">
                 <input type="button" class="btn" value="레이어" style="width: 100%; height: 100%">
 
             </div>
-            <div id="bookmark_box" onclick="layerClick(1,'obsrvlist')">
+            <div id="bookmark_box" onclick="layerClick(1,'bookmarklist')">
                 <input type="button" class="btn" value="북마크" style="width: 100%; height: 100%">
 
             </div>
@@ -286,11 +425,19 @@
                     누적강우량
                 </div>
             </div>
+            <div id="layer_mid3">
+                <div>
+                    관측소명
+                </div>
+                <div>
+                    누적강우량
+                </div>
+            </div>
             <div id="list">
 
             </div>
             <div id="layer_bot">
-                <div id="paging"></div>
+                <div id="paging" class="pagination"></div>
 
             </div>
 

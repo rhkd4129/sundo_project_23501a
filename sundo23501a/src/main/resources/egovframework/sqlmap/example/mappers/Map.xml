@@ -5,7 +5,7 @@
     <select id="findObservationAll" parameterType="observation" resultType="observation">
         select * from observation
         order by observe_post
-        offset #{start}-1 limit 30
+        offset #{start}-1 limit 10
     </select>
     <select id="CntObservationAll" resultType="observation">
         select count(*) as total from observation
