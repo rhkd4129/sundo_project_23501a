@@ -63,6 +63,8 @@ public class KjoController {
     @ResponseBody
     @GetMapping("/searchWaterResources")
     public KjoResponse searchWaterResources(@RequestParam(defaultValue = "1") String currentPage, WaterResources wr) {
+
+        wr = kjoService.nullcheck(wr);
         wr.setTotal(kjoService.searchCnt(wr).getTotal());
         Paging page = new Paging(wr.getTotal(), currentPage,10);
         wr.setStart(page.getStart());

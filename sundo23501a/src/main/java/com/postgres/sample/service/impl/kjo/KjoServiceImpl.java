@@ -219,6 +219,9 @@ public class KjoServiceImpl extends EgovAbstractServiceImpl implements KjoServic
         if (wr.getUser_department() == null) {
             wr.setUser_department("");
         }
+        if (wr.getCate_name() == null) {
+            wr.setCate_name("");
+        }
         return wr;
     }
 }
