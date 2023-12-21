@@ -57,7 +57,7 @@
 					</tr>
 					
 						
-						<%--  --%>
+
 					 <c:forEach var="cnt" begin="0" end="${fn:length(flowList)-1}" step="1">
 							<tr>	
 							<td><a href="/time_edit_F?river_code=${flowList.get(cnt).river_code}&observe_year=${flowList.get(cnt).observe_year}&observe_day=${flowList.get(cnt).observe_day}">${flowList.get(cnt).observe_day}</a></td>

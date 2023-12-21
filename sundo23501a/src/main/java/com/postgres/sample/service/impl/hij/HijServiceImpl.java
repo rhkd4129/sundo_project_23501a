@@ -107,8 +107,9 @@ public class HijServiceImpl extends EgovAbstractServiceImpl implements HijServic
 	// 검색 갯수
 	@Override
 	public int searchTotalO(Observation observation) {
-		int totalCount = hd.ijSearchTotalO();
 		System.out.println("HijServiceImpl searchTotalO START");
+		int totalCount = hd.ijSearchTotalO(observation);
+		System.out.println("HijServiceImpl totalCount:"+totalCount);
 		return totalCount;
 	}
 	
@@ -226,24 +227,31 @@ public class HijServiceImpl extends EgovAbstractServiceImpl implements HijServic
 	// 수위 검색 갯수
 	@Override
 	public int searchTotalW(WaterLevel waterLevel) {
-		int totalCount = hd.ijSearchTotalW();
 		System.out.println("HijServiceImpl searchTotalW START");
+		
+		int totalCount = hd.ijSearchTotalW(waterLevel);
+		
 		return totalCount;
 	}
 	// 수위 검색
 	@Override
 	public List<WaterLevel> searchW(WaterLevel waterLevel) {
 		System.out.println("HijServiceImpl searchW START");
-		List<WaterLevel> searchW = hd.ijSearchW(waterLevel);
 		
-		System.out.println("searchW 사이즈 : " + searchW.size());
-		return searchW;
+    	System.out.println("river_code s: " + waterLevel.getRiver_code() );
+    	System.out.println("start_date s: " + waterLevel.getStart_date() );
+    	System.out.println("end_date s: " + waterLevel.getEnd_date() );
+    	
+		List<WaterLevel> searchWlist = hd.ijSearchW(waterLevel);
+		
+		System.out.println("searchWlist 사이즈s : " + searchWlist.size());
+		return searchWlist;
 	}
 	
 	// 강우량 검색 갯수
 	@Override
 	public int searchTotalR(RainFall rainFall) {
-		int totalCount = hd.ijSearchTotalR();
+		int totalCount = hd.ijSearchTotalR(rainFall);
 		System.out.println("HijServiceImpl searchTotalR START");
 		return totalCount;
 	}
@@ -258,7 +266,7 @@ public class HijServiceImpl extends EgovAbstractServiceImpl implements HijServic
 	//우량 검색 갯수
 	@Override
 	public int searchTotalF(Flow flow) {
-		int totalCount = hd.ijSearchTotalF();
+		int totalCount = hd.ijSearchTotalF(flow);
 		System.out.println("HijServiceImpl searchTotalF START");
 		return totalCount;
 	}

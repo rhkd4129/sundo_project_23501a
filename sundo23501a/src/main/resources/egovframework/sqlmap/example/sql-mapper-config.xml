@@ -23,7 +23,7 @@
 		<typeAlias alias="rainFall" type="com.postgres.sample.dto.RainFall"/>
 		<typeAlias alias="userInfo" type="com.postgres.sample.dto.UserInfo"/>
 		<typeAlias alias="waterGate" type="com.postgres.sample.dto.WaterGate"/>
-		<typeAlias alias="waterLevel" type="com.postgres.sample.dto.WaterLevel"/>
+		<typeAlias alias="WaterLevel" type="com.postgres.sample.dto.WaterLevel"/>
 		<typeAlias alias="waterResources" type="com.postgres.sample.dto.WaterResources"/>
 		<typeAlias alias="orgArea" type="com.postgres.sample.dto.OrgArea"/>
 		<typeAlias alias="LKH_WaterResources" type="com.postgres.sample.dto.LKH_WaterResources"/>

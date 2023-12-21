@@ -13,7 +13,7 @@
 <!-- BOOTSTRAP END -->
 
 <!-- COMMON START -->
-<link rel="stylesheet" type="text/css" href="/common/css/common.css">
-<script type="text/javascript" src="/common/js/common.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/egovframework/common.css">
+<script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <!-- COMMON END -->

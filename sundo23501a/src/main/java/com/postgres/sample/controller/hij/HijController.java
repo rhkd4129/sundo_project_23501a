@@ -14,9 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.postgres.sample.dto.CategoryVO;
 import com.postgres.sample.dto.Code;
@@ -220,7 +222,11 @@ public class HijController {
         model.addAttribute("page", page);
         model.addAttribute("waterLevelList", waterLevelList);
         model.addAttribute("waterLevelListSize", waterLevelList.size());
+        
+        System.out.println("time_find  totalcount :" +totalCount);
+        
         return "/system2/observation_sys/time_find";
+        
     }
     // 수위 수정 조회
     @GetMapping("/time_edit")
@@ -257,21 +263,32 @@ public class HijController {
     @ResponseBody
     @RequestMapping(value="/searchWaterLevel")
     public HijResponse searchWaterLevel(WaterLevel waterLevel, String currentPage) {
+    	System.out.println("HijController searchWaterLevel START");
     	
     	int totalCount = hs.searchTotalW(waterLevel);	//검색 갯수
+    	System.out.println("totalCountW : "+ totalCount);
     	
-    	Paging page = new Paging(totalCount, currentPage, 10);
-    	waterLevel.setStart(page.getStart());
-    	waterLevel.setEnd(page.getEnd());
+    	System.out.println("currentPage : " +currentPage);
+		Paging page = new Paging(totalCount, currentPage, 10);
+		waterLevel.setStart(page.getStart()); waterLevel.setEnd(page.getEnd());
+		
+    	System.out.println("river_code : " + waterLevel.getRiver_code() );
+    	System.out.println("start_date : " + waterLevel.getStart_date() );
+    	System.out.println("end_date : " + waterLevel.getEnd_date() );
     	
-    	List<WaterLevel> searchW = hs.searchW(waterLevel);
+    	List<WaterLevel> searchWlist = hs.searchW(waterLevel);
     	
+    	System.out.println("searchW 사이즈c :" + searchWlist.size());
+    	System.out.println("river_code : " + waterLevel.getRiver_code() );
     	HijResponse hijResponse = new HijResponse();
     	hijResponse.setObj(page);
-    	hijResponse.setList(searchW);
+    	hijResponse.setList(searchWlist);
     	
     	System.out.println("totalCountW : "+ totalCount);
+    	
     	return hijResponse;
+    	
+
     }
     
  //--------------------------------------------------------------------------------------  

@@ -324,26 +324,26 @@
 <!-- 관측소 검색 갯수 **************-->
 	<select id="ijSearchTotalO" parameterType="Observation" resultType="int">
 		SELECT COUNT(*)
-			   FROM(
-			      SELECT T.*, C.cate_name observe_method_name, O.org_name, O.org_area
-			      FROM 
-			         Observation T
-			         LEFT OUTER JOIN Code C
-			           ON T.observe_method = C.cate_code
-			          AND C.field_name     = 'observe_method'
-			         LEFT OUTER JOIN Organization O
-			           ON T.org_code = O.org_code
-			      ) a
-			     WHERE 1 =1
-			     <if test="observe_method != ''">
-			 	 AND a.observe_method = #{observe_method}
-			 	 </if>
-			 	 <if test="org_code != ''">
-			     AND a.org_code = #{org_code}
-			 	 </if> 
-			     <if test="observe_post != ''">
-			     AND a.observe_post like '%' || #{observe_post} || '%'	
-				 </if> 
+	    FROM(
+	      SELECT T.*, C.cate_name observe_method_name, O.org_name, O.org_area
+	      FROM 
+	         Observation T
+	         LEFT OUTER JOIN Code C
+	           ON T.observe_method = C.cate_code
+	          AND C.field_name     = 'observe_method'
+	         LEFT OUTER JOIN Organization O
+	           ON T.org_code = O.org_code
+	      ) a
+	     WHERE 1 =1
+	     <if test="observe_method != ''">
+	 	 AND a.observe_method = #{observe_method}
+	 	 </if>
+	 	 <if test="org_code != ''">
+	     AND a.org_code = #{org_code}
+	 	 </if> 
+	     <if test="observe_post != ''">
+	     AND a.observe_post like '%' || #{observe_post} || '%'	
+		 </if> 
 	   
 	</select>
 	<!-- 관측소 검색 -->
@@ -378,6 +378,132 @@
 			
 	</select>
 	
+	
+	<!-- 시자료 - 수위 검색 갯수 -->
+	<select id="ijSearchTotalW" parameterType="WaterLevel" resultType="int">
+		SELECT COUNT(*)
+		FROM(
+			SELECT (row_number() over()) AS rn, a.*
+			FROM(
+				SELECT W.*, T.observe_post, T.observe_code, T.observe_type,
+					(SELECT cate_name FROM code WHERE field_name = 'observe_type' AND cate_code = T.observe_Type) observe_type_name
+					, TO_CHAR(W.observe_date, 'YYYY-MM-DD') observe_date_str
+				FROM 
+				   water_level W
+					   LEFT OUTER JOIN Observation T
+					   ON W.river_code = T.river_code
+			   WHERE W.river_code = #{river_code}
+			   ORDER BY observe_date DESC
+				)a
+			WHERE 1=1
+				<choose>
+					<when test=" #{start_date}== ''">
+						<![CDATA[ and  a.observe_date <= #{end_date}]]>
+					</when>
+					<when test="#{end_date} == ''">
+						<![CDATA[ and a.observe_date >= #{start_date}]]>
+					</when>
+					<otherwise>
+						AND a.observe_date BETWEEN #{start_date} AND #{end_date}
+					</otherwise>
+				</choose>
+				)
+	</select>		
+				
 	<!-- 시자료 - 수위 검색 -->
-
+	<select id="ijSearchW" parameterType="WaterLevel" resultType="WaterLevel">
+		SELECT *
+		FROM(
+			SELECT (row_number() over()) AS rn, a.*
+			FROM(
+				SELECT W.*, T.observe_post, T.observe_code, T.observe_type,
+					(SELECT cate_name FROM code WHERE field_name = 'observe_type' AND cate_code = T.observe_Type) observe_type_name
+					, TO_CHAR(W.observe_date, 'YYYY-MM-DD') observe_date_str
+				FROM 
+				   water_level W
+					   LEFT OUTER JOIN Observation T
+					   ON W.river_code = T.river_code
+			   WHERE W.river_code = #{river_code}
+			   ORDER BY observe_date DESC
+				)a
+			WHERE 1=1
+				<choose>
+					<when test=" #{start_date}== ''">
+						<![CDATA[ and  a.observe_date <= #{end_date}]]>
+					</when>
+					<when test="#{end_date} == ''">
+						<![CDATA[ and a.observe_date >= #{start_date}]]>
+					</when>
+					<otherwise>
+						AND a.observe_date BETWEEN #{start_date} AND #{end_date}
+					</otherwise>
+				</choose>
+				)
+		WHERE rn BETWEEN #{start} and #{end}
+		
+	</select>
+	
+	
+		<!-- 시자료 - 강우량 검색 갯수 -->
+	<select id="ijSearchTotalR" parameterType="RainFall" resultType="int">
+		SELECT COUNT(*)
+		FROM(
+			SELECT (row_number() over()) AS rn, a.*
+			FROM(
+				SELECT R.*, T.observe_post, T.observe_code, T.observe_type,
+					(SELECT cate_name FROM code WHERE field_name = 'observe_type' AND cate_code = T.observe_Type) observe_type_name
+					FROM 
+					   rainfall R
+					   LEFT OUTER JOIN Observation T
+					   ON R.river_code = T.river_code
+					   WHERE R.river_code=#{river_code}
+					   ORDER BY observe_date DESC
+				)a
+			WHERE 1=1
+				<choose>
+					<when test=" #{start_date}== ''">
+						<![CDATA[ and  a.observe_date <= #{end_date}]]>
+					</when>
+					<when test="#{end_date} == ''">
+						<![CDATA[ and a.observe_date >= #{start_date}]]>
+					</when>
+					<otherwise>
+						AND a.observe_date BETWEEN #{start_date} AND #{end_date}
+					</otherwise>
+				</choose>
+				)
+	</select>
+	
+	
+	<!-- 시자료 - 강우량 검색 -->
+	<select id="ijSearchR" parameterType="RainFall" resultType="RainFall">
+		SELECT *
+		FROM(
+			SELECT (row_number() over()) AS rn, a.*
+			FROM(
+				SELECT R.*, T.observe_post, T.observe_code, T.observe_type,
+					(SELECT cate_name FROM code WHERE field_name = 'observe_type' AND cate_code = T.observe_Type) observe_type_name
+					FROM 
+					   rainfall R
+					   LEFT OUTER JOIN Observation T
+					   ON R.river_code = T.river_code
+					   WHERE R.river_code=#{river_code}
+					   ORDER BY observe_date DESC
+					  )a
+			  WHERE 1=1
+				<choose>
+					<when test=" #{start_date}== ''">
+						<![CDATA[ and  a.observe_date <= #{end_date}]]>
+					</when>
+					<when test="#{end_date} == ''">
+						<![CDATA[ and a.observe_date >= #{start_date}]]>
+					</when>
+					<otherwise>
+						AND a.observe_date BETWEEN #{start_date} AND #{end_date}
+					</otherwise>
+				</choose>
+			)
+	WHERE rn BETWEEN #{start} and #{end}
+			
+</select>
 </mapper>

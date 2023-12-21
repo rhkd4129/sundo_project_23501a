@@ -6,52 +6,131 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
-	<style>
-		header {
-			height: 55px;
-		}
-	</style>
-	<script>
-
-		$(function() {
-
-			$.ajax({
-				url			: '/main_header_21',
-				dataType 	: 'html',
-				success		: function(data) {
-					$('#header').html(data);
-				}
-			});
-
-			$.ajax({
-				url			: '/main_footer',
-				dataType 	: 'html',
-				success		: function(data) {
-					$('#footer').html(data);
-				}
-			});
+<script type="text/javascript">
+	$(function() {
+	
+		$.ajax({
+			url			: '/main_header_21',
+			dataType 	: 'html',
+			success		: function(data) {
+				$('#header').html(data);
+			}
 		});
+	
+		$.ajax({
+			url			: '/main_footer',
+			dataType 	: 'html',
+			success		: function(data) {
+				$('#footer').html(data);
+			}
+		});
+	});
 
-	</script>
+	function search_1(currentPage){
 
+		var river_code = $('#river_code').val();
+		var v_start_date = $('#start_date').val();
+		var v_end_date = $('#end_date').val();
+		
+		const tw = {
+				river_code  	: river_code,
+				start_date		: v_start_date,
+				end_date		: v_end_date,
+				currentPage		: currentPage
+		};
+		console.log(tw);
+		
+		$.ajax({
+			url			: "/searchWaterLevel",
+			data		: tw,
+			dataType	:'json',
+			success		: function(data){
+				console.log(data);
+				
+			
+				var table_body = $('#searchW');
+				table_body.empty();
+				
+				$.each(data.list, function (key, waterlevel){
+				
+					const newtr=$('<tr></tr>');
+			
+					newtr.append('<td><a href="/time_edit?river_code='+waterlevel.river_code+'&observe_date='+waterlevel.observe_date+'}">'+waterlevel.observe_date_str+'</a></td>');
+					
+					for(var h=1; h<=24; h++) {
+						if(h <= 9) {
+							var hourS = eval("waterlevel.hour_0"+h);
+						}else{
+							var hourS = eval("waterlevel.hour_"+h);
+						}
+						newtr.append('<td>' + hourS + '</td>');					
+					}
+					
+					table_body.append(newtr);
+				});
+				
+				table_body.html();
+				
+				 const obj = data.obj;
+
+				var pagingDiv = $('#paging');
+				pagingDiv.empty();
+				
+				var pagingStr = '';
+				
+				if (obj.startPage > obj.pageBlock) {
+				   pagingStr += '<div class="page-link" onclick="search_1(' + (obj.startPage - obj.pageBlock) + ')"><p>&laquo;</p></div>';
+				}
+				
+				for (var i = obj.startPage; i <= obj.endPage; i++) {
+				   pagingStr += '<div class="page-item" onclick="search_1(' + i + ')"><div class="page-link">' + i + '</div></div>';
+				}
+				
+				if (obj.endPage < obj.totalPage) {
+				   pagingStr += '<div class="page-link" onclick="search_1(' + (obj.startPage + obj.pageBlock) + ')"><p>&raquo;</p></div>';
+				}
+				
+				pagingStr += '</div>';
+				pagingDiv.html(pagingStr);
+				
+			}
+		});
+	}
+	
+	//통계 검색
+	function search_2(){
+		
+	}
+	
+	// 검색 버튼
+	function tw_search(){
+		var type = $('#type').val();
+		if(type == "hour") {
+			//시자료 hour
+			search_1();
+		}else{
+			//통계 statistics
+			search_2();
+		}
+	}
+</script>
 </head>
 <body>
 
 	<div class="container">
-	<input type="hidden" name="river_code" value="${rainFallList.get(0).river_code}">
+		<input type="hidden" name="river_code" id="river_code" value="${waterLevelList.get(0).river_code}">
 		<div class="row">
 			<!-- 검색 -->
 			<span class="border border-secondary border-2" style="padding:20px; margin:30px" >
 				<th>자료유형</th>
 				<td><select id="type" >
-							<option value="hour" selected="selected">시자료</option>
-							<option value="statistics">통계</option>
+							<option value="hour" selected="selected" id="hour">시자료</option>
+							<option value="statistics" id="statistics">통계</option>
 					</select></td>
 				<th>조회기간</th>
-						<input type="date" name="startdate" aria-label="startdate" >
-						<input type="date" name="enddate"   aria-label="enddate" >
-				<button onclick="ob_search()">검색</button>
+						<input type="date" name="start_date" aria-label="start_date"  id="start_date">
+						<input type="date" name="end_date"   aria-label="end_date"  id="end_date">
+				<button onclick="tw_search()">검색</button>
 			</span> 
 			<!-- 태그 -->
 			<div style="margin-bottom: 30px">
@@ -63,8 +142,7 @@
 						</tr>
 				</span>
 			</div>
-		
-
+			
 			<div id="center">
 				<h1>시자료(수위)</h1>
 				<input type="hidden" name="river_code" value="${waterLevelList.get(0).river_code}">
@@ -76,93 +154,55 @@
 				<table class="table table-hover">
 					<tr>
 						<th>관측일시</th>
-							<c:forEach var="cnt" begin="0" end="23" step="1">
+							 <c:forEach var="cnt" begin="0" end="23" step="1">
 								<th>${cnt}</th>
-							</c:forEach>
+							</c:forEach> 
 					</tr>
-
-					<c:forEach var="cnt" begin="0" end="${fn:length(waterLevelList)-1}" step="1">
-						<tr>
-							<td><a href="/time_edit?river_code=${waterLevelList.get(cnt).river_code}&observe_date=${waterLevelList.get(cnt).observe_date}">${waterLevelList.get(cnt).observe_date}</a></td>
-
-							<td>${waterLevelList.get(cnt).hour_01}</td>
-							<td>${waterLevelList.get(cnt).hour_02}</td>
-							<td>${waterLevelList.get(cnt).hour_03}</td>
-							<td>${waterLevelList.get(cnt).hour_04}</td>
-							<td>${waterLevelList.get(cnt).hour_05}</td>
-							<td>${waterLevelList.get(cnt).hour_06}</td>
-							<td>${waterLevelList.get(cnt).hour_07}</td>
-							<td>${waterLevelList.get(cnt).hour_08}</td>
-							<td>${waterLevelList.get(cnt).hour_09}</td>
-							<td>${waterLevelList.get(cnt).hour_10}</td>
-							<td>${waterLevelList.get(cnt).hour_11}</td>
-							<td>${waterLevelList.get(cnt).hour_12}</td>
-							<td>${waterLevelList.get(cnt).hour_13}</td>
-							<td>${waterLevelList.get(cnt).hour_14}</td>
-							<td>${waterLevelList.get(cnt).hour_15}</td>
-							<td>${waterLevelList.get(cnt).hour_16}</td>
-							<td>${waterLevelList.get(cnt).hour_17}</td>
-							<td>${waterLevelList.get(cnt).hour_18}</td>
-							<td>${waterLevelList.get(cnt).hour_19}</td>
-							<td>${waterLevelList.get(cnt).hour_20}</td>
-							<td>${waterLevelList.get(cnt).hour_21}</td>
-							<td>${waterLevelList.get(cnt).hour_22}</td>
-							<td>${waterLevelList.get(cnt).hour_23}</td>
-							<td>${waterLevelList.get(cnt).hour_24}</td>
-
-						</tr>
-					</c:forEach>
-
-					<%-- 		<c:forEach var="cnt" begin="0" end="${fn:length(waterLevelList)-1}" step="1">
-                                <tr>
-                                    <td>${waterLevelList.get(cnt).observe_date}</td>
-
-                                    <c:forEach var="h" begin="01" end="24" step="1">
-                                        <td>${waterLevelList.get(cnt).hour_(h)}</td>
-                                    </c:forEach>
-                                </tr>
-                            </c:forEach> --%>
-
-
+					
+				 <tbody id="searchW">
+					 <c:forEach var="waterlevel" items="${waterLevelList}">
+                            	<tr>
+                            		<td><a href="/time_edit?river_code=${waterlevel.river_code}&observe_date=${waterlevel.observe_date}">${waterlevel.observe_date}</a></td>
+                            		<c:forEach var="h" begin="1" end="24" step="1">
+                            			<c:choose>
+	                            			<c:when test="${h ge 10}">
+	                            				<c:set var="hourS">hour_${h}</c:set>
+	                            				<td>${waterlevel[hourS]}</td>
+	                            			</c:when>
+	                            			<c:otherwise>
+	                            				<c:set var="hourS">hour_0${h}</c:set>
+	                    						<td>${waterlevel[hourS]}</td>
+	                            			</c:otherwise>
+                            			</c:choose>                         			
+                            		</c:forEach>
+                            	</tr>
+                     </c:forEach> 
+				</tbody> 
 				</table>
-
-
-				<nav aria-label="Page navigation example">
-					<ul class="pagination justify-content-center">
-					
-						<c:if test="${page.startPage > page.pageBlock }">
-							<li class="page-item"><a class="page-link" href="time_find?currentPage=${page.startPage - page.pageBlock}&river_code=${waterLevelList.get(0).river_code}" tabindex="-1" aria-disabled="true">이전</a></li>
-						</c:if>
-					
-						<c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
-							<c:choose>
-								<c:when test="${page.currentPage==i}">
-									<li class="page-item active">
-										<a class="page-link" href="time_find?currentPage=${i}&river_code=${waterLevelList.get(0).river_code}">${i}</a>
-									</li>
-								</c:when>
-								<c:otherwise>
-									<li class="page-item">
-										<a class="page-link" href="time_find?currentPage=${i}&river_code=${waterLevelList.get(0).river_code}">${i}</a>
-									</li>
-								</c:otherwise>
-							</c:choose>
-						</c:forEach>
-					
-						<c:if test="${page.endPage < page.totalPage }">
-							<li class="page-item">
-								<a class="page-link" href="time_find?currentPage=${page.startPage + page.pageBlock}&river_code=${waterLevelList.get(0).river_code}">다음</a>
-							</li>
-						</c:if>
-					</ul>
-				</nav>
+				
+				 <div id="paging" class="pagination justify-content-center">
+				    <c:if test="${page.startPage > page.pageBlock}">
+				        <div class="page-link" onclick="location.href='/time_find?currentPage=${page.startPage - page.pageBlock}&river_code=${waterLevelList.get(0).river_code} '">
+				            이전
+				        </div>
+				    </c:if>
+				    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+				        <div class="page-item" onclick="location.href='/time_find?currentPage=${i}&river_code=${waterLevelList.get(0).river_code}'">
+				            <div class="page-link" style="cursor:pointer">${i}</div>
+				        </div>
+				    </c:forEach>
+				    <c:if test="${page.endPage < page.totalPage}">
+				        <div class="page-link" onclick="location.href='/time_find?currentPage=${page.startPage + page.pageBlock}}&river_code=${waterLevelList.get(0).river_code}'">
+				            다음
+				        </div>
+				    </c:if>
+				</div>		 	
+				
+				
+				
+				
 			</div>
 		</div>
 	</div>
-	<footer class="footer py-2">
-		<div id="footer" class="container">
-		</div>
-	</footer>
-
 </body>
 </html>

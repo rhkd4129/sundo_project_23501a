@@ -33,17 +33,18 @@
 		});
 	});
 
-	function ob_search(){
+	function ob_search(currentPage) {
 		var observe_method = $('#observe_method').val();
 		var org_code = $('#org_code').val();
 		var observe_post = $('#observe_post').val();
-		
+	 		
 		const ob = {
 				observe_method : observe_method,
 				org_code	   : org_code,
-				observe_post   : observe_post
+				observe_post   : observe_post,
+				currentPage : currentPage
 		};
-		
+	 		
 		console.log(ob);
 		
 		$.ajax({
@@ -69,32 +70,34 @@
 					newtr.append('<td onclick="location.href=' + "'/time_find?river_code=" + values.river_code + "'" + '"><img src="/images/egovframework/cmmn/search.svg"></td>');
 					
 					table_body.append(newtr);
-				})
-				table_body.html();
+				});
+				table_body.html();  
 				
+				// 페이징
 				const obj = data.obj;
+				
+				var pagingDiv = $('#paging');
+				pagingDiv.empty();
+				
+				var pagingStr = '';
+				
+				if (obj.startPage > obj.pageBlock) {
+				   pagingStr += '<div class="page-link" onclick="ob_search(' + (obj.startPage - obj.pageBlock) + ')"><p>&laquo;</p></div>';
+				}
+				
+				for (var i = obj.startPage; i <= obj.endPage; i++) {
+				   pagingStr += '<div class="page-item" onclick="ob_search(' + i + ')"><div class="page-link">' + i + '</div></div>';
+				}
+				
+				if (obj.endPage < obj.totalPage) {
+				   pagingStr += '<div class="page-link" onclick="ob_search(' + (obj.startPage + obj.pageBlock) + ')"><p>&raquo;</p></div>';
+				}
+				
+				pagingStr += '</div>';
+				pagingDiv.html(pagingStr);
 
-                var paginationDiv = $('#paging'); // 페이지네이션을 표시할 div
-                paginationDiv.empty(); // 페이지네이션을 초기화
-                // <div id="c_b" className="pagination">
-                var jspPagination = '';
-
-                if (obj.startPage > obj.pageBlock) {
-                    jspPagination += '<div class="page-link" onclick="/searchObservation(' + (obj.startPage - obj.pageBlock) + ')"><p>이전</p></div>';
-                }
-
-                for (var i = obj.startPage; i <= obj.endPage; i++) {
-                    jspPagination += '<div class="page-item" onclick="/searchObservation(' + i + ')"><div class="page-link">' + i + '</div></div>';
-                }
-
-                if (obj.endPage >= obj.pageBlock) {
-                    jspPagination += '<div class="page-link" onclick="/searchObservation(' + (obj.startPage + obj.pageBlock) + ')"><p>다음</p></div>';
-                }
-                jspPagination += '</div>';
-                paginationDiv.html(jspPagination); // JSP 페이지 네비게이션 코드를 추가
-			}
-		})
-		
+	       }
+	    });
 	}
 </script>
 
@@ -182,7 +185,7 @@
 			</form>
 			
 			
-			<div id="paging" class="pagination justify-content-center">
+			 <div id="paging" class="pagination justify-content-center">
 			    <c:if test="${page.startPage > page.pageBlock}">
 			        <div class="page-link" onclick="location.href='/observation_find?currentPage=${page.startPage - page.pageBlock}'">
 			            이전
@@ -198,29 +201,8 @@
 			            다음
 			        </div>
 			    </c:if>
-			</div>
-                 
-<%-- 			
-				<ul class="pagination justify-content-center">
-
-					<c:if test="${page.startPage > page.pageBlock }">
-						<li class="page-item"><a class="page-link" href="observation_find?currentPage=${page.startPage - page.pageBlock }" tabindex="-1" aria-disabled="true">이전</a></li>
-					</c:if>
-					<c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
-						<c:choose>
-							<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>
-							<c:otherwise><li class="page-item"></c:otherwise>
-						</c:choose>
-						<a class="page-link" href="observation_find?currentPage=${i}">${i}</a></li>
-					</c:forEach>
-
-					<c:if test="${page.endPage < page.totalPage }">
-						<li class="page-item"><a class="page-link" href="observation_find?currentPage=${page.startPage + page.pageBlock }')">다음</a></li>
-					</c:if>
-				</ul>
-				
-			</nav> --%>
-	
+			</div>              
+		
 
 		</div>
 	</div>

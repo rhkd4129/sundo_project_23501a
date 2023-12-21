@@ -43,12 +43,16 @@ public class WaterLevel {
 	//조회용
 	private String 	observe_post;
 	private Integer observe_code;
+	private Date  start_date;
+	private Date  end_date;
+	private String observe_date_str;
 
 	//페이징작업
 	private String rn;
 	private String search;   	private String keyword;
 	private String pageNum;		private int total;
 	private int start; 		 	private int end;
+	private String currentPage;
 }
 
 
