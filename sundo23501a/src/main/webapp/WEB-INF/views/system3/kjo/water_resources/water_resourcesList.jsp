@@ -40,27 +40,36 @@
     <!-- COMMON END -->
     <script type="text/javascript">
 
+        let facility_category;
+        let org_area;
+        let cate_name;
+        let facility_code;
+
         function getcheckresult(gfacility_code){
             console.log("getcheckresult");
             location.href = '/checkresultform?facility_code=' + gfacility_code;
 
         }
 
-        function searchWaterResources(currentPage) {
-            var facility_category = $('#facility_code_List').val();
-            var org_area = $('#org_area_List').val();
-            var cate_name = $('#cate_name').val();
-            var facility_code = $('#facility_code').val();
+        function searchWaterResources(currentPage, search ) {
 
+            let wr;
 
-            const wr = {
+            if (search) {
+                console.log("true");
+                facility_category = $('#facility_code_List').val();
+                org_area = $('#org_area_List').val();
+                cate_name = $('#cate_name').val();
+                facility_code = $('#facility_code').val();
+
+            }
+            wr = {
                 facility_category: facility_category,
                 org_area: org_area,
                 cate_name: cate_name,
                 facility_code: facility_code,
                 currentPage: currentPage
             };
-
             console.log(wr);
             $.ajax({
                 url: "/searchWaterResources",
@@ -104,15 +113,15 @@
                     var jspPagination = '';
 
                     if (obj.startPage > obj.pageBlock) {
-                        jspPagination += '<div class="page-link" onclick="searchWaterResources(' + (obj.startPage - obj.pageBlock) + ')"><p>이전</p></div>';
+                        jspPagination += '<div class="page-link" onclick="searchWaterResources(' + (obj.startPage - obj.pageBlock) + ',false)">이전</div>';
                     }
 
                     for (var i = obj.startPage; i <= obj.endPage; i++) {
-                        jspPagination += '<div class="page-item" onclick="searchWaterResources(' + i + ')"><div class="page-link">' + i + '</div></div>';
+                        jspPagination += '<div class="page-item" onclick="searchWaterResources(' + i + ',false)"><div class="page-link">' + i + '</div></div>';
                     }
 
                     if (obj.endPage >= obj.pageBlock) {
-                        jspPagination += '<div class="page-link" onclick="searchWaterResources(' + (obj.startPage + obj.pageBlock) + ')"><p>다음</p></div>';
+                        jspPagination += '<div class="page-link" onclick="searchWaterResources(' + (obj.startPage + obj.pageBlock) + ',false)">다음</div>';
                     }
                     jspPagination += '</div>';
                     paginationDiv.html(jspPagination); // JSP 페이지 네비게이션 코드를 추가
@@ -160,7 +169,7 @@
                             <input class="form-control" type="text" name="facility_code" id="facility_code" placeholder="XXXXXXXXXXX">
                         </td>
                         <td>
-                            <input class="btn btn-secondary" type="button" id="search_button" value="검색" onclick="searchWaterResources()">
+                            <input class="btn btn-secondary" type="button" id="search_button" value="검색" onclick="searchWaterResources(1,true)">
                         </td>
                     </tr>
                 </table>
@@ -196,17 +205,17 @@
                 </table>
                 <div id="paging" class="pagination justify-content-center">
                     <c:if test="${page.startPage > page.pageBlock}">
-                        <div class="page-link" onclick="searchWaterResources(${page.startPage - page.pageBlock})">
+                        <div class="page-link" onclick="searchWaterResources(${page.startPage - page.pageBlock},false)">
                             이전
                         </div>
                     </c:if>
                     <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-                        <div class="page-item" onclick="searchWaterResources(${i})">
+                        <div class="page-item" onclick="searchWaterResources(${i},false)">
                             <div class="page-link" style="cursor:pointer">${i}</div>
                         </div>
                     </c:forEach>
                     <c:if test="${page.endPage <= page.pageBlock}">
-                        <div class="page-link" onclick="searchWaterResources(${page.startPage + page.pageBlock})">
+                        <div class="page-link" onclick="searchWaterResources(${page.startPage + page.pageBlock},false)">
                             다음
                         </div>
                     </c:if>

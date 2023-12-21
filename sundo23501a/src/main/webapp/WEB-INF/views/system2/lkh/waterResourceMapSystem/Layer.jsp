@@ -1,4 +1,3 @@
-@ -1,367 +1,391 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/header.jsp" %>
@@ -22,6 +21,7 @@
         let getdatatype ="";
         let standdatatype ="";
         $(function() {
+
             $.ajax({
                 url         : '/main_header_2',
                 dataType    : 'html',
@@ -144,39 +144,39 @@
         function layerClick(currentPage, mapping){
             console.log(currentPage);
             // console.log(mapping);
-            const ov = {"currentPage": currentPage}
+                const ov = {"currentPage": currentPage}
 
 
-            $.ajax({
-                url: mapping,
-                data: ov,
-                success: function (data) {
-                    getdatatype = data.type;
-                    console.log("server get type: " + getdatatype);
-                    /*관측소 요청*/
-                    if (getdatatype == "Observation") {
-                        console.log(data.objList);
-                        showobsrv(getdatatype, data);   //  화면에 뿌리는 함수
+                $.ajax({
+                    url: mapping,
+                    data: ov,
+                    success: function (data) {
+                        getdatatype = data.type;
+                        console.log("server get type: " + getdatatype);
+                        /*관측소 요청*/
+                        if (getdatatype == "Observation") {
+                            console.log(data.objList);
+                            showobsrv(getdatatype, data);   //  화면에 뿌리는 함수
 
-                    }
+                        }
                         /*관측소 요청*/
 
-                    /*레이어요청*/
-                    else if (getdatatype == "Layer") {
-                        console.log("Layer");
-                        showlayer(getdatatype, data);   //  화면에 뿌리는 함수
-                    }
                         /*레이어요청*/
-                    /*북마크요청*/
-                    else if (getdatatype == "BookMark") {
-                        console.log("BookMark");
-                        showBookMark(getdatatype, data);   //  화면에 뿌리는 함수
+                        else if (getdatatype == "Layer") {
+                            console.log("Layer");
+                            showlayer(getdatatype, data);   //  화면에 뿌리는 함수
+                        }
+                        /*레이어요청*/
+                        /*북마크요청*/
+                        else if (getdatatype == "BookMark") {
+                            console.log("BookMark");
+                            showBookMark(getdatatype, data);   //  화면에 뿌리는 함수
+                        }
+                        /*북마크요청*/
+
+
                     }
-                    /*북마크요청*/
-
-
-                }
-            })
+                })
 
 
         }
@@ -459,3 +459,4 @@
 </script>
 </body>
 </html>
+

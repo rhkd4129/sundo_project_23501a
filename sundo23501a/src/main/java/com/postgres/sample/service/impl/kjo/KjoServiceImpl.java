@@ -188,4 +188,40 @@ public class KjoServiceImpl extends EgovAbstractServiceImpl implements KjoServic
     public List<Observation> findObservationAll(Observation ov) {
         return KjoDao.findObservationAll(ov);
     }
+
+    @Override
+    public WaterResources nullcheck(WaterResources wr) {
+//        facility_category: $('#facility_code_List').val(),
+//                org_area: $('#org_area_List').val(),
+//                cate_name: $('#cate_name').val(),
+//                facility_code: $('#facility_code').val(),
+        if (wr.getFacility_code() == null) {
+            wr.setFacility_code("");
+        }
+        if (wr.getOrg_area() == null) {
+            wr.setOrg_area("");
+        }
+        if (wr.getCate_name() == null) {
+            wr.setCate_name("");
+        }
+        if (wr.getFacility_category() == null) {
+            wr.setFacility_category("");
+        }
+        if (wr.getSecdate() == null) {
+            wr.setSecdate("");
+        }
+        if (wr.getFirstdate() == null) {
+            wr.setFirstdate("");
+        }
+        if (wr.getOrg_name() == null) {
+            wr.setOrg_name("");
+        }
+        if (wr.getUser_department() == null) {
+            wr.setUser_department("");
+        }
+        if (wr.getCate_name() == null) {
+            wr.setCate_name("");
+        }
+        return wr;
+    }
 }
