@@ -244,7 +244,7 @@
         </tr>
     </table>
 
-    <input class="btn btn-dark" type="button" value="목록" onclick="location.href='/selectCheckReportList'">
+    <input class="btn btn-dark" type="button" value="목록" onclick="location.href='/selectcheckReportlist2?facility_code=' + ${CheckReport.facility_code}+'&currentPage=1'">
     <input class="btn btn-dark" type="button" value="삭제">
     <input class="btn btn-dark" onclick="window.location.reload()" type="button" value="초기화">
     <input class="btn btn-dark" type="button" value="저장" id="saveButton">

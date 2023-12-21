@@ -359,10 +359,10 @@
                         <td><input type="text"></td>
                     </tr>
                 </table>
-                <input type="button" value="목록">
-                <input type="button" value="삭제">
-                <input type="button" value="초기화">
-                <input type="button" value="저장" id="saveButton" onclick="btnclick()">
+                <input class="btn btn-dark" type="button" value="목록" onclick="location.href='/water_resourcesList'">
+                <input class="btn btn-dark" type="button" value="삭제">
+                <input class="btn btn-dark" type="button" onclick="window.location.reload()" value="초기화">
+                <input class="btn btn-dark" type="button" value="저장" id="saveButton" onclick="btnclick()">
 
             </div>
         </div>

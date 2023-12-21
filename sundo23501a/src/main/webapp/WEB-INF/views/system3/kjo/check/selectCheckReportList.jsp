@@ -277,18 +277,20 @@
 
             <div id="paging" class="pagination justify-content-center">
                 <c:if test="${page.startPage > page.pageBlock}">
-                    <div class="page-link" onclick="searchCheckReportList(${page.startPage - page.pageBlock})">
+                    <div class="page-link" onclick="location.href='/selectCheckReportList?currentPage=${page.startPage - page.pageBlock}'">
 
                         이전
                     </div>
                 </c:if>
                 <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-                    <div class="page-item" onclick="searchCheckReportList(${i})">
+                    <div class="page-item" onclick="location.href='/selectCheckReportList?currentPage=${i}'">
+<%--                    <div class="page-item" onclick="searchCheckReportList(${i})">--%>
                         <div class="page-link" style="cursor:pointer">${i}</div>
                     </div>
                 </c:forEach>
                 <c:if test="${page.endPage >= page.pageBlock}">
-                    <div class="page-link" onclick="searchCheckReportList(${page.startPage + page.pageBlock})">
+                    <div class="page-link" onclick="location.href='/selectCheckReportList?currentPage=${page.startPage + page.pageBlock}'">
+<%--                    <div class="page-link" onclick="searchCheckReportList(${page.startPage + page.pageBlock})">--%>
                         다음
                     </div>
                 </c:if>

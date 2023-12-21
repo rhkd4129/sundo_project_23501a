@@ -239,6 +239,8 @@ public class KjoController {
         List<CheckReport> CRList = kjoService.findCheckReportByFcCode(checkReport);
 
         model.addAttribute("CRList", CRList);
+        model.addAttribute("currentPage", checkReport.getCurrentPage());
+
         model.addAttribute("facility_code", checkReport.getFacility_code());
         model.addAttribute("cate_name", checkReport.getFacility_code());
         model.addAttribute("page",page);
