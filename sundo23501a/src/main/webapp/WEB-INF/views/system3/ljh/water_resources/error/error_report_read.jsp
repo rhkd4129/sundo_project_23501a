@@ -40,11 +40,11 @@
 	}
 	
 	.rptTbl th {
-		width: 200px;
+		width: 150px;
 	}
 
 	.alarmTbl .cate {
-		width: 200px;
+		width: 150px;
 	}
 
 	header {

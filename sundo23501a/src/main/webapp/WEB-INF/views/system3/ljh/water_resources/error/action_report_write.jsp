@@ -7,8 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
-
 <style type="text/css">
 	.title {
 		text-align: center;
@@ -29,14 +27,28 @@
 	th {
 		background: #EAEAEA;
 		padding: 5px 10px;
+		height: 40px;
+		width: 150px;
 	}
 	
 	td {
 		padding: 5px 10px;
+		height: 40px;
 	}
 	
-	select, input, textarea {
+	select {
 		width: 100%;
+		height: 35px;
+		border: none;
+	}
+	
+	textarea, input {
+		width: 100%;
+	}
+	
+	.date {
+		height: 35px;
+		width: 200px;
 	}
 	
 	.btns {
@@ -55,7 +67,6 @@
 	header {
 		height: 55px;
 	}
-
 
 </style>
 
@@ -237,7 +248,8 @@
 										</select>
 									</div>
 								</td>
-								<th>작성자</th><td><input type="text" name="user_id" required="required"></td>	<!-- 로그인한 사용자 이름 자동 표출 필요 -->
+								<th>작성자</th>
+								<td><input type="hidden" name="user_id" required="required" value="${user_id}">${user_name}</td>
 							</tr>
 
 							<tr>
@@ -278,14 +290,13 @@
 							</thead>
 							<tbody>
 							<tr>
-								<th>고장/발생 일자</th><td colspan="2"><input type="date" name="break_date" required="required"></td>
-								<th>조치/복구 일자</th><td colspan="2"><input type="date" name="action_date" required="required"></td>
+								<th>고장/발생 일자</th><td colspan="2"><input type="date" class="date" name="break_date" required="required"></td>
+								<th>조치/복구 일자</th><td colspan="2"><input type="date" class="date" name="action_date" required="required"></td>
 							</tr>
-							<tr><th>고장내역</th><td colspan="5"><textarea name="break_content" required="required"></textarea></td></tr>
-							<tr><th>조치내역</th><td colspan="5"><textarea name="action_content" required="required"></textarea></td></tr>
-							<tr><th>특이사항</th><td colspan="5"><textarea name="spec_memo"></textarea></td></tr>
-							<tr><th>향후계획</th><td colspan="5"><textarea name="future_plan"></textarea></td></tr>
-							<!-- <tr><th>파일첨부</th><td colspan="5"></td></tr> -->
+							<tr><th>고장내역</th><td colspan="5"><textarea name="break_content" required="required" rows="4"></textarea></td></tr>
+							<tr><th>조치내역</th><td colspan="5"><textarea name="action_content" required="required" rows="4"></textarea></td></tr>
+							<tr><th>특이사항</th><td colspan="5"><textarea name="spec_memo" rows="4"></textarea></td></tr>
+							<tr><th>향후계획</th><td colspan="5"><textarea name="future_plan" rows="4"></textarea></td></tr>
 							</tbody>
 						</table>
 						<div class="btns">

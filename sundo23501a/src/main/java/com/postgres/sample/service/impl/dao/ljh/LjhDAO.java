@@ -101,6 +101,12 @@ public interface LjhDAO {
 	public int ljhChoiceErrRptCnt(ActionReport actionReport);
 
 	
+//----------------------------------------------------------------------------------
+	// 그래프
+	public List<Integer> ljhErrorChart();
+	public List<Integer> ljhActionChart();
+
+	
 	
 
 

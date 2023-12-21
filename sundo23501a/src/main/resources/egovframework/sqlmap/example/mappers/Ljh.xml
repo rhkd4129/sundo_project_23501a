@@ -50,7 +50,7 @@
 		FROM	alarm
 		WHERE	facility_code = #{facility_code}
 		AND		(alarm_flag is null OR alarm_flag = 'N')
-		ORDER BY alarm_code
+		ORDER BY alarm_date asc, alarm_code asc
 	</select>
 
 	<!-- 고장보고서(break_report) TBL INSERT -->
@@ -84,7 +84,7 @@
 				facility_code, break_report_no, alarm_flag
 		FROM	alarm
 		WHERE	break_report_no = #{doc_no}
-		ORDER BY alarm_code
+		ORDER BY alarm_date asc, alarm_code asc
 	</select>
 	
 	<!-- 고장보고서 수정 - break_report TBL -->
@@ -126,7 +126,7 @@
 							br.facility_category, br.subject, u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
 					FROM	break_report br, user_info u
 					WHERE	u.user_id = br.user_id
-					<if test="facility_category != ''">
+					<if test="facility_category != 'all'">
 						AND		br.facility_category = #{facility_category}
 					</if>
 					<if test="user_name != ''">
@@ -146,7 +146,7 @@
 							br.facility_category, br.subject, u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
 					FROM	break_report br, user_info u
 					WHERE	u.user_id = br.user_id
-					<if test="facility_category != ''">
+					<if test="facility_category != 'all'">
 						AND		br.facility_category = #{facility_category}
 					</if>
 					<if test="user_name != ''">
@@ -227,7 +227,7 @@
 							u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
 					FROM	action_report ar, user_info u
 					WHERE	u.user_id = ar.user_id
-					<if test="facility_category != ''">
+					<if test="facility_category != 'all'">
 						AND		ar.facility_category = #{facility_category}
 					</if>
 					<if test="user_name != ''">
@@ -251,7 +251,7 @@
 							u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
 					FROM	action_report ar, user_info u
 					WHERE	u.user_id = ar.user_id
-					<if test="facility_category != ''">
+					<if test="facility_category != 'all'">
 						AND		ar.facility_category = #{facility_category}
 					</if>
 					<if test="user_name != ''">
@@ -295,6 +295,41 @@
 					AND		facility_code = #{facility_code}
 				)
 	</select>
+	
+	
+	
+<!-- ////////////////////////////////////////////////////////////////////////////////////// -->	
+	<!-- 그래프 -->
+	<select id="ljhErrorChart" resultType="Integer">
+		<!-- 관개수로, 댐, 저수지, 펌프장 -->
+  		SELECT	count(*)
+		FROM	break_report
+		GROUP BY facility_category
+		ORDER BY facility_category
+<!-- 		
+		SELECT
+		    facility_categories.facility_category,
+		    COALESCE(count(break_report.facility_category), 0) as facility_count
+		FROM
+		    (SELECT DISTINCT facility_category FROM break_report) as facility_categories
+		LEFT JOIN
+		    break_report ON facility_categories.facility_category = break_report.facility_category
+		    AND break_report.create_datetime = current_date
+		GROUP BY
+		    facility_categories.facility_category
+		ORDER BY
+		    facility_categories.facility_category
+ -->
+	</select>
+	
+	<select id="ljhActionChart" resultType="Integer">
+		<!-- 관개수로, 댐, 저수지, 펌프장 -->
+ 		SELECT	count(*)
+		FROM	action_report
+		GROUP BY facility_category
+		ORDER BY facility_category
+	</select>
+	
 	
 	
 </mapper>

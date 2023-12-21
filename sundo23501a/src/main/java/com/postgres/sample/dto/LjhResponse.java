@@ -7,5 +7,6 @@ import lombok.Data;
 @Data
 public class LjhResponse {
 	List<?>		list;
+	List<?>		secList;
 	Object		obj;
 }

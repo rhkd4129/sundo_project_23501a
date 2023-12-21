@@ -31,15 +31,22 @@
 	th {
 		background: #EAEAEA;
 		padding: 5px 10px;
+		height: 40px;
 	}
 	
 	td {
 		padding: 5px 10px;
+		height: 40px;
 	}
 	
-	header {
-		height: 55px;
+	.rptTbl th {
+		width: 100px;
 	}
+
+	.alarmTbl .cate {
+		width: 100px;
+	}
+
 </style>
 </head>
 <body>

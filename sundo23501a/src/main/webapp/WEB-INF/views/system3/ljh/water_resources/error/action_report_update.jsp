@@ -27,6 +27,7 @@
 		background: #EAEAEA;
 		padding: 5px 10px;
 		height: 40px;
+		width: 150px;
 	}
 	
 	td {
@@ -34,20 +35,19 @@
 		height: 40px;
 	}
 	
-	select, .subject {
+	select {
+		width: 100%;
+		height: 35px;
+		border: none;
+	}
+	
+	textarea, input {
 		width: 100%;
 	}
 	
-	textarea {
-		width: 100%;
-	}
-	
-	.handling_content {
-		width: 95%;
-	}
-	
-	.handling_flag {
-		width: 4%;
+	.date {
+		height: 35px;
+		width: 200px;
 	}
 	
 	.btns {
@@ -59,16 +59,6 @@
 		width: 80px;
 	}
 	
-	.rptTbl th {
-		width: 200px;
-		height: 40px;
-	}
-
-	.alarmTbl .cate {
-		width: 200px;
-		height: 40px;
-	}
-	
 	header {
 		height: 55px;
 	}
@@ -78,7 +68,7 @@
 <script type="text/javascript">
 
 	$(function() {
-	
+
 		$.ajax({
 			url			: '/main_header_3',
 			dataType 	: 'html',
@@ -158,9 +148,9 @@
 </script>
 </head>
 <body>
-	<header id="header"></header>
+	<header id="header" style="margin-top: 3%"></header>
 	
-	<div class="container" style="margin-top: 3%">
+	<div class="container">
 		<div class="row">
 			<div id="center">
 				<p class="title">조치 결과 보고서 수정</p>
@@ -250,15 +240,15 @@
 						</thead>
 						<tbody>
 							<tr>
-								<th>고장/발생일자</th>
-								<td colspan="2"><input type="date" name="break_date" value="${actionRpt.break_date }"></td>
-								<td colspan="2"><input type="date" name="action_date" value="${actionRpt.action_date }"></td>					
+								<th>고장/발생 일자</th>
+								<td colspan="2"><input type="date" class="date" name="break_date" value="${actionRpt.break_date }"></td>
+								<th>조치/복구 일자</th>
+								<td colspan="2"><input type="date" class="date" name="action_date" value="${actionRpt.action_date }"></td>					
 							</tr>
-							<tr><th>고장내역</th><td colspan="5"><textarea name="break_content">${actionRpt.break_content }</textarea></td></tr>
-							<tr><th>조치내역</th><td colspan="5"><textarea name="action_content">${actionRpt.action_content }</textarea></td></tr>
-							<tr><th>특이사항</th><td colspan="5"><textarea name="spec_memo">${actionRpt.spec_memo }</textarea></td>
-							<tr><th>향후계획</th><td colspan="5"><textarea name="future_plan">${actionRpt.future_plan }</textarea></td></tr>
-							<!-- <tr><th>파일첨부</th><td colspan="5"><input type="file" name="file1"></td></tr> -->
+							<tr><th>고장내역</th><td colspan="5"><textarea rows="4" name="break_content">${actionRpt.break_content }</textarea></td></tr>
+							<tr><th>조치내역</th><td colspan="5"><textarea rows="4" name="action_content">${actionRpt.action_content }</textarea></td></tr>
+							<tr><th>특이사항</th><td colspan="5"><textarea rows="4" name="spec_memo">${actionRpt.spec_memo }</textarea></td>
+							<tr><th>향후계획</th><td colspan="5"><textarea rows="4" name="future_plan">${actionRpt.future_plan }</textarea></td></tr>
 						</tbody>
 					</table>
 					<div class="btns">

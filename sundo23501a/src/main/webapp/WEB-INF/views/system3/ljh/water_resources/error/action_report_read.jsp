@@ -33,7 +33,7 @@
 	th {
 		background: #EAEAEA;
 		padding: 5px 10px;
-		width: 200px;
+		width: 150px;
 		height: 40px;
 	}
 	

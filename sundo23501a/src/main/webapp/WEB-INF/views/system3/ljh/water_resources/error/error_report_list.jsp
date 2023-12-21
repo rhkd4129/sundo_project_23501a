@@ -54,14 +54,37 @@
 		padding: 20px;
 	}
 	
+	.searchTbl {
+		width: 100%;
+	}
+	
+	.searchTbl th {
+ 		width: 70px;
+ 		text-align: right;
+	}
+	
 	.searchTbl td {
- 		padding: 0px 30px 0px 10px; 
+ 		 padding-left: 20px;
 	}
 	
 	#paging {
 		margin: 30px;
 	}
 	
+	.searchBtn {
+		text-align: right;
+	}
+	
+	.pagination {
+		--bs-pagination-border-color: white;
+		--bs-pagination-color: gray;
+		--bs-pagination-hover-color: black;
+ 		--bs-pagination-hover-bg: white;
+	}
+	
+	.subject {
+		width: 350px;
+	}
 </style>
 <script>
 
@@ -136,42 +159,35 @@
 				var pagingStr = '';
 				
 				if (obj.startPage > obj.pageBlock) {
-					// pagingStr += '<a href="error_report_list?currentPage=' + (obj.startPage - obj.pageBlock) + '">[이전]</a>';
-					pagingStr += '<div class="page-link" onclick="searchError(' + (obj.startPage - obj.pageBlock) + ')"><p>이전</p></div>';
+					pagingStr += '<div class="page-link" onclick="searchError(' + (obj.startPage - obj.pageBlock) + ')"><p>&laquo;</p></div>';
 				}
 				
 				for (var i = obj.startPage; i <= obj.endPage; i++) {
-					// pagingStr += '<a href="error_report_list?currentPage=' + i + '">[' + i + ']</a>';
 					pagingStr += '<div class="page-item" onclick="searchError(' + i + ')"><div class="page-link">' + i + '</div></div>';
 				}
 				
-				if (obj.endPage >= obj.pageBlock) {
-					// pagingStr += '<a href="error_report_list?currentPage=' +(obj.startPage + obj.pageBlock) + '">[다음]</a>';
-					pagingStr += '<div class="page-link" onclick="searchError(' + (obj.startPage + obj.pageBlock) + ')"><p>다음</p></div>';
+				if (obj.endPage < obj.totalPage) {
+					pagingStr += '<div class="page-link" onclick="searchError(' + (obj.startPage + obj.pageBlock) + ')"><p>&raquo;</p></div>';
 				}
 				
 				pagingStr += '</div>';
 				pagingDiv.html(pagingStr);
 				
 			}
-			
 		});
-		
 	};
 	
 </script>
 </head>
 <body>
-
 	<header id="header" style="margin-top: 3%"></header>
-
 
 	<div class="container">
 		<div class="row">
 			<div id="center">
 				<div>
 					<p class="title">고장/조치 결과 보고 목록</p>
-					<div class="btn-group tapBtn">
+					<div class="btn-group btn-group-lg tapBtn">
 						<button type="button" id="errorBtn" class="btn btn-dark" onclick="location.href='/error_report_list'">고장 보고서</button>
 						<button type="button" id="actionBtn" class="btn btn-outline-dark" onclick="location.href='/action_report_list'">조치 결과 보고서</button>
 					</div>
@@ -182,6 +198,7 @@
 								<th>시설물 종류</th>
 								<td>
 									<select id="facility_category_list">
+										<option value="all">전체</option>
 										<c:forEach var="wcList" items="${waterCategory }">
 											<option name="facility_category" value="${wcList.facility_category }">${wcList.facility_category }</option>
 										</c:forEach>
@@ -191,9 +208,9 @@
 								<td><input type="text" name="user_name" id="user_name"></td>
 								<th>등록일자</th>
 								<td><input type="date" name="create_datetime" id="create_datetime"></td>
-		                        <td>
-		                            <input class="btn btn-dark btn-sm" type="button" value="검색" onclick="searchError()">
-		                        </td>
+								<td class="searchBtn">
+									<input class="btn btn-dark btn-sm" type="button" value="검색" onclick="searchError()">
+								</td>
 							</tr>
 						</table>
 					</div>
@@ -203,7 +220,7 @@
 					</div>
 
 					<table class="listTable">
-						<tr class="tableCate"><th>연번</th><th>등록 일자</th><th>시설물 종류</th><th>제목</th><th>작성자</th><th>고장 보고서</th></tr>
+						<tr class="tableCate"><th>연번</th><th>등록 일자</th><th>시설물 종류</th><th class="subject">제목</th><th>작성자</th><th>고장 보고서</th></tr>
 						<tbody id="brTable">
 							<c:forEach var="brList" items="${breakRptList }">
 								<tr class="tableRow">
@@ -215,30 +232,25 @@
 						</tbody>
 					</table>
 
-					<div id="paging" class="pagination justify-content-center">
+					<div id="paging" class="pagination pagination-sm justify-content-center">
 						<c:if test="${page.startPage > page.pageBlock}">
-							<div class="page-link" onclick="location.href='error_report_list?currentPage=${page.startPage - page.pageBlock}'">
-	                            이전
-	                        </div>
+							<div class="page-link" onclick="location.href='error_report_list?currentPage=${page.startPage - page.pageBlock}'">&laquo;</div>
 						</c:if>
 
 						<c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
 							<div class="page-item" onclick="location.href='error_report_list?currentPage=${i}'">
-	                            <div class="page-link" style="cursor:pointer">${i}</div>
-	                        </div>
+								<div class="page-link" style="cursor:pointer">${i}</div>
+							</div>
 						</c:forEach>
 
 						<c:if test="${page.endPage < page.totalPage}">
-							<div class="page-link" onclick="location.href='error_report_list?currentPage=${page.startPage + page.pageBlock}'">
-	                            다음
-	                        </div>
+							<div class="page-link" onclick="location.href='error_report_list?currentPage=${page.startPage + page.pageBlock}'">&raquo;</div>
 						</c:if>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
 	
 	<footer class="footer py-2">
 		<div id="footer" class="container">

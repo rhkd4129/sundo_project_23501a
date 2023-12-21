@@ -34,16 +34,29 @@
 		height: 40px;
 	}
 	
-	select, .subject {
+	select {
 		width: 100%;
+		height: 35px;
+		border: none;
 	}
 	
 	textarea {
 		width: 100%;
 	}
 	
+	.subject {
+		width: 100%;
+		height: 35px;
+	}
+	
+	.break_date {
+		height: 35px;
+		width: 200px;
+	}
+	
 	.handling_content {
 		width: 95%;
+		height: 35px;
 	}
 	
 	.handling_flag {
@@ -60,12 +73,12 @@
 	}
 	
 	.rptTbl th {
-		width: 200px;
+		width: 150px;
 		height: 40px;
 	}
 
 	.alarmTbl .cate {
-		width: 200px;
+		width: 150px;
 		height: 40px;
 	}
 	
@@ -249,9 +262,9 @@
 						</thead>
 						<tbody>
 							<tr><th>제목</th><td colspan="5"><input type="text" class="subject" name="subject" value="${breakReport.subject }"></td></tr>
-							<tr><th>고장일자</th><td colspan="5"><input type="date" name="break_date" value="${breakReport.break_date }"></td></tr>
-							<tr><th>고장원인</th><td colspan="5"><textarea name="break_cause">${breakReport.break_cause }</textarea></td></tr>
-							<tr><th>현재상황</th><td colspan="5"><textarea name="current_state">${breakReport.current_state }</textarea></td></tr>
+							<tr><th>고장일자</th><td colspan="5"><input type="date" class="break_date" name="break_date" value="${breakReport.break_date }"></td></tr>
+							<tr><th>고장원인</th><td colspan="5"><textarea rows="4" name="break_cause">${breakReport.break_cause }</textarea></td></tr>
+							<tr><th>현재상황</th><td colspan="5"><textarea rows="4" name="current_state">${breakReport.current_state }</textarea></td></tr>
 							<tr><th>즉시처리</th>
 								<td colspan="5">
 									<c:choose>
@@ -262,10 +275,9 @@
 											<input type="checkbox" class="handling_flag" name="handling_flag" value="N">
 										</c:otherwise>
 									</c:choose>
-									<input type="text" name="handling_content" class="handling_content" value="${breakReport.handling_content }">
+									<input type="text" class="handling_content" name="handling_content" value="${breakReport.handling_content }">
 								</td></tr>
-							<tr><th>향후계획</th><td colspan="5"><textarea name="future_plan">${breakReport.future_plan }</textarea></td></tr>
-							<!-- <tr><th>파일첨부</th><td colspan="5"><input type="file" name="file1"></td></tr> -->
+							<tr><th>향후계획</th><td colspan="5"><textarea rows="4" name="future_plan">${breakReport.future_plan }</textarea></td></tr>
 						</tbody>
 					</table>
 					

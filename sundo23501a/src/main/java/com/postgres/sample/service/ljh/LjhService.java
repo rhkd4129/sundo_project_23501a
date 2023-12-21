@@ -37,6 +37,12 @@ public interface LjhService {
 	int 					choiceErrRptCnt(ActionReport actionReport);
 	
 	
+	List<Integer> 			errorChart();
+	List<Integer> 			actionChart();
+	
+	
+	
+	
 	
 	
 	

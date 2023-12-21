@@ -3,6 +3,8 @@ package com.postgres.sample.controller.ljh;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,7 @@ import com.postgres.sample.dto.BreakReport;
 import com.postgres.sample.dto.Code;
 import com.postgres.sample.dto.LjhResponse;
 import com.postgres.sample.dto.Paging;
+import com.postgres.sample.dto.UserInfo;
 import com.postgres.sample.dto.WaterResources;
 import com.postgres.sample.service.ljh.LjhService;
 
@@ -52,8 +55,13 @@ public class LjhController {
 	
 	// 고장 보고서 작성 페이지로 이동
 	@RequestMapping("/error_report_write_form")
-	public String errorRptWriteForm(Model model) {
+	public String errorRptWriteForm(Model model, HttpServletRequest request) {
 		System.out.println("LjhController errorReportWriteForm Start");
+		
+		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
+		String user_id = userInfo.getUser_id();
+		String user_name = userInfo.getUser_name();
+		System.out.println("로그인 유저 : " + user_id + " / " + user_name);
 		
 		List<WaterResources> waterCategory = new ArrayList<WaterResources>();
 		waterCategory = ljhService.getWaterCategory();
@@ -63,6 +71,8 @@ public class LjhController {
 		
 		model.addAttribute("waterCategory", waterCategory);
 		model.addAttribute("checkCodeList", checkCodeList);
+		model.addAttribute("user_id", user_id);
+		model.addAttribute("user_name", user_name);
 		
 		return "/system3/ljh/water_resources/error/error_report_write";
 	}
@@ -247,8 +257,13 @@ public class LjhController {
 	
 	// 조치 결과 보고서 작성
 	@RequestMapping("/action_report_write_form")
-	public String actionRptWriteForm(Model model) {
+	public String actionRptWriteForm(Model model, HttpServletRequest request) {
 		System.out.println("LjhController actionRptWriteForm Start");
+		
+		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
+		String user_id = userInfo.getUser_id();
+		String user_name = userInfo.getUser_name();
+		System.out.println("로그인 유저 : " + user_id + " / " + user_name);
 		
 		List<WaterResources> waterCategory = new ArrayList<WaterResources>();
 		waterCategory = ljhService.getWaterCategory();
@@ -258,6 +273,8 @@ public class LjhController {
 		
 		model.addAttribute("waterCategory", waterCategory);
 		model.addAttribute("checkCodeList", checkCodeList);
+		model.addAttribute("user_id", user_id);
+		model.addAttribute("user_name", user_name);
 		
 		return "/system3/ljh/water_resources/error/action_report_write";
 	}
@@ -374,13 +391,32 @@ public class LjhController {
 		return "/system3/ljh/water_resources/error/choice_error_report_list";
 	}
 	
+	
+
+//-----------------------------------------------------------------------------------------
+	// 통계 페이지
 	@RequestMapping("/chart")
-	public String chart() {
+	public String chart(Model model) {
 		
 		return "/system3/ljh/chart/chart";
 	}
 	
-	
+	// 고장 및 조치 통계
+	@ResponseBody
+	@RequestMapping("/errorChart")
+	public LjhResponse errorChart() {
+		List<Integer> errorChart = new ArrayList<Integer>();
+		errorChart = ljhService.errorChart();
+		
+		List<Integer> acitonChart = new ArrayList<Integer>();
+		acitonChart = ljhService.actionChart();
+		
+		LjhResponse ljhResponse = new LjhResponse();
+		ljhResponse.setList(errorChart);
+		ljhResponse.setSecList(acitonChart);
+		
+		return ljhResponse;
+	}
 	
 	
 	

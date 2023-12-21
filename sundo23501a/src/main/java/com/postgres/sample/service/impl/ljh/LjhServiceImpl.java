@@ -244,10 +244,6 @@ public class LjhServiceImpl extends EgovAbstractServiceImpl implements LjhServic
 	}
 
 
-	
-	
-	
-	
 //-----------------------------------------------------------------------------------------------
 	// 고장/조치결과보고 > 조치 결과 보고서 목록 페이징 작업용 전체 보고서 개수 SELECT
 	@Override
@@ -334,6 +330,7 @@ public class LjhServiceImpl extends EgovAbstractServiceImpl implements LjhServic
 		
 		List<ActionReport> actionRptList = null;
 		actionRptList = ljhDAO.ljhSearchAction(actionReport);
+		System.out.println("LjhServiceImpl searchAction breakRptList.size() : " + actionRptList.size());
 		
 		return actionRptList;
 	}
@@ -360,7 +357,24 @@ public class LjhServiceImpl extends EgovAbstractServiceImpl implements LjhServic
 		
 		return total;
 	}
+
+
 	
+//-----------------------------------------------------------------------------------------------
+	// 그래프
+	@Override
+	public List<Integer> errorChart() {
+		List<Integer> errorChart = null;
+		errorChart = ljhDAO.ljhErrorChart();
+		return errorChart;
+	}
+
+	@Override
+	public List<Integer> actionChart() {
+		List<Integer> actionChart = null;
+		actionChart = ljhDAO.ljhActionChart();
+		return actionChart;
+	}
 
 
 	
