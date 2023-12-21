@@ -117,8 +117,12 @@
                 toggleLayerVisibility(1); // 두 번째 레이어의 가시성 토글
             });
 
-            $('#sumun').on('click', function () {
-                toggleLayerVisibility(2); // 세 번째 레이어의 가시성 토글
+            $('#sumun').on('change', function () {
+                if ($(this).is(':checked')) {
+                    alert("ddd");
+                    toggleLayerVisibility(2); // 세 번째 레이어의 가시성 토글
+                }
+
             });
 
             $('#sumun2').on('click', function () {
@@ -235,33 +239,22 @@
             // 새로운 div 요소 생성
             var layerMid = $('#layer_mid3');
 
+            layerMid.append('<div class="list_level_1">하천도</div>');
+            layerMid.append('<div class="list_level_2">서울 한강<input type="checkbox" id="checkbox2" class="checkbox" value="서울 한강"></div>');
+            layerMid.append('<div class="list_level_2">경기도 한강<input type="checkbox" id="checkbox3" class="checkbox" value="경기도 한강"></div>');
+            layerMid.append('<div class="list_level_2">서울 한강 수계<input type="checkbox" id="checkbox4" class="checkbox" value="서울 한강 수계"></div>');
+            layerMid.append('<div class="list_level_2">경기 한강 수계<input type="checkbox" id="checkbox5" class="checkbox" value="경기 한강 수계"></div>');
 
-
-
-
-
-            layerMid.append('<div id="list_level_1">하천도</div>');
-            layerMid.append('<div id="list_level_2">서울 한강</div>');
-            layerMid.append('<div id="list_level_2">경기도 한강</div>');
-            layerMid.append('<div id="list_level_2">서울 한강 수계</div>');
-            layerMid.append('<div id="list_level_2">경기 한강 수계</div>');
-
-            layerMid.append('<div id="list_level_1">수문</div>');
-
-            layerMid.append('<div id="list_level_1">관측소</div>');
-            layerMid.append('<div id="list_level_1">수자원 시설물</div>');
+            layerMid.append('<div class="list_level_1">수문<input type="checkbox" id="sumun" class="checkbox" value="수문"></div>');
+            layerMid.append('<div class="list_level_1">관측소<input type="checkbox" id="checkbox7" class="checkbox" value="관측소"></div>');
+            layerMid.append('<div class="list_level_1">수자원시설물</div>');
 
             // 하위 항목에 대한 처리
-            layerMid.append('<div id="list_level_2">댐</div>');
-            layerMid.append('<div id="list_level_2">저수지</div>');
-            layerMid.append('<div id="list_level_2">펌프장</div>');
-            layerMid.append('<div id="list_level_2">취소문</div>');
-            layerMid.append('<div id="list_level_2">배소문</div>');
-
-            // 하위 항목을 수자원 시설물 아래에 추가
-
-
-
+            layerMid.append('<div class="list_level_2">댐<input type="checkbox" id="checkbox9" class="checkbox" value="댐"></div>');
+            layerMid.append('<div class="list_level_2">저수지<input type="checkbox" id="checkbox10" class="checkbox" value="저수지"></div>');
+            layerMid.append('<div class="list_level_2">펌프장<input type="checkbox" id="checkbox11" class="checkbox" value="펌프장"></div>');
+            layerMid.append('<div class="list_level_2">취소문<input type="checkbox" id="checkbox12" class="checkbox" value="취소문"></div>');
+            layerMid.append('<div class="list_level_2">배소문<input type="checkbox" id="checkbox13" class="checkbox" value="배소문"></div>');
         }
 
 
