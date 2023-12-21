@@ -25,16 +25,17 @@ public class LkhMapController {
     private final MapService mapService;
 
     @GetMapping("/layer")
-    public String waterResourceStatistics(Model model){
+    public String waterResourceStatistics(Model model) {
         return "system2/lkh/waterResourceMapSystem/Layer";
     }
+
     @ResponseBody
     @GetMapping("/obsrvlist")
-    public KjoResponse obsrvlist(Observation ov){
+    public KjoResponse obsrvlist(Observation ov) {
         Logger.info("obsrvlist START");
 
         ov.setTotal(mapService.CntObservationAll().getTotal());
-        Paging page = new Paging(ov.getTotal(), ov.getCurrentPage(), 30);
+        Paging page = new Paging(ov.getTotal(), ov.getCurrentPage(), 10);
         ov.setStart(page.getStart());
         ov.setEnd(page.getEnd());
 
@@ -43,9 +44,24 @@ public class LkhMapController {
         KjoResponse response = new KjoResponse();
         response.setObj(page);
         response.setObjList(OVList);
+        response.setType("Observation");
 
         Logger.info("obsrvlist END");
         return response;
     }
 
+    @ResponseBody
+    @GetMapping("/layerlist")
+    public KjoResponse layerList() {
+        KjoResponse response = new KjoResponse();
+        response.setType("Layer");
+        return response;
+    }
+    @ResponseBody
+    @GetMapping("/bookmarklist")
+    public KjoResponse obsrvlist() {
+        KjoResponse response = new KjoResponse();
+        response.setType("BookMark");
+        return response;
+    }
 }
