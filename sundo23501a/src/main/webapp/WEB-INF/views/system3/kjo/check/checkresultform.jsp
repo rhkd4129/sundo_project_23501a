@@ -162,7 +162,7 @@
                     </tr>
                     <tr class="table">
                         <td>점검일자:</td>
-                        <td><input type="date" name="check_date" id="check_date"></td>
+                        <td><input class="form-control" type="date" name="check_date" id="check_date"></td>
 
                         <td>기상상황:</td>
                         <td><select class="form-select" id="weather" name="weather">
@@ -171,13 +171,13 @@
                             <option value="비">비</option>
                         </select></td>
                         <td>점검자 소속:</td>
-                        <td><input class="form-control" type="text" name="user_department" id="user_department">
+                        <td><input value="${UserInfo.user_department}"  class="form-control" type="text" name="user_department" id="user_department" disabled>
                         </td>
                         <td>직급:</td>
-                        <td><input class="form-control" type="text" name="user_position" id="user_position">
+                        <td><input value="${UserInfo.user_position}" class="form-control" type="text" name="user_position" id="user_position" disabled>
                         </td>
                         <td>이름:</td>
-                        <td><input class="form-control" type="text" name="user_name" id="user_name">
+                        <td><input value="${UserInfo.user_name}" class="form-control" type="text" name="user_name" id="user_name" disabled>
                         </td>
 
                     </tr>
@@ -354,15 +354,11 @@
                         <td>특이사항:</td>
                         <td><input class="form-control" id="spec_memo" type="text"></td>
                     </tr>
-                    <tr>
-                        <td>점검일지:파일임</td>
-                        <td><input type="text"></td>
-                    </tr>
                 </table>
-                <input type="button" value="목록">
-                <input type="button" value="삭제">
-                <input type="button" value="초기화">
-                <input type="button" value="저장" id="saveButton" onclick="btnclick()">
+                <input class="btn btn-dark" type="button" value="목록" onclick="location.href='/water_resourcesList'">
+                <input class="btn btn-dark" type="button" value="삭제">
+                <input class="btn btn-dark" type="button" onclick="window.location.reload()" value="초기화">
+                <input class="btn btn-dark" type="button" value="저장" id="saveButton" onclick="btnclick()">
 
             </div>
         </div>

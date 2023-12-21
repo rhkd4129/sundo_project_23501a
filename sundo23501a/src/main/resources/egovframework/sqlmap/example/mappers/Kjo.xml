@@ -245,6 +245,21 @@
                 on wr.org_area = oz.org_area
                 left join organization org
                 on wr.org_area = org.org_area
+
+        <choose>
+            <when test="firstdate eq '' and secdate eq ''">
+            </when>
+            <when test="firstdate eq ''">
+                <![CDATA[ and cr.firstdate <= #{secdate} ]]>
+            </when>
+            <when test="secdate eq ''">
+                <![CDATA[ and cr.firstdate >= #{firstdate} ]]>
+            </when>
+            <otherwise>
+                <![CDATA[ and cr.firstdate between #{firstdate} and #{secdate} ]]>
+            </otherwise>
+        </choose>
+
         ) as tab
         left join user_info ui
         on tab.user_id = ui.user_id
@@ -258,20 +273,6 @@
             and tab.facility_code like '%' || #{facility_code} || '%'
         </if>
 
-
-        <choose>
-            <when test="firstdate eq '' and secdate eq ''">
-            </when>
-            <when test="firstdate eq ''">
-                <![CDATA[ and tab.modify_datetime <= #{secdate} ]]>
-            </when>
-            <when test="secdate eq ''">
-                <![CDATA[ and tab.modify_datetime >= #{firstdate} ]]>
-            </when>
-            <otherwise>
-                <![CDATA[ and tab.modify_datetime between #{firstdate} and #{secdate} ]]>
-            </otherwise>
-        </choose>
 
 
     </select>
@@ -293,6 +294,19 @@
                 on wr.org_area = oz.org_area
                 left join organization org
                 on wr.org_area = org.org_area
+        <choose>
+            <when test="firstdate eq '' and secdate eq ''">
+            </when>
+            <when test="firstdate eq ''">
+                <![CDATA[ and cr.firstdate <= #{secdate} ]]>
+            </when>
+            <when test="secdate eq ''">
+                <![CDATA[ and cr.firstdate >= #{firstdate} ]]>
+            </when>
+            <otherwise>
+                <![CDATA[ and cr.firstdate between #{firstdate} and #{secdate} ]]>
+            </otherwise>
+        </choose>
         ) as tab
         left join user_info ui
         on tab.user_id = ui.user_id
@@ -306,20 +320,6 @@
             and tab.facility_code like '%' || #{facility_code} || '%'
         </if>
 
-
-        <choose>
-            <when test="firstdate eq '' and secdate eq ''">
-            </when>
-            <when test="firstdate eq ''">
-                <![CDATA[ and tab.modify_datetime <= #{secdate} ]]>
-            </when>
-            <when test="secdate eq ''">
-                <![CDATA[ and tab.modify_datetime >= #{firstdate} ]]>
-            </when>
-            <otherwise>
-                <![CDATA[ and tab.modify_datetime between #{firstdate} and #{secdate} ]]>
-            </otherwise>
-        </choose>
         offset ${start}-1 limit 10
     </select>
 

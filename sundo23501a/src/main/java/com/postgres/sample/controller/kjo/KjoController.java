@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import com.postgres.sample.dto.*;
 import com.postgres.sample.service.kjo.*;
@@ -62,6 +63,8 @@ public class KjoController {
     @ResponseBody
     @GetMapping("/searchWaterResources")
     public KjoResponse searchWaterResources(@RequestParam(defaultValue = "1") String currentPage, WaterResources wr) {
+
+        wr = kjoService.nullcheck(wr);
         wr.setTotal(kjoService.searchCnt(wr).getTotal());
         Paging page = new Paging(wr.getTotal(), currentPage,10);
         wr.setStart(page.getStart());
@@ -84,13 +87,16 @@ public class KjoController {
     
 
     @GetMapping("/checkresultform")
-    public String checkresult(WaterResources wr, Model model) throws Exception {
+    public String checkresult(WaterResources wr, Model model, HttpServletRequest request) throws Exception {
     	System.out.println("checkresult");
         wr= kjoService.findWaterResourcesById(wr);
-
+        UserInfo ui = (UserInfo) request.getSession(false).getAttribute("userInfo");
+        Logger.info("user : "+ui.toString());
 
         model.addAttribute("WaterResources",wr);
-    	
+        model.addAttribute("UserInfo",ui);
+
+
         return "/system3/kjo/check/checkresultform";
     }
     
@@ -202,15 +208,16 @@ public class KjoController {
     public KjoResponse getcheckresultform(WaterResources wr,  Model model){
         System.out.println("checkresult");
 //        if (cr.get)
-        if (wr.getFacility_category().equals("전체")) {
+        if ("전체".equals(wr.getFacility_category())) {
             wr.setFacility_category("");
         }
-        if (wr.getOrg_name().equals("전체")) {
+        if ("전체".equals(wr.getOrg_name())) {
             wr.setOrg_name("");
         }
-        if (wr.getOrg_area().equals("전체")) {
+        if ("전체".equals(wr.getOrg_area())) {
             wr.setOrg_area("");
         }
+        wr = kjoService.nullcheck(wr);
 
         wr.setTotal(kjoService.searchCntWRAndCR(wr).getTotal());
 
@@ -239,6 +246,8 @@ public class KjoController {
         List<CheckReport> CRList = kjoService.findCheckReportByFcCode(checkReport);
 
         model.addAttribute("CRList", CRList);
+        model.addAttribute("currentPage", checkReport.getCurrentPage());
+
         model.addAttribute("facility_code", checkReport.getFacility_code());
         model.addAttribute("cate_name", checkReport.getFacility_code());
         model.addAttribute("page",page);
