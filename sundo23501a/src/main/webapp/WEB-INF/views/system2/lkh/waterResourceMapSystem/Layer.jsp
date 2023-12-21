@@ -1,3 +1,4 @@
+@ -1,367 +1,391 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/header.jsp" %>
@@ -5,15 +6,19 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>수자원 등록 </title>
-    <script>
-        <link rel="stylesheet"  href="http://localhost:8090/geoserver/openlayers3/ol.css"   type="text/css">
-        <link rel="stylesheet" href="http://localhost:8090/geoserver/openlayers3/ol.css" type="text/css">
-    </script>
+    <title>실시간 수문정보 관리시스템  </title>
+    <link rel="stylesheet" type="text/css" href="/css/map.css">
+
+    <link rel="stylesheet"  href="http://localhost:8090/geoserver/openlayers3/ol.css"   type="text/css">
+    <link rel="stylesheet"  href="http://localhost:8090/geoserver/openlayers3/ol.css"   type="text/css">
+    <link rel="stylesheet" href="http://localhost:8090/geoserver/openlayers3/ol.css" type="text/css">
     <script src="http://localhost:8090/geoserver/openlayers3/ol.js" type="text/javascript"></script>
     <script>
+        let view;
+        let a;
+        let init_pos;
+        let map;
         $(function() {
-
             $.ajax({
                 url         : '/main_header_2',
                 dataType    : 'html',
@@ -29,106 +34,208 @@
                     $('#footer').html(data);
                 }
             });
+            a = 'a';
+            init_pos = ol.proj.fromLonLat([126.9780, 37.5665])
+            view = new ol.View({
+                center:init_pos,
+                zoom:10
+            })
+
+
+            map = new ol.Map({
+                target: 'map',
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM()
+                    }),
+                    new ol.layer.Image({
+                        source: new ol.source.ImageWMS({
+                            url: 'http://localhost:8090/geoserver/wms',
+                            params: {
+                                'LAYERS': 'lee:SEOUL_HANGANG_HACUN',
+                                'TILED': true
+                            },
+                            serverType: 'geoserver'
+                        }),
+                        visible: false // 초기에는 레이어를 숨겨둠
+                    }),
+
+                    new ol.layer.Image({
+                        source: new ol.source.ImageWMS({
+                            url: 'http://localhost:8090/geoserver/wms',
+                            params: {
+                                'LAYERS':'lee:GYEONGGI_HANGANG_HACUN',
+                                'TILED': true
+                            },
+                            serverType: 'geoserver'
+                        }),
+                        visible: false // 초기에는 레이어를 숨겨둠
+                    }),
+                    new ol.layer.Image({
+                        source: new ol.source.ImageWMS({
+                            url: 'http://localhost:8090/geoserver/wms',
+                            params: {
+                                'LAYERS':'lee:SUMUN_POS',
+                                'TILED': true
+                            },
+                            serverType: 'geoserver'
+                        }),
+                        visible: false // 초기에는 레이어를 숨겨둠
+                    }),
+                    new ol.layer.Image({
+                        source: new ol.source.ImageWMS({
+                            url: 'http://localhost:8090/geoserver/wms',
+                            params: {
+                                'LAYERS':'lee:OBSERVATION_POS',
+                                'TILED': true
+                            },
+                            serverType: 'geoserver'
+                        }),
+                        visible: false // 초기에는 레이어를 숨겨둠
+                    }),
+                    new ol.layer.Image({
+                        source: new ol.source.ImageWMS({
+                            url: 'http://localhost:8090/geoserver/wms',
+                            params: {
+                                'LAYERS':'lee:dam_pos',
+                                'TILED': true
+                            },
+                            serverType: 'geoserver'
+                        }),
+                        visible: false // 초기에는 레이어를 숨겨둠
+                    })
+
+                ],
+                view: view,
+            });
+
+
+            $('#activateLayerButton').on('click', function () {
+                toggleLayerVisibility(1); // 두 번째 레이어의 가시성 토글
+            });
+
+            $('#sumun').on('click', function () {
+                toggleLayerVisibility(2); // 세 번째 레이어의 가시성 토글
+            });
+
+            $('#sumun2').on('click', function () {
+                toggleLayerVisibility(3); // 세 번째 레이어의 가시성 토글
+            });
+            $('#sumun3').on('click', function () {
+                toggleLayerVisibility(4); // 세 번째 레이어의 가시성 토글
+            });
+            $('#dam').on('click', function () {
+                toggleLayerVisibility(5); // 세 번째 레이어의 가시성 토글
+            });
+            $('#waterway_pos').on('click', function () {
+                toggleLayerVisibility(6); // 세 번째 레이어의 가시성 토글
+            });
+
+            function toggleLayerVisibility(layerIndex) {
+                var layer = map.getLayers().getArray()[layerIndex];
+                layer.setVisible(!layer.getVisible());
+            }
+
+
         });
+        function layerClick(currentPage, mapping){
+            console.log("fd");
 
+            if(mapping == 'obsrvlist'){
+                $.ajax({
+                    url: mapping,
+                    data: currentPage,
+                    success: function (data) {
+                        showobsrv();
+                        console.log("succ");
+                        console.log(data);
+                        const objList = data.objList;
+                        let list = $('#list');
+                        let newdiv = $('<div></div>');
+
+                        list.empty();
+                        $.each(objList, function (key, values) {
+                            const newcon = $('<div></div>');
+                            newcon.click(function () {
+                                getLatLong(values.observe_code);
+                            });
+                            newcon.append(values.observe_post);
+                            newcon.append('<input type="hidden" value="' + values.latitude + '" id="lat' + values.observe_code + '">');
+                            newcon.append('<input type="hidden" value="' + values.longitude + '" id="long' + values.observe_code + '">');
+                            list.append(newcon);
+                        });
+                    }
+                })
+            }
+
+        }
+        function showobsrv() {
+            var rightLayer = document.getElementById('right_layer');
+            if (!rightLayer) {
+                console.error("Element 'right_layer' not found.");
+                return;
+            }
+            // rightLayer.style.display = 'block';
+
+            // var c    on = $('#right_layer');
+            if(rightLayer.style.display=='none'){
+                rightLayer.style.display = 'block';
+            }else{
+                rightLayer.style.display = 'none';
+            }
+
+            var layerTop = document.getElementById('layer_top');
+            if (!layerTop) {
+                console.error("Element 'layer_top' not found.");
+                return;
+            }
+            layerTop.innerHTML = '';
+
+            var selectElement = document.createElement('select');
+            var optionElement = document.createElement('option');
+            optionElement.text = '전체';
+            selectElement.appendChild(optionElement);
+            layerTop.appendChild(selectElement);
+
+            var inputElement = document.createElement('input');
+            inputElement.setAttribute('placeholder', '관측소명을 입력하세요');
+            layerTop.appendChild(inputElement);
+
+            var searchButton = document.createElement('input');
+            searchButton.setAttribute('type', 'button');
+            searchButton.setAttribute('value', '검색');
+            searchButton.setAttribute('id', 'search');
+            layerTop.appendChild(searchButton);
+        }
+
+
+        function getLatLong(observe_code){
+            console.log(observe_code);
+            let latvalue = $('#lat' + observe_code).val();
+            let longvalue = $('#long' + observe_code).val();
+            // console.log(latvalue);
+            // console.log(longvalue);
+            alert("latvalue"+latvalue +"longvalue"+ longvalue);
+            const coordinates = [parseFloat(longvalue), parseFloat(latvalue)];  // 좌표를 배열로 변환
+            moveToCoordinates(coordinates,10)
+        }
+
+        function moveToCoordinates(coordinates, zoom) {
+            console.log("corr");
+            console.log(coordinates);
+            // let view = new ol.View();
+            console.log(view);
+            view.animate({
+                center: ol.proj.fromLonLat(coordinates),
+                duration: 2000,  // 애니메이션 지속 시간 (2초)
+                zoom: zoom,
+            });
+
+
+        }
     </script>
-    <style>
-
-        header {
-            height: 55px;
-        }
-
-        body {
-            font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-            font-size: small;
-        }
-
-        iframe {
-            width: 100%;
-            height: 250px;
-            border: none;
-        }
-
-        #map {
-            /*clear: both;*/
-            /*position: relative;*/
-            /*width: 1003px;*/
-            /*height: 600px;*/
-            border: 1px solid black;
-        }
-
-        #wrapper {
-            width: 1003px;
-        }
-
-
-        h1 {
-            color: blue;
-        }
-
-        hr {
-            border: solid 1px yellow;
-        }
-
-        .custom-mouse-position {
-            color: blue;
-            font-family: Arial;
-            font-size: 10pt;
-        }
-        #layer{
-            /*background-color: dimgray;*/
-            display: flex;
-            position: absolute;
-            width: 24%;
-            height: 100%;
-            z-index: 5;
-
-        }
-        #left_layer{
-            background-color: #2c0b0e;
-            width: 25%;
-            height: 84%;
-        }
-        #right_layer{
-            width: 75%;
-            height: 84%;
-            background-color: whitesmoke;
-        }
-
-        #obsrv_box{
-            width: 100%;
-            height: 10%;
-            background-color: red;
-
-        }
-        #layer_box{
-            width: 100%;
-            height: 10%;
-            background-color: yellow;
-        }
-        #bookmark_box{
-            width: 100%;
-            height: 10%;
-            background-color: green;
-        }
-        #layer_top {
-            display: flex;
-            justify-content: center;
-
-        }
-        #layer_mid{
-            display: flex;
-            justify-content: space-around;
-        }
-        #layer_mid2{
-            display: flex;
-            justify-content: space-around;
-        }
-
-    </style>
 </head>
-<body style="
-    height: 84%">
+<body style="height: 84%">
 <header id="header"></header>
 
 <div style="border: solid 1px black">
@@ -151,7 +258,7 @@
                 <input type="button" class="btn" value="관측소" style="width: 100%; height: 100%">
 
             </div>
-            <div id="layer_box" onclick="layerClick(1,'obsrvlist')">
+            <div id="layer_box" onclick="layerClick(1,'layerList')">
                 <input type="button" class="btn" value="레이어" style="width: 100%; height: 100%">
 
             </div>
@@ -163,11 +270,7 @@
         </div>
         <div id="right_layer" style="display: none">
             <div id="layer_top">
-                <select>
-                    <option>전체</option>
-                </select>
-                <input placeholder="관측소명을 입력하세요" >
-                <input type="button" value="검색" id="search">
+
             </div>
             <div id="layer_mid">
                 <div>관측소</div>
@@ -198,123 +301,15 @@
 
 
 
-    <footer class="footer py-2">
-        <div id="footer" class="container">
-        </div>
-    </footer>
+<footer class="footer py-2">
+    <div id="footer" class="container">
+    </div>
+</footer>
 
 <script type="text/javascript">
-
-    var map = new ol.Map({
-        target: 'map',
-        layers: [
-            new ol.layer.Tile({
-                source: new ol.source.OSM()
-            }),
-            new ol.layer.Image({
-                source: new ol.source.ImageWMS({
-                    url: 'http://localhost:8090/geoserver/wms',
-                    params: {
-                        'LAYERS': 'lee:SEOUL_HANGANG_HACUN',
-                        'TILED': true
-                    },
-                    serverType: 'geoserver'
-                }),
-                visible: false // 초기에는 레이어를 숨겨둠
-            }),
-
-            new ol.layer.Image({
-                source: new ol.source.ImageWMS({
-                    url: 'http://localhost:8090/geoserver/wms',
-                    params: {
-                        'LAYERS':'lee:GYEONGGI_HANGANG_HACUN',
-                        'TILED': true
-                    },
-                    serverType: 'geoserver'
-                }),
-                visible: false // 초기에는 레이어를 숨겨둠
-            }),
-            new ol.layer.Image({
-                source: new ol.source.ImageWMS({
-                    url: 'http://localhost:8090/geoserver/wms',
-                    params: {
-                        'LAYERS':'lee:sumun_pos',
-                        'TILED': true
-                    },
-                    serverType: 'geoserver'
-                }),
-                visible: false // 초기에는 레이어를 숨겨둠
-            }),
-            new ol.layer.Image({
-                source: new ol.source.ImageWMS({
-                    url: 'http://localhost:8090/geoserver/wms',
-                    params: {
-                        'LAYERS':'lee:observation_pos',
-                        'TILED': true
-                    },
-                    serverType: 'geoserver'
-                }),
-                visible: false // 초기에는 레이어를 숨겨둠
-            }),
-            new ol.layer.Image({
-                source: new ol.source.ImageWMS({
-                    url: 'http://localhost:8090/geoserver/wms',
-                    params: {
-                        'LAYERS':'lee:dam_pos',
-                        'TILED': true
-                    },
-                    serverType: 'geoserver'
-                }),
-                visible: false // 초기에는 레이어를 숨겨둠
-            }),
-            new ol.layer.Image({
-                source: new ol.source.ImageWMS({
-                    url: 'http://localhost:8090/geoserver/wms',
-                    params: {
-                        'LAYERS':'lee:waterway_pos',
-                        'TILED': true
-                    },
-                    serverType: 'geoserver'
-                }),
-                visible: false // 초기에는 레이어를 숨겨둠
-            })
-        ],
-        view: new ol.View({
-            center: ol.proj.fromLonLat([126.9780, 37.5665]), // 서울 시청 좌표
-            zoom: 10
-        })
-    });
-
-    $('#activateLayerButton').on('click', function () {
-        toggleLayerVisibility(1); // 두 번째 레이어의 가시성 토글
-    });
-
-    $('#sumun').on('click', function () {
-        toggleLayerVisibility(2); // 세 번째 레이어의 가시성 토글
-    });
-
-    $('#sumun2').on('click', function () {
-        toggleLayerVisibility(3); // 세 번째 레이어의 가시성 토글
-    });
-    $('#sumun3').on('click', function () {
-        toggleLayerVisibility(4); // 세 번째 레이어의 가시성 토글
-    });
-    $('#dam').on('click', function () {
-        toggleLayerVisibility(5); // 세 번째 레이어의 가시성 토글
-    });
-    $('#waterway_pos').on('click', function () {
-        toggleLayerVisibility(6); // 세 번째 레이어의 가시성 토글
-    });
-
-    function toggleLayerVisibility(layerIndex) {
-        var layer = map.getLayers().getArray()[layerIndex];
-        layer.setVisible(!layer.getVisible());
-    }
 
 
 </script>
 </body>
 </html>
-
-
 
