@@ -1,6 +1,5 @@
 package com.postgres.sample.dto;
 
-import java.util.Date;
 
 import lombok.Data;
 
@@ -27,4 +26,14 @@ public class Flow {
 	private Double december;
 	
 
+	
+	//페이징작업
+	private String rn;
+	private String search;   	private String keyword;
+	private String pageNum;		private int total;
+	private int start; 		 	private int end;
+	
+	//조회용
+	private String 	observe_post;
+	private Integer observe_code;
 }
