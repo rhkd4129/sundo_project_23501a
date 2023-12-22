@@ -97,7 +97,6 @@
             console.log("check_grade");
             console.log(check_grade);
             console.log("note");
-            console.log(음표);
 
 
             const cr = {
@@ -118,22 +117,30 @@
             };
 
             $.ajax({
-                type: "POST",
+                type: "post",
                 url: "checkresultSave",
                 data: cr,
                 success: function (response) {
                     // 서버 응답에 대한 로직
                     console.log(response);
-                    let url = "/water_resourcesList";
-                    location.replace(url);
-                }
-                ,
-                error: function (error) {
-                    console.log(error);
-                    console.error(error);
+                    let url;
+                    let code;
+                    if (response == 'Error') {
+                        url = '/water_resourcesList';
+                        location.replace(url);
 
-                    alert("값을 정확히 입력하세요");
+                    }
+
+                    console.log(url);
+                    alert('값을 확인하세요');
+                    // location.replace(url);
+                },
+                error: function (data) {
+                    console.log(data);
+                    location.replace('/water_resourcesList');
+
                 }
+
             });
         }
 

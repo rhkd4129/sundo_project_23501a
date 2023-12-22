@@ -116,7 +116,7 @@ public class KjoController {
             int error = 0;
 
             redirectAttributes.addAttribute("WaterResources",wr);
-            return "redirect:/checkresultform";
+            return "Error";
         }
 
         CheckReport checkReport = new CheckReport();
@@ -163,7 +163,7 @@ public class KjoController {
         }
 
 
-        return "redirect:/selectCheckReportList";
+        return "Success";
     }
 
     @GetMapping("/selectCheckReportList")
