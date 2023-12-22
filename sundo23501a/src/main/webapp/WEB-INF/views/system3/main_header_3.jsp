@@ -4,16 +4,16 @@
 
 <nav class="navbar navbar-expand-md navbar-dark fixed-top pms-bg-dark">
 	<div class="container-fluid">		
-			<a class="navbar-brand" style="margin-left:10px" href="/main"><b>수자원 시설물 관리시스템</b></a>
+			<a class="navbar-brand" style="margin-left:10px" href="/main"><b style="color: white;">수자원 시설물 관리시스템</b></a>
 
 		<div style="margin-left: 4%">
-				<a class="navbar-brand" style="margin-left:10px" href="/water_resourcesList"><b>점검결과작성</b></a>
+				<a class="navbar-brand" style="margin-left:10px" href="/water_resourcesList"><b style="color: white;">점검결과작성</b></a>
 
-				<a class="navbar-brand" style="margin-left:10px" href="/selectCheckReportList"><b>점검이력조회</b></a>
+				<a class="navbar-brand" style="margin-left:10px" href="/selectCheckReportList"><b style="color: white;">점검이력조회</b></a>
 
-				<a class="navbar-brand" style="margin-left:10px" href="/chart"><b>점검이력통계</b></a>
+				<a class="navbar-brand" style="margin-left:10px" href="/chart"><b style="color: white;">점검이력통계</b></a>
 
-				<a class="navbar-brand" style="margin-left:10px" href="/error_report_list"><b>고장/조치결과보고</b></a>
+				<a class="navbar-brand" style="margin-left:10px" href="/error_report_list"><b style="color: white;">고장/조치결과보고</b></a>
 
 		</div>
 
