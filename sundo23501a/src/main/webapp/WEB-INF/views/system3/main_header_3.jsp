@@ -4,27 +4,16 @@
 
 <nav class="navbar navbar-expand-md navbar-dark fixed-top pms-bg-dark">
 	<div class="container-fluid">		
-		<button class="btn btn-secondary" onclick="goto('/main')">
 			<a class="navbar-brand" style="margin-left:10px" href="/main"><b>수자원 시설물 관리시스템</b></a>
-		</button>
 
 		<div style="margin-left: 4%">
-			<button class="btn btn-secondary" onclick="goto('/main')">
 				<a class="navbar-brand" style="margin-left:10px" href="/water_resourcesList"><b>점검결과작성</b></a>
-			</button>
 
-			<button class="btn btn-secondary" onclick="goto('/main')">
 				<a class="navbar-brand" style="margin-left:10px" href="/selectCheckReportList"><b>점검이력조회</b></a>
-			</button>
 
+				<a class="navbar-brand" style="margin-left:10px" href="/chart"><b>점검이력통계</b></a>
 
-			<button class="btn btn-secondary" onclick="goto('/main')">
-				<a class="navbar-brand" style="margin-left:10px" href="/main"><b>점검이력통계</b></a>
-			</button>
-
-			<button class="btn btn-secondary" onclick="goto('/main')">
-				<a class="navbar-brand" style="margin-left:10px" href="/action_report_list"><b>고장/조치결과보고</b></a>
-			</button>
+				<a class="navbar-brand" style="margin-left:10px" href="/error_report_list"><b>고장/조치결과보고</b></a>
 
 		</div>
 
@@ -41,7 +30,7 @@
 			<%-- <img class="uploadFile" style=" width: 32px; height: 32px; border-radius: 50%;" alt="UpLoad File" src="${pageContext.request.contextPath}/${userInfo.attach_path }/${userInfo.attach_name}"> --%>
 			<ul class="nav nav-pills">
 				<li class="nav-item">
-					<a class="nav-link px-2 link-light" aria-current="page" href="#">${userInfo.user_name} (${userInfo.system_name})</a>
+					<a class="nav-link px-2 link-light" aria-current="page" href="#">${userInfo.user_name}<br>(${userInfo.system_name})</a>
 				</li>
 			</ul>
 			
@@ -86,10 +75,6 @@
 				</svg>
 			</button>
 
-			<div class="d-flex" role="search" style="margin-left:10px">        
-				<input id="search" class="form-control me-2" type="search" placeholder="통합검색" aria-label="Search" name="keyword">
-				<button class="btn btn-dark" type="submit" onclick="searchAll()">Search</button>
-			</div>
 		</div>
 	</div>
 </nav>
