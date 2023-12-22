@@ -117,13 +117,14 @@
                 toggleLayerVisibility(1); // 두 번째 레이어의 가시성 토글
             });
 
-            $('#sumun').on('change', function () {
-                if ($(this).is(':checked')) {
-                    alert("ddd");
+            $('#sumun').on('click', function () {
                     toggleLayerVisibility(2); // 세 번째 레이어의 가시성 토글
-                }
-
             });
+
+
+
+
+
 
             $('#sumun2').on('click', function () {
                 toggleLayerVisibility(3); // 세 번째 레이어의 가시성 토글
@@ -138,13 +139,17 @@
                 toggleLayerVisibility(6); // 세 번째 레이어의 가시성 토글
             });
 
-            function toggleLayerVisibility(layerIndex) {
-                var layer = map.getLayers().getArray()[layerIndex];
-                layer.setVisible(!layer.getVisible());
-            }
+
 
 
         });
+
+
+        function toggleLayerVisibility(layerIndex) {
+            var layer = map.getLayers().getArray()[layerIndex];
+            layer.setVisible(!layer.getVisible());
+        }
+
         function layerClick(currentPage, mapping){
             console.log(currentPage);
             // console.log(mapping);
@@ -234,12 +239,31 @@
 
         }
 
+        function createDivCheckBox(divClassName, CheckboxId, CheckboxLabel){
+            var newDiv = $('<div>',{class:divClassName})
+            newDiv.text(CheckboxLabel);
+            var  checkBox= $('<input>', {
+                type: 'checkbox',
+                id: CheckboxId,
+                class: 'checkBox',
+                click: function() {
+                    toggleLayerVisibility(2);
+                }
+            });
+            newDiv.append(checkBox)
+            return newDiv
+        }
+
         function showlayer(getdatatype, data) {
             rightlayerShow(getdatatype);
             // 새로운 div 요소 생성
             var layerMid = $('#layer_mid3');
 
             layerMid.append('<div class="list_level_1">하천도</div>');
+
+            seoulHangang = createDivCheckBox("list_level_2","seoulHacun","서울한강");
+
+            layerMid.append(seoulHangang);
             layerMid.append('<div class="list_level_2">서울 한강<input type="checkbox" id="checkbox2" class="checkbox" value="서울 한강"></div>');
             layerMid.append('<div class="list_level_2">경기도 한강<input type="checkbox" id="checkbox3" class="checkbox" value="경기도 한강"></div>');
             layerMid.append('<div class="list_level_2">서울 한강 수계<input type="checkbox" id="checkbox4" class="checkbox" value="서울 한강 수계"></div>');
@@ -255,7 +279,10 @@
             layerMid.append('<div class="list_level_2">펌프장<input type="checkbox" id="checkbox11" class="checkbox" value="펌프장"></div>');
             layerMid.append('<div class="list_level_2">취소문<input type="checkbox" id="checkbox12" class="checkbox" value="취소문"></div>');
             layerMid.append('<div class="list_level_2">배소문<input type="checkbox" id="checkbox13" class="checkbox" value="배소문"></div>');
+
         }
+
+
 
 
 
