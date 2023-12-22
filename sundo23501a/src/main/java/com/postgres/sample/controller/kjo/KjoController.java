@@ -25,41 +25,41 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequiredArgsConstructor
 public class KjoController {
-	private static final Logger Logger = LoggerFactory.getLogger(KjoController.class);
+    private static final Logger Logger = LoggerFactory.getLogger(KjoController.class);
     private final KjoService kjoService;
 
     @GetMapping("/water_resourcesList")
     public String waterResoucesList(@RequestParam(defaultValue = "1") String currentPage, Model model) {
-    	System.out.println("water_resourcesList");
-    	WaterResources wr = new WaterResources();
-    	//	페이징 위한 수자원시설물 개수
-    	wr.setTotal(kjoService.cntWaterResource().getTotal());
-    	Paging page = new Paging(wr.getTotal(), currentPage,10);
-    	wr.setStart(page.getStart());
-    	wr.setEnd(page.getEnd());
-    	
-    	List<WaterResources> wrctgList = kjoService.findFacilityCategory();
-    	List<OrgArea> orgList = kjoService.findAllOrgArea();
-    	List<WaterResources> wrList = kjoService.PaingWaterResourceLists(wr);
+        System.out.println("water_resourcesList");
+        WaterResources wr = new WaterResources();
+        //   페이징 위한 수자원시설물 개수
+        wr.setTotal(kjoService.cntWaterResource().getTotal());
+        Paging page = new Paging(wr.getTotal(), currentPage,10);
+        wr.setStart(page.getStart());
+        wr.setEnd(page.getEnd());
 
-    	model.addAttribute("wrctgList",wrctgList);
-    	model.addAttribute("orgList",orgList);
-    	model.addAttribute("wrList",wrList);
-    	model.addAttribute("page",page);
-    	return "/system3/kjo/water_resources/water_resourcesList";
+        List<WaterResources> wrctgList = kjoService.findFacilityCategory();
+        List<OrgArea> orgList = kjoService.findAllOrgArea();
+        List<WaterResources> wrList = kjoService.PaingWaterResourceLists(wr);
+
+        model.addAttribute("wrctgList",wrctgList);
+        model.addAttribute("orgList",orgList);
+        model.addAttribute("wrList",wrList);
+        model.addAttribute("page",page);
+        return "/system3/kjo/water_resources/water_resourcesList";
     }
 
     @ResponseBody
     @GetMapping("/facility_code_List")
     public List<WaterResources> facilityCodeList(@RequestParam String facility_category) {
-    	
+
         WaterResources wr = new WaterResources();
         wr.setFacility_category(facility_category);
         List<WaterResources> wrList = kjoService.findFacilityAddrbyCategory(wr);
         System.out.println(wrList);
         return wrList;
     }
-    
+
     @ResponseBody
     @GetMapping("/searchWaterResources")
     public KjoResponse searchWaterResources(@RequestParam(defaultValue = "1") String currentPage, WaterResources wr) {
@@ -84,11 +84,11 @@ public class KjoController {
         return response;
 
     }
-    
+
 
     @GetMapping("/checkresultform")
     public String checkresult(WaterResources wr, Model model, HttpServletRequest request) throws Exception {
-    	System.out.println("checkresult");
+        System.out.println("checkresult");
         wr= kjoService.findWaterResourcesById(wr);
         UserInfo ui = (UserInfo) request.getSession(false).getAttribute("userInfo");
         Logger.info("user : "+ui.toString());
@@ -99,7 +99,7 @@ public class KjoController {
 
         return "/system3/kjo/check/checkresultform";
     }
-    
+
     @PostMapping("/checkresultSave")
     public String checkresultSave(KJO_CheckReport cr, RedirectAttributes redirectAttributes) {
         //  입력된 사용자
@@ -135,7 +135,7 @@ public class KjoController {
         checkReport.setCreate_datetime(String.valueOf(LocalDate.now()));
 
         int result = kjoService.inputChkReport(checkReport);
-/*              chkList저장                                                */
+        /*              chkList저장                                                */
         String notes = cr.getNote();
         String grades = cr.getCheck_grade();
         String[] noteArray = notes.split("\\|",-1);
@@ -179,7 +179,7 @@ public class KjoController {
 //        List<CheckReport> crList = kjoService.pageChkReport(crt);
 
         WaterResources wr = new WaterResources();
-        //	페이징 위한 수자원시설물 개수
+        //   페이징 위한 수자원시설물 개수
         wr.setTotal(kjoService.cntWaterResource().getTotal());
         Paging page = new Paging(wr.getTotal(), currentPage,10);
         wr.setStart(page.getStart());
@@ -249,7 +249,7 @@ public class KjoController {
         model.addAttribute("currentPage", checkReport.getCurrentPage());
 
         model.addAttribute("facility_code", checkReport.getFacility_code());
-        model.addAttribute("cate_name", checkReport.getFacility_code());
+        model.addAttribute("cate_name", checkReport.getCate_name());
         model.addAttribute("page",page);
 
         return "system3/kjo/check/selectCheckReportList2";
@@ -282,9 +282,4 @@ public class KjoController {
 
 
 
-
-
-    
-    
-	
 }
