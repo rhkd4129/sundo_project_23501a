@@ -38,7 +38,8 @@ public class Observation{
 	private String  org_name;
 	private String  river_name;
 	private String  observe_type_name;
-	
+	private String	currentPage;
+
 	//페이징작업
 	private String rn;
 	private String search;   	private String keyword;
