@@ -95,7 +95,7 @@ $(function() {
 								<th>본문</th>
 								<td>							
 									<div class="input-group">
-										<textarea class="form-control" aria-label="With textarea" name="body" rows="15">${board.doc_body}</textarea>
+										<textarea class="form-control" aria-label="With textarea" name="body" rows="15">${board.body}</textarea>
 									</div>
 								</td>
 							</tr>

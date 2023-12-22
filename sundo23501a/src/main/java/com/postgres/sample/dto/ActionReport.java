@@ -28,10 +28,10 @@ public class ActionReport {
 	private String 	modify_datetime;
 	
 	// 페이징 작업
-	private int		rn;
-	private String	search;			private String	keyword;
-	private String	pageNum;		private int		total;
-	private int		start; 		 	private int 	end;
+	private int rn;
+	private String search;   	private String keyword;
+	private String pageNum;		private int total;
+	private int start; 		 	private int end;
 	
 	// 조회용 추가
 	private String	user_name;

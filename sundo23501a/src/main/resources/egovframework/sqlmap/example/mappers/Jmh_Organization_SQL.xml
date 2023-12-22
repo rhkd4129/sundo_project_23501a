@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.postgres.sample.service.impl.dao.jmh.OrganizationDAO">
+
+	<!-- 기간명 가져오기 -->
+	<select id="JmhOrgList" resultType="Organization">
+		SELECT *
+		FROM ORGANIZATION
+	</select>
+
+	<!-- 코드 분류 가져오기 -->
+	<select id="JmhCodeList" parameterType="Code" resultType="Code">
+		SELECT *
+		FROM CODE
+		WHERE field_name = #{field_name}
+		ORDER BY cate_code
+	</select>	
+	
+	<!-- 총 문서수 -->
+	<select id="JmhTotalCount" parameterType="Organization" resultType="int">
+		SELECT Count(*) 
+		FROM ORGANIZATION
+	</select>
+
+	<!-- 검색 문서수 -->
+	<select id="JmhSearchCount" parameterType="Organization" resultType="int">
+		SELECT Count(*)
+		FROM (	SELECT p.*, o.org_area_name 
+				FROM ORGANIZATION p, ORG_AREA o 
+				WHERE p.org_area = o.org_area ) a
+		WHERE 1=1
+			<choose>
+				<when test="org_area != 'all'">
+					 AND a.org_area = #{org_area}
+				</when>
+			</choose>
+			<choose>
+				<when test="org_name != ''">
+					 AND a.org_name like '%' || #{org_name} || '%'
+				</when>
+			</choose>
+	</select>
+	
+	<!-- 문서 목록 -->
+	<select id="JmhBoardList" parameterType="Organization" resultType="Organization">
+		SELECT *
+		FROM
+		(
+			SELECT (row_number() over()) AS rn, a.*
+			FROM
+					( SELECT p.*, o.org_area_name 
+					  FROM ORGANIZATION p, ORG_AREA o 
+					  WHERE p.org_area = o.org_area 
+					  ORDER BY p.org_code DESC) a
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+
+	<!-- 검색 목록 -->
+	<select id="JmhSearchList" parameterType="Organization" resultType="Organization">
+		SELECT *
+		FROM
+		(
+			SELECT (row_number() over()) AS rn, a.*
+			FROM
+					( SELECT p.*, o.org_area_name 
+					  FROM ORGANIZATION p, ORG_AREA o 
+					  WHERE p.org_area = o.org_area 
+					  ORDER BY p.org_code DESC) a
+			WHERE 1=1
+			<choose>
+				<when test="org_area != 'all'">
+					 AND a.org_area = #{org_area}
+				</when>
+			</choose>
+			<choose>
+				<when test="org_name != ''">
+					 AND a.org_name like '%' || #{org_name} || '%'
+				</when>
+			</choose>
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+		
+	</select>
+	
+	<!-- 문서 등록 -->
+	<insert id="JmhInsertBoard" parameterType="Organization">
+		INSERT INTO 
+			ORGANIZATION(
+				ORG_CODE, 
+				ORG_NAME,
+				ORG_AREA,
+				ORG_ADDR, 
+				ORG_TEL,
+				CREATE_DATETIME,
+				MODIFY_DATETIME
+			) 				
+			VALUES(
+				#{org_code}, 
+				#{org_name},
+				#{org_area},
+				#{org_addr}, 
+				#{org_tel},
+				NOW(),
+				NOW()
+			)	
+	</insert>
+	
+	<!-- 문서 조회 -->
+	<select id="JmhSelectBoard" parameterType="Organization" resultType="Organization">
+		SELECT 	p.*, o.org_area_name
+		FROM ORGANIZATION p
+			LEFT OUTER JOIN ORG_AREA o
+			ON p.org_area = o.org_area 
+		WHERE p.org_code = #{org_code}
+	</select>
+	
+	<!-- 문서 수정 -->
+	<update id="JmhUpdateBoard" parameterType="Organization">
+		UPDATE ORGANIZATION 
+		SET 
+			ORG_NAME	= #{org_name},
+			ORG_AREA	= #{org_area},
+			ORG_ADDR	= #{org_addr},
+			ORG_TEL		= #{org_tel},
+			MODIFY_DATETIME	= now()
+		WHERE org_code=#{org_code}
+	</update>
+	
+	<!-- 문서 삭제 -->
+	<delete id="JmhDeleteBoard" parameterType="Organization">
+		DELETE FROM ORGANIZATION 
+		WHERE org_code=#{org_code}
+	</delete>
+	
+	<!-- 행정구역 -->
+	<select id="JmhOrgAreaList" parameterType="OrgArea" resultType="OrgArea">
+		SELECT * FROM ORG_AREA
+	</select>
+		
+</mapper>
