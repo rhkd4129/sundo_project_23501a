@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+.page-link {
+	cursor:pointer;
+}
+
 /*좌측메뉴*/
 .menubar {
 	min-width: 200px;

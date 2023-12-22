@@ -13,7 +13,7 @@
 	}
 	
 	table {
-		width: 100%;
+ 		width: 100%;
 		border-top: solid gray 2px;
 		border-bottom: solid gray 2px;
 	}
@@ -40,75 +40,20 @@
 	}
 	
 	.rptTbl th {
-		width: 150px;
+		width: 100px;
 	}
 
 	.alarmTbl .cate {
-		width: 150px;
+		width: 100px;
 	}
 
-	header {
-		height: 55px;
-	}
 </style>
-
-<script>
-
-	$(function() {
-
-		$.ajax({
-			url			: '/main_header_3',
-			dataType 	: 'html',
-			success		: function(data) {
-				$('#header').html(data);
-			}
-		});
-
-		$.ajax({
-			url			: '/main_footer',
-			dataType 	: 'html',
-			success		: function(data) {
-				$('#footer').html(data);
-			}
-		});
-	});
-
-</script>
-
-<script type="text/javascript">
-	function delErrorRpt() {
-		var answer = confirm('보고서를 삭제하시겠습니까?')
-		
-		if (answer) {
-			var doc_no = '${breakReport.doc_no}';
-			var sendurl = "/error_report_delete?doc_no=" + doc_no;
-			
-			$.ajax({
-				url		: sendurl,
-				dataType: 'json',
-				success : function(data) {
-					console.log(data);
-					
-					alert("삭제되었습니다");
-					location.href="/error_report_list";
-				}
-			});
-		
-		} else {
-			return false;
-		}		
-	};
-
-</script>
 </head>
 <body>
-
-	<header id="header"></header>
-	
 	<div class="container" style="margin-top: 3%">
 		<div class="row">
 			<div id="center">
-				<p class="title">고장 보고서 상세 페이지</p>
+				<p class="title">고장 보고서</p>
 				<div>
 					<table class="rptTbl">
 						<tr>
@@ -154,19 +99,12 @@
 					</table>
 					
 					<div class="btns">
-						<button class="btn btn-dark btn-sm" onclick="location.href='/error_report_list'">목록</button>
-						<button class="btn btn-dark btn-sm" onclick="location.href='/error_report_update_form?doc_no=${breakReport.doc_no}'">수정</button>
-						<button class="btn btn-dark btn-sm" onclick="delErrorRpt()">삭제</button>
+						<button class="btn btn-dark btn-sm" onclick="location.href='/choice_error_report_list?facility_category=${breakReport.facility_category}&facility_code=${breakReport.facility_code }'">목록</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	<footer class="footer py-2">
-		<div id="footer" class="container">
-		</div>
-	</footer>
 
 </body>
 </html>
