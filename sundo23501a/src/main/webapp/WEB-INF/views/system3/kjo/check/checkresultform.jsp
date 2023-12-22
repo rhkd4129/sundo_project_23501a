@@ -13,7 +13,7 @@
     <!-- COMMON END -->
     <style type="text/css">
         header {
-            height: 55px;
+            height: 10px;
         }
 
         container{
@@ -142,10 +142,12 @@
 <body>
 
 
-    <header id="header"></header>
+
+<header id="header" style="margin-top: 3%"></header>
 
 
-    <div class="container" style="margin-top: 3%">
+
+<div class="container" style="margin-top: 3%">
         <div class="row">
             <div id="center">
 
@@ -182,21 +184,21 @@
                     </tr>
                     <tr>
                         <th>점검위치</th>
-                        <th>점검 항목</th>
+                        <th colspan="4">점검 항목</th>
                         <th>평가 점수</th>
-                        <th>비고</th>
+                        <th colspan="4">비고</th>
                     </tr>
 
                     <tr>
                         <td>마루</td>
-                        <td>
+                        <td colspan="4">
                             <ul>
                                 <li>균열 및 단차</li>
                                 <li>수축이음부의 열림</li>
                                 <li>기타사항</li>
                             </ul>
                         </td>
-                        <td>
+                        <td >
                             <ul>
                                 <li><select class="check_grade form-select" id="check_grade1">
                                     <option value="a">a</option>
@@ -215,7 +217,7 @@
                                 </select></li>
                             </ul>
                         </td>
-                        <td>
+                        <td colspan="4">
                             <ul>
                                 <li><input class="note form-control" id="note1" type="text" name="input1"></li>
                                 <li><input class="note form-control" id="note2" type="text" name="input2"></li>
@@ -226,7 +228,7 @@
 
                     <tr>
                         <td>상류면</td>
-                        <td>
+                        <td colspan="4">
                             <ul>
                                 <li>수축이음부의 열림</li>
                                 <li>균열</li>
@@ -258,7 +260,7 @@
                                 </select></li>
                             </ul>
                         </td>
-                        <td>
+                        <td colspan="4">
                             <ul>
                                 <li><input class="note form-control" id="note4" type="text" name="input1"></li>
                                 <li><input class="note form-control" id="note5" type="text" name="input2"></li>
@@ -269,7 +271,7 @@
                     </tr>
                     <tr>
                         <td>하류면</td>
-                        <td>
+                        <td colspan="4">
                             <ul>
                                 <li>균열 및 단차</li>
                                 <li>수축 및 수평시공이음부를 통한 누수</li>
@@ -301,7 +303,7 @@
                                 </select></li>
                             </ul>
                         </td>
-                        <td>
+                        <td colspan="4">
                             <ul>
                                 <li><input class="note form-control" id="note8" type="text" name="input2"></li>
                                 <li><input class="note form-control" id="note9" type="text" name="input3"></li>
@@ -312,7 +314,7 @@
                     </tr>
                     <tr>
                         <td>검사량</td>
-                        <td>
+                        <td colspan="4">
                             <ul>
                                 <li>횡방향 검사량에서의 균열</li>
                                 <li>상류 종방향 검사량에서의 균열</li>
@@ -332,7 +334,7 @@
                                 </select></li>
                             </ul>
                         </td>
-                        <td>
+                        <td  colspan="4">
                             <ul>
                                 <li><input class="note form-control" id="note12" type="text" name="input1"></li>
                                 <li><input class="note form-control" id="note13" type="text" name="input2"></li>
@@ -340,9 +342,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>점검결과:</td>
+                        <td >점검결과:</td>
 
-                        <td>
+                        <td colspan="9">
                             <select class="form-select" id="check_result" name="check_result">
                                 <option value="보수필요">보수필요</option>
                                 <option value="양호">양호</option>
@@ -351,7 +353,7 @@
                     </tr>
                     <tr>
                         <td>특이사항:</td>
-                        <td><input class="form-control" id="spec_memo" type="text"></td>
+                        <td colspan="9"><input class="form-control" id="spec_memo" type="text"></td>
                     </tr>
                     <tr>
                         <td>점검일지:파일임</td>
