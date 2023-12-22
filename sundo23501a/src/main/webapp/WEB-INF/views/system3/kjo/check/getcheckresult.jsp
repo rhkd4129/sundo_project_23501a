@@ -70,7 +70,7 @@
         </tr>
         <tr class="table">
             <td>점검일자:</td>
-            <td><input class="form-control" type="date" name="check_date" id="check_date" value="${CheckReport.modify_datetime}"></td>
+            <td><input type="date" name="check_date" id="check_date" value="${CheckReport.modify_datetime}"></td>
 
             <td>기상상황:</td>
             <td>
