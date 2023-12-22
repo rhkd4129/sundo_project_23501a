@@ -1,12 +1,9 @@
 package com.postgres.sample.controller.kjo;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import com.postgres.sample.dto.*;
 import com.postgres.sample.service.kjo.*;
@@ -26,7 +23,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class KjoController {
 	private static final Logger Logger = LoggerFactory.getLogger(KjoController.class);
+	
+	
     private final KjoService kjoService;
+
+    
 
     @GetMapping("/water_resourcesList")
     public String waterResoucesList(@RequestParam(defaultValue = "1") String currentPage, Model model) {
@@ -63,8 +64,6 @@ public class KjoController {
     @ResponseBody
     @GetMapping("/searchWaterResources")
     public KjoResponse searchWaterResources(@RequestParam(defaultValue = "1") String currentPage, WaterResources wr) {
-
-        wr = kjoService.nullcheck(wr);
         wr.setTotal(kjoService.searchCnt(wr).getTotal());
         Paging page = new Paging(wr.getTotal(), currentPage,10);
         wr.setStart(page.getStart());
@@ -87,16 +86,13 @@ public class KjoController {
     
 
     @GetMapping("/checkresultform")
-    public String checkresult(WaterResources wr, Model model, HttpServletRequest request) throws Exception {
+    public String checkresult(WaterResources wr, Model model) throws Exception {
     	System.out.println("checkresult");
         wr= kjoService.findWaterResourcesById(wr);
-        UserInfo ui = (UserInfo) request.getSession(false).getAttribute("userInfo");
-        Logger.info("user : "+ui.toString());
+
 
         model.addAttribute("WaterResources",wr);
-        model.addAttribute("UserInfo",ui);
-
-
+    	
         return "/system3/kjo/check/checkresultform";
     }
     
@@ -113,10 +109,9 @@ public class KjoController {
         wr.setFacility_code(cr.getFacility_code());
         UserInfo uid = (kjoService.findUserId(ui));
         if (uid.equals(null)) {
-            int error = 0;
 
             redirectAttributes.addAttribute("WaterResources",wr);
-            return "redirect:/checkresultform";
+            return "redirect/checkresultSave";
         }
 
         CheckReport checkReport = new CheckReport();
@@ -149,7 +144,7 @@ public class KjoController {
 
         chkList.setDoc_no(checkReport.getDoc_no());
         chkList.setFacility_code(checkReport.getFacility_code());
-        chkList.setChecklist_no(kjoService.cntChkListByFacilityCode(chkList).getTotal());
+        chkList.setChecklistist_no(kjoService.cntChkListByFacilityCode(chkList).getTotal());
 
         for (int i = 0; i < chkItemInfoList.size(); i++) {
             chkList.setCheck_category(chkItemInfoList.get(i).getCheck_category());
@@ -157,13 +152,13 @@ public class KjoController {
             chkList.setCheck_grade(gradeArray[i]);
             chkList.setNote(noteArray[i]);
 
-            chkList.setChecklist_no(chkList.getChecklist_no()+1);
+            chkList.setChecklistist_no(chkList.getChecklistist_no()+1);
 
             chklistresult += kjoService.inputChkList(chkList);
         }
 
 
-        return "redirect:/selectCheckReportList";
+        return "forward:/water_resourcesList";
     }
 
     @GetMapping("/selectCheckReportList")
@@ -171,115 +166,46 @@ public class KjoController {
         List<WaterResources> wrctgList = kjoService.findFacilityCategory();
         List<OrgArea> orgList = kjoService.findAllOrgArea();
         List<Organization> organizationList = kjoService.findAllOrgList();
-//        CheckReport crt = kjoService.cntAllReport();
-//        Paging page = new Paging(crt.getTotal(), currentPage, 10);
-//        crt.setStart(page.getStart());
-//        crt.setEnd(page.getEnd());
-//
-//        List<CheckReport> crList = kjoService.pageChkReport(crt);
+        CheckReport crt = kjoService.cntAllReport();
+        Paging page = new Paging(crt.getTotal(), currentPage);
+        crt.setStart(page.getStart());
+        crt.setEnd(page.getEnd());
 
-        WaterResources wr = new WaterResources();
-        //	페이징 위한 수자원시설물 개수
-        wr.setTotal(kjoService.cntWaterResource().getTotal());
-        Paging page = new Paging(wr.getTotal(), currentPage,10);
-        wr.setStart(page.getStart());
-        wr.setEnd(page.getEnd());
+        List<CheckReport> crList = kjoService.pageChkReport(crt);
 
 
-        List<WaterResources> wrList = kjoService.PaingWaterResourceAndCheckReport(wr);
+        for ( CheckReport cr: crList){
+            cr.setModify_datetime(cr.getModify_datetime().substring(0,10));
 
-//        for ( CheckReport cr: crList){
-//            cr.setModify_datetime(cr.getModify_datetime().substring(0,10));
-//
-//        }
+        }
 
 
         model.addAttribute("wrctgList",wrctgList);
-        model.addAttribute("wrList",wrList);
         model.addAttribute("organizationList",organizationList);
         model.addAttribute("orgList",orgList);
-//        model.addAttribute("crList",crList);
+        model.addAttribute("crList",crList);
         model.addAttribute("page",page);
         return "/system3/kjo/check/selectCheckReportList";
     }
 
     @ResponseBody
     @GetMapping("/getcheckresultform")
-    public KjoResponse getcheckresultform(WaterResources wr,  Model model){
+    public KjoResponse getcheckresultform(CheckReport cr,  Model model){
         System.out.println("checkresult");
-//        if (cr.get)
-        if ("전체".equals(wr.getFacility_category())) {
-            wr.setFacility_category("");
-        }
-        if ("전체".equals(wr.getOrg_name())) {
-            wr.setOrg_name("");
-        }
-        if ("전체".equals(wr.getOrg_area())) {
-            wr.setOrg_area("");
-        }
-        wr = kjoService.nullcheck(wr);
 
-        wr.setTotal(kjoService.searchCntWRAndCR(wr).getTotal());
+        cr.setTotal(kjoService.cntSearchChkReport(cr).getTotal());
 
-        Paging page = new Paging(wr.getTotal(), wr.getCurrentPage(),10);
-        wr.setStart(page.getStart());
-        wr.setEnd(page.getEnd());
+        Paging page = new Paging(cr.getTotal(), cr.getCurrentPage());
+        cr.setStart(page.getStart());
+        cr.setEnd(page.getEnd());
 
-        List<WaterResources> CRList =  kjoService.searchWRAndCR(wr);
+        List<CheckReport> CRList =  kjoService.pageSearchChkReport(cr);
         KjoResponse response = new KjoResponse();
         response.setObj(page);
         response.setObjList(CRList);
 
         return response;
     }
-
-    @GetMapping("/selectcheckReportlist2")
-    public String selectcheckReportlist2(CheckReport checkReport,Model model) {
-        checkReport.setTotal(kjoService.cntCheckReportByFcCode(checkReport).getTotal());
-        Paging page = new Paging(checkReport.getTotal(), checkReport.getCurrentPage(),10);
-        checkReport.setStart(page.getStart());
-        checkReport.setEnd(page.getEnd());
-        WaterResources wr = new WaterResources();
-        wr.setFacility_code(checkReport.getFacility_code());
-
-        checkReport.setCate_name( kjoService.findWaterResourcesById(wr).getCate_name());
-        List<CheckReport> CRList = kjoService.findCheckReportByFcCode(checkReport);
-
-        model.addAttribute("CRList", CRList);
-        model.addAttribute("currentPage", checkReport.getCurrentPage());
-
-        model.addAttribute("facility_code", checkReport.getFacility_code());
-        model.addAttribute("cate_name", checkReport.getFacility_code());
-        model.addAttribute("page",page);
-
-        return "system3/kjo/check/selectCheckReportList2";
-    }
-
-
-
-    @GetMapping("/getcheckresult")
-    public String getcheckresult(CheckReport cr,Model model) {
-        CheckReport checkReport = kjoService.findCheckReportByDocNo(cr);
-        CheckList cl = new CheckList();
-        cl.setDoc_no(cr.getDoc_no());
-        List<CheckList> CLList = kjoService.findCheckListAndCodeByDocNo(cl);
-
-        List<CheckList> FloorList = CLList.stream().filter(checkList -> "마루".equals(checkList.getCheck_category())).collect(Collectors.toList());
-        List<CheckList> TopCLList = CLList.stream().filter(checkList -> "상류면".equals(checkList.getCheck_category())).collect(Collectors.toList());
-        List<CheckList> BotList = CLList.stream().filter(checkList -> "하류면".equals(checkList.getCheck_category())).collect(Collectors.toList());
-        List<CheckList> IpqList = CLList.stream().filter(checkList -> "검사량".equals(checkList.getCheck_category())).collect(Collectors.toList());
-
-
-        model.addAttribute("CheckReport", checkReport);
-        model.addAttribute("CheckList", CLList);
-
-        model.addAttribute("FloorList", FloorList);
-        model.addAttribute("TopCLList", TopCLList);
-        model.addAttribute("BotList", BotList);
-        model.addAttribute("IpqList", IpqList);
-        return "system3/kjo/check/getcheckresult";
-    }
-
 
 
 

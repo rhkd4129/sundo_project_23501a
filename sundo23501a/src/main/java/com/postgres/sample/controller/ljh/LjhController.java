@@ -1,23 +1,22 @@
 package com.postgres.sample.controller.ljh;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.postgres.sample.dto.ActionReport;
 import com.postgres.sample.dto.Alarm;
 import com.postgres.sample.dto.BreakReport;
 import com.postgres.sample.dto.Code;
-import com.postgres.sample.dto.LjhResponse;
 import com.postgres.sample.dto.Paging;
-import com.postgres.sample.dto.UserInfo;
 import com.postgres.sample.dto.WaterResources;
 import com.postgres.sample.service.ljh.LjhService;
 
@@ -34,34 +33,29 @@ public class LjhController {
 	public String errorRptList(String currentPage, Model model) {
 		System.out.println("LjhController errorReportList Start");
 		
+		List<BreakReport> breakReportList = new ArrayList<BreakReport>();
+		breakReportList = ljhService.getErrorRptList();
+		
 		// 페이징 작업
-		int total = ljhService.breakRptCount();
+		int total = breakReportList.size();
 		
 		Paging paging = new Paging(total, currentPage, 10);
 		BreakReport breakRpt = new BreakReport();
 		breakRpt.setStart(paging.getStart());
 		breakRpt.setEnd(paging.getEnd());
+		
 		List<BreakReport> breakRptList = ljhService.getBreakRptListPage(breakRpt);
 		
-		List<WaterResources> waterCategory = new ArrayList<WaterResources>();
-		waterCategory = ljhService.getWaterCategory();		// 수자원 시설물 종류 SELECT
-		
-		model.addAttribute("breakRptList", breakRptList);
+		model.addAttribute("breakReportList", breakRptList);
 		model.addAttribute("page", paging);
-		model.addAttribute("waterCategory", waterCategory);
 		
 		return "/system3/ljh/water_resources/error/error_report_list";
 	}
 	
 	// 고장 보고서 작성 페이지로 이동
 	@RequestMapping("/error_report_write_form")
-	public String errorRptWriteForm(Model model, HttpServletRequest request) {
+	public String errorRptWriteForm(Model model) {
 		System.out.println("LjhController errorReportWriteForm Start");
-		
-		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
-		String user_id = userInfo.getUser_id();
-		String user_name = userInfo.getUser_name();
-		System.out.println("로그인 유저 : " + user_id + " / " + user_name);
 		
 		List<WaterResources> waterCategory = new ArrayList<WaterResources>();
 		waterCategory = ljhService.getWaterCategory();
@@ -71,8 +65,6 @@ public class LjhController {
 		
 		model.addAttribute("waterCategory", waterCategory);
 		model.addAttribute("checkCodeList", checkCodeList);
-		model.addAttribute("user_id", user_id);
-		model.addAttribute("user_name", user_name);
 		
 		return "/system3/ljh/water_resources/error/error_report_write";
 	}
@@ -125,7 +117,7 @@ public class LjhController {
 	
 	// 고장 보고서 상세
 	@RequestMapping("/error_report_read")
-	public String errorRptRead(Integer doc_no, Model model, String popup) {
+	public String errorRptRead(Integer doc_no, Model model) {
 		System.out.println("LjhController errorRptRead Start");
 		
 		BreakReport breakReport = new BreakReport();
@@ -137,12 +129,7 @@ public class LjhController {
 		model.addAttribute("breakReport", breakReport);
 		model.addAttribute("alarmList", alarmList);
 		
-		if ("Y".equals(popup)) {
-			// popup=Y (조치 결과 보고서 작성 페이지 > 고장보고서 보기 클릭 시)
-			return "/system3/ljh/water_resources/error/choice_error_report_read";
-		} else {
-			return "/system3/ljh/water_resources/error/error_report_read";
-		}
+		return "/system3/ljh/water_resources/error/error_report_read";
 	}
 	
 	// 고장 보고서 수정
@@ -151,7 +138,7 @@ public class LjhController {
 		System.out.println("LjhController errorRptUpdateForm Start");
 		
 		List<WaterResources> waterCategory = new ArrayList<WaterResources>();
-		waterCategory = ljhService.getWaterCategory();		// 수자원 시설물 종류 SELECT
+		waterCategory = ljhService.getWaterCategory();		// 수자원 시설물 카테고리 SELECT
 		
 		List<Code> checkCodeList = new ArrayList<Code>();
 		checkCodeList = ljhService.getCheckCode();			// 점검대상, 중분류, 소분류 SELECT
@@ -205,30 +192,6 @@ public class LjhController {
 		return result;
 	}
 	
-	// 고장 보고서 검색
-	@ResponseBody
-	@RequestMapping("/search_error")
-	public LjhResponse searchError(@RequestParam(defaultValue = "1") String currentPage, BreakReport breakReport) {
-		System.out.println("LjhController searchError Start");
-		
-		breakReport.setTotal(ljhService.searchErrCnt(breakReport));
-		
-		Paging page = new Paging(breakReport.getTotal(), currentPage, 10);
-		breakReport.setStart(page.getStart());
-		breakReport.setEnd(page.getEnd());
-		
-		// System.out.println("endPage : " + page.getEndPage());
-		
-		List<BreakReport> breakRptList = new ArrayList<BreakReport>();
-		breakRptList = ljhService.searchError(breakReport);
-		
-		LjhResponse ljhResponse = new LjhResponse();
-		ljhResponse.setList(breakRptList);
-		ljhResponse.setObj(page);
-		
-		return ljhResponse;
-	}
-	
 	
 //-----------------------------------------------------------------------------------------
 	// 고장/조치결과보고 > 조치 결과 보고서 목록
@@ -236,34 +199,29 @@ public class LjhController {
 	public String actionRptList(String currentPage, Model model) {
 		System.out.println("LjhController actionRptList Start");
 		
+		List<ActionReport> actionReportList = new ArrayList<ActionReport>();
+		actionReportList = ljhService.getActionRptList();
+		
 		// 페이징 작업
-		int total = ljhService.actionRptCount();
+		int total = actionReportList.size();
 		
 		Paging paging = new Paging(total, currentPage, 10);
 		ActionReport actionRpt = new ActionReport();
 		actionRpt.setStart(paging.getStart());
 		actionRpt.setEnd(paging.getEnd());
+		
 		List<ActionReport> actionRptList = ljhService.getActionRptListPage(actionRpt);
 		
-		List<WaterResources> waterCategory = new ArrayList<WaterResources>();
-		waterCategory = ljhService.getWaterCategory();		// 수자원 시설물 종류 SELECT
-		
-		model.addAttribute("actionRptList", actionRptList);
+		model.addAttribute("actionReportList", actionRptList);
 		model.addAttribute("page", paging);
-		model.addAttribute("waterCategory", waterCategory);
 		
 		return "/system3/ljh/water_resources/error/action_report_list";
 	}
 	
 	// 조치 결과 보고서 작성
 	@RequestMapping("/action_report_write_form")
-	public String actionRptWriteForm(Model model, HttpServletRequest request) {
+	public String actionRptWriteForm(Model model) {
 		System.out.println("LjhController actionRptWriteForm Start");
-		
-		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
-		String user_id = userInfo.getUser_id();
-		String user_name = userInfo.getUser_name();
-		System.out.println("로그인 유저 : " + user_id + " / " + user_name);
 		
 		List<WaterResources> waterCategory = new ArrayList<WaterResources>();
 		waterCategory = ljhService.getWaterCategory();
@@ -273,8 +231,6 @@ public class LjhController {
 		
 		model.addAttribute("waterCategory", waterCategory);
 		model.addAttribute("checkCodeList", checkCodeList);
-		model.addAttribute("user_id", user_id);
-		model.addAttribute("user_name", user_name);
 		
 		return "/system3/ljh/water_resources/error/action_report_write";
 	}
@@ -347,75 +303,6 @@ public class LjhController {
 		int result = ljhService.actionRptDelete(doc_no);
 		
 		return result;
-	}
-	
-	// 조치 결과 보고서 검색
-	@ResponseBody
-	@RequestMapping("/search_action")
-	public LjhResponse searchAction(@RequestParam(defaultValue = "1") String currentPage, ActionReport actionReport) {
-		System.out.println("LjhController searchAction Start");
-		
-		actionReport.setTotal(ljhService.searchActCnt(actionReport));
-		
-		Paging page = new Paging(actionReport.getTotal(), currentPage, 10);
-		actionReport.setStart(page.getStart());
-		actionReport.setEnd(page.getEnd());
-		
-		List<ActionReport> actionRptList = new ArrayList<ActionReport>();
-		actionRptList = ljhService.searchAction(actionReport);
-		
-		LjhResponse ljhResponse = new LjhResponse();
-		ljhResponse.setList(actionRptList);
-		ljhResponse.setObj(page);
-		
-		return ljhResponse;
-	}
-	
-	// 조치 결과 보고서 작성 > 고장보고서 보기
-	@RequestMapping("/choice_error_report_list")
-	public String choiceErrRpt(@RequestParam(defaultValue = "1") String currentPage, ActionReport actionReport, Model model) {
-		System.out.println("LjhController choiceErrRpt Start");
-		
-		int total = ljhService.choiceErrRptCnt(actionReport);
-		
-		Paging page = new Paging(total, currentPage, 10);
-		actionReport.setStart(page.getStart());
-		actionReport.setEnd(page.getEnd());
-
-		List<BreakReport> breakRptList = new ArrayList<BreakReport>();
-		breakRptList = ljhService.choiceErrRptList(actionReport);
-		
-		model.addAttribute("breakRptList", breakRptList);
-		model.addAttribute("page", page);
-		
-		return "/system3/ljh/water_resources/error/choice_error_report_list";
-	}
-	
-	
-
-//-----------------------------------------------------------------------------------------
-	// 통계 페이지
-	@RequestMapping("/chart")
-	public String chart(Model model) {
-		
-		return "/system3/ljh/chart/chart";
-	}
-	
-	// 고장 및 조치 통계
-	@ResponseBody
-	@RequestMapping("/errorChart")
-	public LjhResponse errorChart() {
-		List<Integer> errorChart = new ArrayList<Integer>();
-		errorChart = ljhService.errorChart();
-		
-		List<Integer> acitonChart = new ArrayList<Integer>();
-		acitonChart = ljhService.actionChart();
-		
-		LjhResponse ljhResponse = new LjhResponse();
-		ljhResponse.setList(errorChart);
-		ljhResponse.setSecList(acitonChart);
-		
-		return ljhResponse;
 	}
 	
 	
