@@ -6,8 +6,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
-
 <style type="text/css">
 	.title {
 		text-align: center;
@@ -36,6 +34,31 @@
 	
 	select {
 		width: 100%;
+		height: 35px;
+		border: none;
+	}
+	
+	textarea {
+		width: 100%;
+	}
+	
+	.subject {
+		width: 100%;
+		height: 35px;
+	}
+	
+	.date {
+		height: 35px;
+		width: 200px;
+	}
+	
+	.handling_content {
+		width: 95%;
+		height: 35px;
+	}
+	
+	.handling_flag {
+		width: 4%;
 	}
 	
 	.btns {
@@ -48,20 +71,25 @@
 	}
 	
 	.cate {
-		width: 200px;
+		width: 150px;
 	}
 	
 	.rptTbl th {
-		width: 200px;
+		width: 150px;
 	}
 
 	.alarmTbl .cate {
-		width: 200px;
+		width: 150px;
+	}
+
+	.alarmTbl th, .alarmTbl td {
+		height: 35px;
 	}
 
 	header {
 		height: 55px;
 	}
+	
 </style>
 
 
@@ -101,7 +129,7 @@
 					var options = "";
 					
 					options += '<select id="wrCodeSelect" name="facility_code">';
-					options += '<option>전체</option>';
+					options += '<option value="전체">전체</option>';
 					
 					for(var i = 0; i < rtndata.length; i++) {
 						options += '<option value="' + rtndata[i].facility_code + '">' + rtndata[i].facility_code + '</option>';
@@ -125,7 +153,7 @@
 								var alarmBox = $('#alarmBox');
 								var alarms = "";
 								
-								alarms += '<tr><th rowspan="' + rtndata.length+1 + '">알람내역</th><th>알람코드</th><th>알람내용</th><th>알람일시</th><th>확인</th></tr>';
+								alarms += '<tr><th rowspan="' + rtndata.length+1 + '" class="cate">알람내역</th><th>알람코드</th><th>알람내용</th><th>알람일시</th><th>확인</th></tr>';
 								
 								for(var i = 0; i < rtndata.length; i++) {
 									alarms += '<tr><td>' + rtndata[i].alarm_code + '</td>' 
@@ -143,7 +171,36 @@
 			});
 		});
 	});
-
+	
+	
+	// form 입력값 체크
+	function chk() {
+		if (errorForm.facility_category.value == '전체') {
+			alert("시설물 종류를 선택하세요.");
+			return false;
+		}
+		
+		if (errorForm.facility_code.value == '전체') {
+			alert("시설물 코드를 선택하세요.");
+			return false;
+		}
+		
+		if (errorForm.check_target.value == '전체') {
+			alert("점검대상을 선택하세요.");
+			return false;
+		}
+		
+		if (errorForm.m_category.value == '전체') {
+			alert("중분류를 선택하세요.");
+			return false;
+		}
+		
+		if (errorForm.s_category.value == '전체') {
+			alert("소분류를 선택하세요.");
+			return false;
+		}
+	};
+	
 </script>
 </head>
 <body>
@@ -155,14 +212,14 @@
 				<div id="center">
 					<div>
 						<p class="title">고장 보고서 작성</p>
-						<form action="error_report_write" method="post">
+						<form action="error_report_write" method="post" name="errorForm" onsubmit="return chk()">
 							<table class="rptTbl">
 								<thead>
 								<tr>
 									<th class="cate">시설물 종류</th>
 									<td>
 										<select id="waterCategorySelect" name="facility_category">
-											<option>전체</option>
+											<option value="전체">전체</option>
 											<c:forEach var="water" items="${waterCategory }">
 												<option value="${water.facility_category }">${water.facility_category }</option>
 											</c:forEach>
@@ -172,17 +229,18 @@
 									<td>
 										<div id="wrCodeOption">
 											<select id="wrCodeSelect" name="facility_code">
-												<option>전체</option>
+												<option value="전체">전체</option>
 											</select>
 										</div>
 									</td>
-									<th class="cate">작성자</th><td><input type="text" name="user_id"></td>	<!-- 로그인한 사용자 이름 자동 표출 필요 -->
+									<th class="cate">작성자</th>
+									<td><input type="hidden" name="user_id" required="required" value="${user_id}">${user_name}</td>
 								</tr>
 								<tr>
 									<th class="cate">점검대상</th>
 									<td>
 										<select name="check_target">
-											<option>전체</option>
+											<option value="전체">전체</option>
 											<c:forEach var="checkCode" items="${checkCodeList }">
 												<c:if test="${checkCode.field_name == 'check_target' }">
 													<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
@@ -193,7 +251,7 @@
 									<th class="cate">중분류</th>
 									<td>
 										<select name="m_category">
-											<option>전체</option>
+											<option value="전체">전체</option>
 											<c:forEach var="checkCode" items="${checkCodeList }">
 												<c:if test="${checkCode.field_name == 'm_category' }">
 													<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
@@ -204,7 +262,7 @@
 									<th class="cate">소분류</th>
 									<td>
 										<select name="s_category">
-											<option>전체</option>
+											<option value="전체">전체</option>
 											<c:forEach var="checkCode" items="${checkCodeList }">
 												<c:if test="${checkCode.field_name == 's_category' }">
 													<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
@@ -215,14 +273,14 @@
 								</tr>
 								</thead>
 								<tbody>
-								<tr><th class="cate">제목</th><td colspan="5"><input type="text" name="subject"></td></tr>
-								<tr><th class="cate">고장일자</th><td colspan="5"><input type="date" name="break_date"></td></tr>
-								<tr><th class="cate">고장원인</th><td colspan="5"><textarea name="break_cause"></textarea></td></tr>
-								<tr><th class="cate">현재상황</th><td colspan="5"><textarea name="current_state"></textarea></td></tr>
-								<tr><th class="cate">즉시처리</th><td colspan="5"><input type="checkbox" name="handling_flag" value="Y">
-									<input type="text" name="handling_content"></td></tr>
-								<tr><th class="cate">향후계획</th><td colspan="5"><textarea name="future_plan"></textarea></td></tr>
-								<tr><th class="cate">파일첨부</th><td colspan="5"><!-- <input type="file" name="file1"> --></td></tr>
+								<tr><th class="cate">제목</th><td colspan="5"><input type="text" class="subject" name="subject" required="required"></td></tr>
+								<tr><th class="cate">고장일자</th><td colspan="5"><input type="date" class="date" name="break_date" required="required"></td></tr>
+								<tr><th class="cate">고장원인</th><td colspan="5"><textarea rows="4" name="break_cause"></textarea></td></tr>
+								<tr><th class="cate">현재상황</th><td colspan="5"><textarea rows="4" name="current_state"></textarea></td></tr>
+								<tr><th class="cate">즉시처리</th><td colspan="5">
+									<input type="checkbox" class="handling_flag" name="handling_flag" value="Y">
+									<input type="text" class="handling_content" name="handling_content"></td></tr>
+								<tr><th class="cate">향후계획</th><td colspan="5"><textarea rows="4" name="future_plan"></textarea></td></tr>
 								</tbody>
 							</table>
 							<table class="alarmTbl">

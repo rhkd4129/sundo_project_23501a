@@ -1,12 +1,8 @@
 package com.postgres.sample.service.impl.jmh;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
@@ -16,9 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.postgres.sample.dto.AccessLog;
 import com.postgres.sample.dto.Code;
-import com.postgres.sample.dto.LoginLog;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.UserInfo;
 import com.postgres.sample.service.impl.dao.jmh.BoardUserInfoDAO;
@@ -29,31 +23,14 @@ import com.postgres.sample.service.jmh.UserInfoService;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class UserInfoServiceImpl extends EgovAbstractServiceImpl implements UserInfoService {// implements UserInfoService
+public class JmhUserInfoServiceImpl extends EgovAbstractServiceImpl implements UserInfoService {// implements UserInfoService
 
 	private final UserInfoDAO 		userInfoDAO;
 	private final BoardUserInfoDAO 	boardUserInfoDAO;
 
-	//--------------------------------------------------------------------------------------
-	//---------로그
-	//--------------------------------------------------------------------------------------
-	@Override
-	public int InsertLoginLog(LoginLog loginLog) {
-		System.out.println("UserInfoServiceImpl InsertLoginLog Start..");
-		int result = userInfoDAO.JmhInsertLoginLog(loginLog);
-		System.out.println("result:"+result);
-		return result;
-	}
-
-	@Override
-	public int InsertAccessLog(AccessLog accessLog) {
-		System.out.println("UserInfoServiceImpl InsertAccessLog Start..");
-		int result = userInfoDAO.JmhInsertAccessLog(accessLog);
-		return result;
-	}
-  
+    
 	//--------------------------------------------------------------------------------------	
-	//사용자 로그인 체크 1 (ID/PW)
+	//사용자 로그인 체크
 	@Override
 	public UserInfo userLoginCheck(UserInfo userInfo) {
 		System.out.println("UserInfoServiceImpl userLoginCheck Start..");
@@ -63,22 +40,12 @@ public class UserInfoServiceImpl extends EgovAbstractServiceImpl implements User
 		return userInfoDTO;
 	}
 	//--------------------------------------------------------------------------------------	
-	//사용자 로그인 체크 2 (권한체크)
+	//사용자 로그인 체크
 	@Override
 	public UserInfo userLoginSystemCheck(UserInfo userInfo) {
-		System.out.println("UserInfoServiceImpl userLoginSystemCheck Start..");
+		System.out.println("UserInfoServiceImpl userLoginCheck Start..");
 		//-------------------------------------------------------------
 		UserInfo userInfoDTO = userInfoDAO.JmhUserLoginSystemCheck(userInfo);
-		//-------------------------------------------------------------
-		return userInfoDTO;
-	}
-	//--------------------------------------------------------------------------------------	
-	//사용자 로그인 체크 3 (사용여부)
-	@Override
-	public UserInfo userLoginUseFlagCheck(UserInfo userInfo) {
-		System.out.println("UserInfoServiceImpl userLoginUseFlagCheck Start..");
-		//-------------------------------------------------------------
-		UserInfo userInfoDTO = userInfoDAO.JmhUserLoginUseFlagCheck(userInfo);
 		//-------------------------------------------------------------
 		return userInfoDTO;
 	}
@@ -167,11 +134,10 @@ public class UserInfoServiceImpl extends EgovAbstractServiceImpl implements User
 
 		int totalCnt = 0;
 		
-		if(userInfo.getSystem_category() != null) {
-			System.out.println("totalCount ★검색 권한---->"+userInfo.getSystem_category());
-			if(!userInfo.getSystem_category().equals("")) {
-				System.out.println("totalCount ★검색 아이디---->"+userInfo.getUser_id());
-				System.out.println("totalCount ★검색 성명---->"+userInfo.getUser_name());
+		if(userInfo.getKeyword() != null) {
+			System.out.println("totalCount ★검색 Search---->"+userInfo.getSearch());
+			if(!userInfo.getKeyword().equals("")) {
+				System.out.println("totalCount ★검색 SearchKeyword---->"+userInfo.getKeyword());
 				//검색 건수 가져오기
 				//-------------------------------------------------------------------
 				totalCnt = boardUserInfoDAO.JmhSearchCount(userInfo);
@@ -197,11 +163,10 @@ public class UserInfoServiceImpl extends EgovAbstractServiceImpl implements User
 		
 		List<UserInfo> boardList = null;
 		
-		if(userInfo.getSystem_category() != null) {
-			System.out.println("boardList ★검색 권한---->"+userInfo.getSystem_category());
-			if(!userInfo.getSystem_category().equals("")) {
-				System.out.println("boardList ★검색 아이디---->"+userInfo.getUser_id());
-				System.out.println("boardList ★검색 성명---->"+userInfo.getUser_name());
+		if(userInfo.getKeyword() != null) {
+			System.out.println("boardList ★검색 Search---->"+userInfo.getSearch());
+			if(!userInfo.getKeyword().equals("")) {
+				System.out.println("boardList ★검색 SearchKeyword---->"+userInfo.getKeyword());
 				//----------------------------------------------------
 				boardList = boardUserInfoDAO.JmhSearchList(userInfo);
 				//----------------------------------------------------
@@ -273,5 +238,4 @@ public class UserInfoServiceImpl extends EgovAbstractServiceImpl implements User
 		System.out.println("UserInfoServiceImpl deleteBoard END...");
 		return resultCount;
 	}
-
 }

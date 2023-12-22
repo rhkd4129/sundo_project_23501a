@@ -10,7 +10,7 @@
 $(function() {
 	var system_category = "${userInfo.system_category}";
 	if(system_category == '1') {
-		location.href = '/admin_userinfo_list';
+		location.href = '/adminpage_main';
 	}else if(system_category == '2') {
 		location.href = '/realTimeSystem/layer';
 	}else if(system_category == '3') {

@@ -21,11 +21,16 @@ public class CheckReport {
 	private String 		user_name;
 	private String 		facility_category;
 	private String 		org_name;
+	private String 		org_area;
 	private String 		org_area_name;
 	private String 		user_department;
 	private String 		firstdate;
 	private String 		secdate;
 	private String 		currentPage;
+
+	private String 		cate_name;
+	private String 		user_position;
+
 
 
 

@@ -3,7 +3,7 @@
 <mapper namespace="com.postgres.sample.service.impl.dao.jmh.BoardUserInfoDAO">
 
 	<!-- 코드 분류 가져오기 -->
-	<select id="JmhCodeList" parameterType="Code" resultType="Code">
+	<select id="JmhCodeList3" parameterType="Code" resultType="Code">
 		SELECT *
 		FROM CODE
 		WHERE field_name = #{field_name}
@@ -23,20 +23,20 @@
 				 FROM USER_INFO
 				ORDER BY user_name) a
 		WHERE 1=1
+		AND 
 			<choose>
-				<when test="system_category != 'all'">
-					 AND a.system_category = #{system_category} 
+				<when test="search == '1_system_category'">
+					 a.system_category like '%' || #{keyword} || '%' 
 				</when>
-			</choose>
-			<choose>
-				<when test="user_id != ''">
-					 AND a.user_id like '%' || #{user_id} || '%'
+				<when test="search == '2_user_id'">
+					 a.user_id like '%' || #{keyword} || '%'
 				</when>
-			</choose>
-			<choose>
-				<when test="user_name != ''">
-					 AND a.user_name like '%' || #{user_name} || '%'
+				<when test="search == '3_user_name'">
+					 a.user_name like '%' || #{keyword} || '%'
 				</when>
+				<otherwise>
+					 a.user_name like '%' || #{keyword} || '%'
+				</otherwise>
 			</choose>
 	</select>
 	
@@ -74,21 +74,21 @@
 							 LEFT OUTER JOIN ORGANIZATION o
 								 ON u.org_code = o.org_code
 					  ORDER BY user_name) a
-			WHERE 1=1			
+			WHERE 1=1
+			AND 
 			<choose>
-				<when test="system_category != 'all'">
-					 AND a.system_category = #{system_category} 
+				<when test="search == '1_system_category'">
+					 a.system_category like '%' || #{keyword} || '%' 
 				</when>
-			</choose>
-			<choose>
-				<when test="user_id != ''">
-					 AND a.user_id like '%' || #{user_id} || '%'
+				<when test="search == '2_user_id'">
+					 a.user_id like '%' || #{keyword} || '%'
 				</when>
-			</choose>
-			<choose>
-				<when test="user_name != ''">
-					 AND a.user_name like '%' || #{user_name} || '%'
+				<when test="search == '3_user_name'">
+					 a.user_name like '%' || #{keyword} || '%'
 				</when>
+				<otherwise>
+					 a.user_name like '%' || #{keyword} || '%'
+				</otherwise>
 			</choose>
 		)
 		WHERE rn BETWEEN #{start} AND #{end}

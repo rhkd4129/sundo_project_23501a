@@ -58,13 +58,6 @@
 		}else{
 			$('#idNewWinFlag').prop('checked', true);
 		}
-		
-		
-		$('select[name=system_category]').change(function(){
-			//alert($(this).val());
-			document.frmSearch.submit();
-		});
-		
 	});	
 	
 	
@@ -72,20 +65,6 @@
 <style type="text/css">
 header {
     height: 55px;
-}
-hr{
-	margin:0px;
-}
-.table > thead {
-	border-top:2px solid #888888;
-}
-.searchbox {
-	border:2px solid #dee2e6;
-	border-radius: 10px;
-	padding: 10px;
-}
-.searchbox th, td {
-	padding: 2px;
 }
 .tr-link {
 	cursor:pointer;
@@ -101,9 +80,31 @@ hr{
  		<!-- 메뉴 -->
 		<div id="menubar" class="col-2"></div>		
 		<!-- 본문 -->
-		<div id="center" class="col-10">
+		<div id="center" class="col-9">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
-			<br>			
+			<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+			  <symbol id="house-door-fill" viewBox="0 0 16 16">
+			    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+			  </symbol>
+			</svg>		
+			<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
+			    <ol class="breadcrumb breadcrumb-chevron p-1">
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis" href="/main">
+			          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
+			          <span class="visually-hidden">Home</span>
+			        </a>
+			      </li>
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="adminpage_main">관리자</a>
+			      </li>
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="adminpage_main">사용자 관리</a>
+			      </li>
+			      <li class="breadcrumb-item active" aria-current="page">사용자 관리</li>
+			    </ol>
+			</nav>
+			
 			<div id="idFrameSet">
 				<div id="idFrameList">
 					<div class="container-fluid">
@@ -111,55 +112,37 @@ hr{
 							<tr>
 								<td style="vertical-align:top"><span class="apptitle">사용자 관리</span></td>
 								<td align="right">
+									<form action="admin_notice_list">
+										<table>
+											<tr>
+												<td>
+													<select class="form-select" name="search" style="font-size:0.8rem">
+														<c:forEach var="code" items="${search_codelist}">
+															<option value="${code.cate_code}">${code.cate_name}</option>
+														</c:forEach>
+													</select>
+												</td>
+												<td><input type="text" class="form-control me-2" style="font-size:0.8rem" name="keyword" placeholder="검색어를 입력하세요" required="required"></td>
+												<td>
+													<button type="submit" class="btn btn-dark btn-sm">검색</button>
+													<button type="button" class="btn btn-outline-secondary btn-sm" onclick="goto('admin_notice_list')" style="cursor:pointer">
+									         			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+															<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"></path>
+															<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"></path>
+														</svg>
+													</button>
+												</td>
+											</tr>
+										</table>
+									</form>	
 								</td>
 							</tr>
-						</table>
-						<form name="frmSearch" action="admin_userinfo_list">
-							<div class="searchbox">
-								<table width="100%">
-									<tr>
-										<td><h6><b>검색조건</b></h6><hr></td>
-									</tr>
-									<tr>
-										<td>										
-											<table>
-												<tr>
-													<td style="width:30px;text-align:right;font-weight:bold;">권한</td>
-													<td>
-														<select class="form-select" name="system_category" style="font-size:0.8rem">
-															<option value="all">전체</option>
-															<c:forEach var="code" items="${CodeList_system_category}">
-																<option value="${code.cate_code}" 
-																<c:if test="${system_category == code.cate_code}">selected</c:if>
-																>${code.cate_name}</option>
-															</c:forEach>
-														</select>
-													</td>
-													<td style="width:45px;text-align:right;font-weight:bold;">아이디</td>
-													<td><input type="text" name="user_id" class="form-control" value="${user_id}"></td>
-													<td style="width:30px;text-align:right;font-weight:bold;">성명</td>
-													<td><input type="text" name="user_name" class="form-control" value="${user_name}"></td>
-													<td style="width:100px;padding-left:10px">
-														<button type="submit" class="btn btn-dark btn-sm">검색</button>
-														<button type="button" class="btn btn-outline-secondary btn-sm" onclick="goto('admin_userinfo_list')" style="cursor:pointer">
-										         			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-																<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"></path>
-																<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"></path>
-															</svg>
-														</button>
-													</td>
-												</tr>												
-											</table>
-										</td>
-									</tr>
-								</table>
-							</div>
-						</form>							
+						</table>						
 						<table width="100%" style="margin-bottom:5px">
 							<tr>
-								<!-- <td width="100">
-									<button type="button" class="btn btn-dark btn-sm" onclick="callAction('write','admin_userinfo_write')">작성</button>
-								</td> -->
+								<td width="100">
+									<button type="button" class="btn btn-dark btn-sm" onclick="callAction('write','admin_notice_write')">작성</button>
+								</td>
 								<td width="200">
 									<div class="form-check form-switch">
 										<input class="form-check-input" type="checkbox" role="switch" id="idNewWinFlag" checked="" value="newwin"><!-- flexSwitchCheckChecked -->
@@ -168,7 +151,7 @@ hr{
 								</td>
 								<td width="*" style="text-align:right">
 									<c:if test="${not empty keyword}">								
-										<a href="admin_userinfo_list"><img src="/images/btn_icon_delete2.png" width="18" height="19" style="vertical-align:bottom"></a> 
+										<a href="admin_notice_list"><img src="/images/btn_icon_delete2.png" width="18" height="19" style="vertical-align:bottom"></a> 
 										검색어( <c:forEach var="code" items="${search_codelist}"><c:if test="${code.cate_code == search}">${code.cate_name}</c:if></c:forEach> = ${keyword} ) 
 										<img src="/images/icon_search.png" width="14" height="14" style="vertical-align:bottom"> 검색 건수
 									</c:if>
@@ -241,6 +224,7 @@ hr{
 			</div>
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->	
 		</div>
+		<div id="menubar" class="col-1"></div>	
 	</div>
 </div>
 <!-- FOOTER -->

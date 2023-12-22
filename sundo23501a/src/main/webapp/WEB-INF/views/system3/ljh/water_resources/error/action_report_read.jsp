@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <%@ include file="/WEB-INF/views/header.jsp" %>
 <!DOCTYPE html>
 <html>
@@ -34,40 +33,43 @@
 	th {
 		background: #EAEAEA;
 		padding: 5px 10px;
-		width: 200px;
+		width: 150px;
+		height: 40px;
 	}
 	
 	td {
 		padding: 5px 10px;
+		height: 40px;
 	}
+	
 	header {
 		height: 55px;
 	}
 
 </style>
 
-	<script>
+<script>
 
-		$(function() {
+	$(function() {
 
-			$.ajax({
-				url			: '/main_header_3',
-				dataType 	: 'html',
-				success		: function(data) {
-					$('#header').html(data);
-				}
-			});
-
-			$.ajax({
-				url			: '/main_footer',
-				dataType 	: 'html',
-				success		: function(data) {
-					$('#footer').html(data);
-				}
-			});
+		$.ajax({
+			url			: '/main_header_3',
+			dataType 	: 'html',
+			success		: function(data) {
+				$('#header').html(data);
+			}
 		});
 
-	</script>
+		$.ajax({
+			url			: '/main_footer',
+			dataType 	: 'html',
+			success		: function(data) {
+				$('#footer').html(data);
+			}
+		});
+	});
+
+</script>
 <script type="text/javascript">
 	function delActionRpt() {
 		var answer = confirm('보고서를 삭제하시겠습니까?')
@@ -99,13 +101,9 @@
 
 	<header id="header"></header>
 
-
-
-
 	<div class="container" style="margin-top: 3%">
 		<div class="row">
 			<div id="center">
-
 				<p class="title">조치 결과 보고서 상세 페이지</p>
 				<div>
 					<table>
@@ -131,7 +129,6 @@
 						<tr><th>조치내역</th><td colspan="5">${actionRpt.action_content }</td></tr>
 						<tr><th>특이사항</th><td colspan="5">${actionRpt.spec_memo }</td></tr>
 						<tr><th>향후계획</th><td colspan="5">${actionRpt.future_plan }</td></tr>
-						<tr><th>파일</th><td colspan="5"></td></tr>
 						</tbody>
 					</table>
 					<div class="btns">

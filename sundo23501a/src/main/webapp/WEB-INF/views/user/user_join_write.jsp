@@ -383,7 +383,7 @@ select {
 												<label for="userpass">비밀번호*</label>
 											</th>
 											<td colspan="2">
-												<input id="userpass" class="form-control" type="password" name="user_pw" value="${userInfo.user_pw }" placeholder="Password" autocomplete="off" required="required">
+												<input id="userpass" class="form-control" type="password" name="user_pw" value="${userInfo.user_pw }" placeholder="Password" autocomplete="off">
 												<small style="color: red"><form:errors path="user_pw"/></small>
 											</td>
 										</tr>
@@ -402,21 +402,21 @@ select {
 										<tr>
 											<th>이름*</th>
 											<td colspan="2">
-												<input type="text" class="form-control" name="user_name" value="${userInfo.user_name}" required="required">
+												<input type="text" class="form-control" name="user_name" value="${userInfo.user_name}">
 												<small style="color: red"><form:errors path="user_name"/></small>
 											</td>
 										</tr>							          	
 							            <tr>
 							            	<th>EMAIL*</th>
-							            	<td colspan="2">
+							            	<td>
 							            		<div id="mail_input">
-								            		<input type="email" class="form-control" name="user_email" id="user_email" placeholder="ID@Email.com" value="${userInfo.user_email}" required="required">
+								            		<input type="email" class="form-control" name="user_email" id="user_email" placeholder="ID@Email.com" value="${userInfo.user_email}">
 								            		<small style="color: red"><div id="msg2"></div></small>
 							            		</div>
 							            	</td>
-							            	<!-- <td>
+							            	<td>
 							            		<button type="button" id="confirmBtn" class="btn btn-danger btn-sm" onclick="send_save_mail()">이메일 인증</button>
-							            	</td> -->
+							            	</td>
 							            </tr>
 							            <tr id="mail_number" name="mail_number" style="display: none">
 							            	<th>인증번호 입력</th>
@@ -432,7 +432,7 @@ select {
 							          	<tr>
 							          		<th>TEL*</th>
 							          		<td colspan="2">
-							          			<input type="tel" class="form-control" name="user_tel" placeholder="010-xxxx-xxxx" value="${userInfo.user_tel}" required="required">
+							          			<input type="tel" class="form-control" name="user_tel" placeholder="010-xxxx-xxxx" value="${userInfo.user_tel}">
 							          			<small style="color: red"><form:errors path="user_tel"/></small> 
 							          		</td>
 							          	</tr>
@@ -449,15 +449,13 @@ select {
 										<tr>
 											<th>소속부서*</th>
 											<td colspan="2">
-												<input type="text" class="form-control" name="user_department" id="user_department" required="required">
-												<small style="color: red"><form:errors path="user_department"/></small>
+												<input type="text" class="form-control" name="user_department" id="user_department">
 											</td>
 										</tr>
 										<tr>
 											<th>직급*</th>
 											<td colspan="2">
-												<input type="text" class="form-control" name="user_position" id="user_position" required="required">
-												<small style="color: red"><form:errors path="user_position"/></small>
+												<input type="text" class="form-control" name="user_position" id="user_position">
 											</td>
 										</tr>
 							            <!-- <tr>

@@ -20,12 +20,7 @@
         header {
             height: 55px;
         }
-        #contents1{
-            font-size: 14pt;
-            margin: 0 1% 0 0;
-        }
-        #contents2{
-            font-size: 14pt;
+        #contents{
             margin: 0 3% 0 0;
         }
     </style>
@@ -56,9 +51,6 @@
 
         }
 
-        function pageing(facility_code, currentPage) {
-            window.location.href = "/selectcheckReportlist2?facility_code=" + facility_code+"&currentPage="+currentPage;
-        }
     </script>
 </head>
 <body>
@@ -72,23 +64,23 @@
         <div class="row">
             <div id="center">
                 <div style="display: flex">
-                    <div id="contents1">시설물 명칭:</div>
-                    <div id="contents2">${cate_name}</div>
+                    <div id="contents">시설물 명칭:</div>
+                    <div id="contents">${cate_name}</div>
 
-                    <div id="contents1">시설물 코드:</div>
-                    <div id="contents2">${facility_code}</div>
+                    <div id="contents">시설물 코드:</div>
+                    <div id="contents">${facility_code}</div>
                 </div>
-                <table style="width: 100%; " class="table">
+                <table>
                     <tr>
-                        <th style="font-size:10pt;">연번</th>
-                        <th style="font-size:10pt;">점검일자</th>
-                        <th style="font-size:10pt;">점검자</th>
-                        <th style="font-size:10pt;">점검결과</th>
-                        <th style="font-size:10pt;">점검일지</th>
-                        <th style="font-size:10pt;">비고</th>
+                        <th>연번</th>
+                        <th>점검일자</th>
+                        <th>점검자</th>
+                        <th>점검결과</th>
+                        <th>점검일지</th>
+                        <th>비고</th>
                     </tr>
                         <c:forEach items="${CRList}" var="list">
-                        <tr style="vertical-align: middle">
+                        <tr>
                             <td>${list.rn}</td>
                             <td>${list.modify_datetime}</td>
                             <td>${list.user_name}</td>
@@ -102,17 +94,17 @@
 
                 <div id="paging" class="pagination justify-content-center">
                     <c:if test="${page.startPage > page.pageBlock}">
-                        <div class="page-link" onclick="pageing(${facility_code},${page.startPage - page.pageBlock})">
+                        <div class="page-link" onclick="pageGo(${facility_code},${page.startPage - page.pageBlock})">
                             이전
                         </div>
                     </c:if>
                     <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-                        <div class="page-item" onclick="pageing(${facility_code},${i})">
+                        <div class="page-item" onclick="pageGo(${facility_code},${i})">
                             <div class="page-link" style="cursor:pointer">${i}</div>
                         </div>
                     </c:forEach>
                     <c:if test="${page.endPage >= page.pageBlock}">
-                        <div class="page-link" onclick="pageing(${facility_code},${page.startPage + page.pageBlock})">
+                        <div class="page-link" onclick="pageGo(${facility_code},${page.startPage + page.pageBlock})">
                             다음
                         </div>
                     </c:if>

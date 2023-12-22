@@ -34,10 +34,10 @@
 				</svg>
 			</button>
 
-			<!-- <div class="d-flex" role="search" style="margin-left:10px">        
+			<div class="d-flex" role="search" style="margin-left:10px">        
 				<input id="search" class="form-control me-2" type="search" placeholder="통합검색" aria-label="Search" name="keyword">
 				<button class="btn btn-dark" type="submit" onclick="searchAll()">Search</button>
-			</div> -->
+			</div>
 		</div>
 	</div>
 </nav>

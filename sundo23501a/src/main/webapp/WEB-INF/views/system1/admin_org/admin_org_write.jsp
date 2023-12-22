@@ -35,7 +35,12 @@ $(function() {
 <!-- CONTENT -->
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 				<div class="container-fluid">
-					<form name="formOrg" action="admin_org_insert" method="post">
+					<form name="formPrjBdData" action="admin_notice_insert" method="post" enctype="multipart/form-data">
+						<input type="hidden" name="user_id" value="${userInfoDTO.user_id}">
+						<input type="hidden" name="bd_count" value="0">
+						<input type="hidden" name="attach_name" value="">
+						<input type="hidden" name="attach_path" value="">
+						
 						<div style="height:34px">
 							<span class="apptitle">문서 작성</span>
 						</div>
@@ -53,32 +58,28 @@ $(function() {
 								<col width="80%"></col>
 							</colgroup>
 							<tr>
-								<th>기관코드</th>
-								<td><input type="text" class="form-control" name="org_code" required="required" value="${board.org_code}"></td>
+								<th>작성자</th>
+								<td><input type="text" class="form-control" name="user_name" value="${userInfoDTO.user_name}" readonly></td>
 							</tr>
 							<tr>
-								<th>기관명</th>
-								<td><input type="text" class="form-control" name="org_name" required="required" value="${board.org_name}"></td>
+								<th>작성일</th>
+								<td><input type="date" class="form-control" name="create_date_str" value="${todayDate}" readonly></td>
 							</tr>
 							<tr>
-								<th>행정구역</th>								
-								<td>
-									<select class="form-select" name="org_area" style="font-size:0.8rem">
-										<c:forEach var="obj" items="${orgAreaList}">
-											<option value="${obj.org_area}" 
-											<c:if test="${board.org_area == obj.org_area}">selected</c:if>
-											>${obj.org_area_name}</option>
-										</c:forEach>
-									</select>
+								<th>제목</th>
+								<td><input type="text" class="form-control" name="subject" value="" required="required"></td>
+							</tr>
+							<tr>
+								<th>파일첨부</th>
+								<td><input type="file" class="form-control form-control-sm" name="file1"></td>
+							</tr>
+							<tr>
+								<th>본문</th>
+								<td>							
+									<div class="input-group">
+										<textarea class="form-control" aria-label="With textarea" name="body" rows="15"></textarea>
+									</div>
 								</td>
-							</tr>
-							<tr>
-								<th>주소</th>
-								<td><input type="text" class="form-control" name="org_addr" required="required" value="${board.org_addr}"></td>
-							</tr>
-							<tr>
-								<th>전화번호</th>
-								<td><input type="text" class="form-control" name="org_tel" required="required" value="${board.org_tel}"></td>
 							</tr>
 						</table>
 					</form>

@@ -23,7 +23,6 @@ public class JmhServiceImpl extends EgovAbstractServiceImpl implements JmhServic
 
 	private final BoardNoticeDAO	boardNoticeDAO;
 	
-	
 	//--------------------------------------------------------------------------------------
 	//---------공지사항
 	//--------------------------------------------------------------------------------------	
@@ -158,7 +157,7 @@ public class JmhServiceImpl extends EgovAbstractServiceImpl implements JmhServic
 		List<Code> codeList = null;
 		System.out.println("JmhServiceImpl codeList Start...");
 		//-------------------------------------------------
-		codeList = boardNoticeDAO.JmhCodeList(code);
+		codeList = boardNoticeDAO.JmhCodeList2(code);
 		//-------------------------------------------------
 		System.out.println("JmhServiceImpl codeList.size()->" +codeList.size());
 		

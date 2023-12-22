@@ -9,7 +9,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.postgres.sample.dto.UserInfo;
-import com.postgres.sample.service.jmh.UserInfoService;
 
 public class UserInfoCheckInterceptor extends EgovAbstractServiceImpl implements HandlerInterceptor {
 	public UserInfoCheckInterceptor() {
@@ -41,9 +40,9 @@ public class UserInfoCheckInterceptor extends EgovAbstractServiceImpl implements
 		  System.out.println("preHandle userInfo is no exists");
 		  response.sendRedirect("/user_login");
 		  return false;   // 컨트롤러 진행 x
-		} else {
+		} else
 		  session.setMaxInactiveInterval(3600); //세션아웃 (1시간)
-		}
+		  
 		return true;   // 컨트롤러 진행 o
 		
 	}

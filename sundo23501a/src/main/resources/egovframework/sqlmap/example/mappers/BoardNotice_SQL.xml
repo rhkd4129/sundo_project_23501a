@@ -3,7 +3,7 @@
 <mapper namespace="com.postgres.sample.service.impl.dao.jmh.BoardNoticeDAO">
 
 	<!-- 코드 분류 가져오기 -->
-	<select id="JmhCodeList" parameterType="Code" resultType="Code">
+	<select id="JmhCodeList2" parameterType="Code" resultType="Code">
 		SELECT *
 		FROM CODE
 		WHERE field_name = #{field_name}

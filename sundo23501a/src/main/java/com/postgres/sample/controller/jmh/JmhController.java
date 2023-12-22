@@ -37,17 +37,11 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.postgres.sample.dto.AccessLog;
 import com.postgres.sample.dto.BoardNotice;
 import com.postgres.sample.dto.Code;
-import com.postgres.sample.dto.LoginLog;
-import com.postgres.sample.dto.OrgArea;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.Paging;
 import com.postgres.sample.dto.UserInfo;
-import com.postgres.sample.service.jmh.JmhAccessLogService;
-import com.postgres.sample.service.jmh.JmhLoginLogService;
-import com.postgres.sample.service.jmh.JmhOrgService;
 import com.postgres.sample.service.jmh.JmhService;
 import com.postgres.sample.service.jmh.UserInfoService;
 
@@ -60,11 +54,8 @@ public class JmhController {
 	
 	private static final Logger Logger = LoggerFactory.getLogger(JmhController.class);
 	
-	private final UserInfoService uiService;		//사용자 관리
-	private final JmhOrgService orgService;			//기관 관리
-	private final JmhService jmhService;			//공지사항
-	private final JmhAccessLogService alogService; 	//접속 이력
-	private final JmhLoginLogService llogService; 	//로그인 이력
+	private final UserInfoService uiService;
+	private final JmhService jmhService;
 	
 	// SMTP(Send Mail Transport protocol) 메일 전송 객체
 	private final  JavaMailSender mailSender;
@@ -143,6 +134,8 @@ public class JmhController {
 		return "/system2/main_header_2";
 	}
 
+
+
 	@RequestMapping(value = "/main_header_21")
 	public String mainHeader21Page(HttpServletRequest request, Model model) {
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
@@ -198,7 +191,7 @@ public class JmhController {
 	//--------------------------------------------------------------------------------------		
 	// 인터셉터 체크(preHandler -> Controller)
 	@PostMapping(value = "user_login_check")
-	public String interCeptor(UserInfo userInfo, HttpServletRequest request, HttpSession session, Model model) {
+	public String interCeptor(UserInfo userInfo, HttpSession session, Model model) {
 		System.out.println("JmhController userLoginCheck Start..");
 		System.out.println("JmhController userLoginCheck userInfo.getUser_id()->"+userInfo.getUser_id());
 		System.out.println("JmhController userLoginCheck userInfo.getUser_pw()->"+userInfo.getUser_pw());
@@ -209,53 +202,33 @@ public class JmhController {
 		//---------------------------------------------------------------
 		UserInfo userInfoDTO2 = uiService.userLoginSystemCheck(userInfo);
 		//---------------------------------------------------------------
-		UserInfo userInfoDTO3 = uiService.userLoginUseFlagCheck(userInfo);
-		//---------------------------------------------------------------
 		
 		if(userInfo.getUser_id().equals("") && userInfo.getUser_pw().equals("")) {
 			System.out.println("ID, PW 공백");
-			model.addAttribute("idMsgBox", "아이디를 입력해주세요.");
-			model.addAttribute("pwMsgBox", "비밀번호를 입력해주세요.");
+			model.addAttribute("idMsgBox", "아이디를 입력해 주세요.");
+			model.addAttribute("pwMsgBox", "비밀번호를 입력해 주세요.");
 			return "forward:/user_login";
 		} else if (userInfo.getUser_id().equals("")) {
 			System.out.println("ID 공백");
-			model.addAttribute("idMsgBox", "아이디를 입력해주세요.");
+			model.addAttribute("idMsgBox", "아이디를 입력해 주세요.");
 			return "forward:/user_login";
 		} else if (userInfo.getUser_pw().equals("")) {
 			System.out.println("PW 공백");
 			model.addAttribute("user_id", userInfo.getUser_id());
-			model.addAttribute("pwMsgBox", "비밀번호를 입력해주세요.");
+			model.addAttribute("pwMsgBox", "비밀번호를 입력해 주세요.");
 			return "forward:/user_login";
 		} else if (userInfoDTO == null) {
 			System.out.println("ID or PW 틀림");
-			model.addAttribute("pwMsgBox", "아이디 또는 비밀번호를 확인해주세요.");
+			model.addAttribute("pwMsgBox", "아이디 또는 비밀번호를 확인해 주세요.");
 			return "forward:/user_login";
 		} else if (userInfoDTO != null && userInfoDTO2 == null) {
-			System.out.println("시스템 권한이 맞지 않음");
-			model.addAttribute("pwMsgBox", "권한을 확인해주세요.");
-			return "forward:/user_login";
-		} else if (userInfoDTO != null && userInfoDTO2 != null && userInfoDTO3 == null) {
-			System.out.println("사용여부가 Y가 아님");
-			model.addAttribute("pwMsgBox", "사용승인이 필요합니다. 관리자에게 사용여부를 확인해주세요.");
+			System.out.println("ID or PW 틀림");
+			model.addAttribute("pwMsgBox", "권한을 확인해 주세요.");
 			return "forward:/user_login";
 		} else {
 			System.out.println("user_login_check userInfo exists");
-			
 			session.setMaxInactiveInterval(3600); //세션아웃 (1시간)
 			session.setAttribute("userInfo", userInfoDTO); // 세션 생성 + 저장
-			
-			//-------------------------------------------
-			//로그인 이력 남기기
-			String ip = request.getRemoteAddr();
-			System.out.println("ip:"+ip);
-			LoginLog loginLog = new LoginLog();
-			loginLog.setIp(ip);
-			loginLog.setUser_id(userInfoDTO.getUser_id());
-			System.out.println("userInfoDTO.getUser_id():"+userInfoDTO.getUser_id());
-			int result = uiService.InsertLoginLog(loginLog);
-			System.out.println("result_c:"+result);
-			//-------------------------------------------
-			
 			System.out.println("session.getAttribute(userInfo)->"+session.getAttribute("userInfo"));
 			return "redirect:/main";
 		}
@@ -557,22 +530,19 @@ public class JmhController {
 		List<UserInfo> boardList = uiService.boardList(userInfo);
 		//--------------------------------------------------------------
 		
-		//-------------------------------------------------
-		// 권한 정보 가져옴
+		//검색 분류코드 가져오기
 		Code code = new Code();
-		code.setField_name("system_category");
-		List<Code> codeList = uiService.codeList(code);
-		//-------------------------------------------------
-		System.out.println("JmhController admin_userinfo_list codeList.size->"+codeList.size());
-		model.addAttribute("CodeList_system_category", codeList);
-				
+		code.setField_name("search_category");
+		//-----------------------------------------------------
+		List<Code> search_codelist = uiService.codeList(code);
+		//-----------------------------------------------------
 
 		model.addAttribute("boardList", boardList); 
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("page", page);
-		model.addAttribute("system_category", userInfo.getSystem_category()); 	//권한
-		model.addAttribute("user_id", userInfo.getUser_id()); 					//아이디
-		model.addAttribute("user_name", userInfo.getUser_name()); 				//성명
+		model.addAttribute("search", userInfo.getSearch()); 		//검색필드
+		model.addAttribute("keyword", userInfo.getKeyword()); 	//검색어
+		model.addAttribute("search_codelist", search_codelist); 	//검색 분류
 		
 		System.out.println("----사용자 관리 목록(admin_userinfo_list) END-----");
 		
@@ -654,7 +624,7 @@ public class JmhController {
 		//------------------------------------------------------------
 		System.out.println("user_name->"+selectUserInfo.getUser_name());	
 		
-		model.addAttribute("userInfo", selectUserInfo);
+		model.addAttribute("board", selectUserInfo);
 		
 		System.out.println("-----사용자 관리 수정화면 열기(admin_userinfo_edit) END-----");
 
@@ -674,12 +644,10 @@ public class JmhController {
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 
 		if(bindingResult.hasErrors()) {
-			System.out.println("validation 에러 발생"+bindingResult.getFieldErrorCount()+bindingResult.toString());
-			
+			System.out.println("validation 에러 발생");
 			model.addAttribute("msg", "fail");
-						
-			return "/system1/admin_userinfo/admin_userinfo_edit";
-		}
+			return "forward:/admin_userinfo_edit";
+		}		
 		
 		//--------------------------------------------------
 		int resultCount = uiService.updateBoard(userInfo);
@@ -720,208 +688,12 @@ public class JmhController {
 		return "success";
 	}
 	
-	//==============================================================
 	// 기관 관리
-	///admin_org_list
-	@GetMapping("/admin_org_list")
-	public String adminOrgList(Organization orgInfo, String currentPage, HttpServletRequest request, Model model) {
-		System.out.println("-----기관 관리 목록(/admin_org_list) START-----");
-		
-		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
-		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-		
-		// 기관 관리 목록에 표시되는 문서 건수 Count
-		//-------------------------------------------------
-		int totalCount = orgService.totalCount(orgInfo);
-		//-------------------------------------------------
-		
-		//Page 작업
-		Paging 	page = new Paging(totalCount, currentPage);
-		
-		//Parameter emp --> Page만 추가 Setting
-		orgInfo.setStart(page.getStart()); 	//시작시 1
-		orgInfo.setEnd(page.getEnd());		//시작시 15
-		
-		//-----------------------------------------------------------
-		List<Organization> boardList = orgService.boardList(orgInfo);
-		//-----------------------------------------------------------
-		
-		//---------------------------------------------------
-		// 행정구역 정보 가져옴
-		List<OrgArea> orgAreaList = orgService.orgAreaList();
-		//---------------------------------------------------
-		System.out.println("JmhController admin_org_list orgAreaList.size->"+orgAreaList.size());
-		model.addAttribute("orgAreaList", orgAreaList);
-
-		model.addAttribute("boardList", boardList); 
-		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("page", page);
-		model.addAttribute("org_area", orgInfo.getOrg_area()); 	//행정구역
-		model.addAttribute("org_name", orgInfo.getOrg_name()); 	//기관 명칭
-		
-		System.out.println("----기관 관리 목록(admin_org_list) END-----");
-		
-		return "/system1/admin_org/admin_org_list";
-	}
-	
-	//기관 관리 - 작성화면
-	@RequestMapping(value = "admin_org_write")
-	public String adminOrgWrite(Model model, HttpServletRequest request) {
-		System.out.println("-----기관 관리 작성(admin_org_write) START-----");
-		
-		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
-		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-		
-		//---------------------------------------------------
-		// 행정구역 정보 가져옴
-		List<OrgArea> orgAreaList = orgService.orgAreaList();
-		//---------------------------------------------------
-		System.out.println("JmhController admin_org_list orgAreaList.size->"+orgAreaList.size());
-		model.addAttribute("orgAreaList", orgAreaList);
-		
-		
-
-		model.addAttribute("userInfoDTO", userInfoDTO); //로그인사용자 정보
-		
-		System.out.println("-----기관 관리 작성(admin_org_write) END-----");
-		
-		return "/system1/admin_org/admin_org_write";
-	}
-	
-	//신규등록
-	@RequestMapping(value = "admin_org_insert", method = RequestMethod.POST)
-	public String adminOrgInsert(Organization orgInfo, HttpServletRequest request, Model model)	throws IOException, Exception {
-		
-		System.out.println("-----기관 관리 등록(admin_org_insert) START-----");
-				
-		//----------------------------------------------------
-		int resultCount = orgService.insertBoard(orgInfo);
-		//----------------------------------------------------
-		
-		model.addAttribute("action", "insert"); //수행(작성)
-		model.addAttribute("status", "success"); //상태(성공)
-		model.addAttribute("orgInfo", orgInfo);
-		model.addAttribute("redirect", "admin_org_list"); //목록으로 이동
- 
-		System.out.println("-----기관 관리 등록(admin_org_insert) END-----");
-		
-		return "forward:/submit_control";
-	}
-	
-	//기관 관리 - 조회화면
-	@RequestMapping(value = "admin_org_read")
-	public String adminOrgRead(Organization orgInfo, HttpServletRequest request, Model model) {
-		System.out.println("-----기관 관리 조회(admin_org_read) START-----");
-
-		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
-		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-
-		System.out.println("org_code->"+orgInfo.getOrg_code());
-	
-		//------------------------------------------------------------
-		Organization selectOrganization = orgService.selectBoard(orgInfo);
-		//------------------------------------------------------------
-		System.out.println("org_name->"+selectOrganization.getOrg_name());		
-
-	
-		model.addAttribute("userInfo", userInfoDTO); //로그인사용자 정보
-		model.addAttribute("board", selectOrganization);
-		
-		System.out.println("-----기관 관리 조회(admin_org_read) END-----");
-		
-		return "/system1/admin_org/admin_org_read";
-	}
-
-	//수정화면 열기
-	@RequestMapping(value = "admin_org_edit")
-	public String adminOrgEdit(Organization orgInfo, Model model) {
-		System.out.println("-----기관 관리 수정화면 열기(admin_org_edit) START-----");
-		
-		System.out.println("org_code->"+orgInfo.getOrg_code());
-		
-		//---------------------------------------------------
-		// 행정구역 정보 가져옴
-		List<OrgArea> orgAreaList = orgService.orgAreaList();
-		//---------------------------------------------------
-		System.out.println("JmhController admin_org_list orgAreaList.size->"+orgAreaList.size());
-		model.addAttribute("orgAreaList", orgAreaList);
-		
-		//----------------------------------------------------------------
-		Organization selectOrganization = orgService.selectBoard(orgInfo);
-		//----------------------------------------------------------------
-		System.out.println("org_name->"+selectOrganization.getOrg_name());	
-		
-		model.addAttribute("board", selectOrganization);
-		
-		System.out.println("-----기관 관리 수정화면 열기(admin_org_edit) END-----");
-
-		return "/system1/admin_org/admin_org_edit";
-	}
-	
-	//수정 저장
-	@RequestMapping(value = "admin_org_update", method = RequestMethod.POST)
-	public String adminOrgUpdate(@ModelAttribute("orgInfo") @Valid Organization orgInfo
-									, BindingResult bindingResult
-									, HttpServletRequest request
-									, Model model) throws IOException {
-		
-		System.out.println("-----기관 관리 수정(admin_org_update) START-----");
-
-		System.out.println("JmhController adminOrgUpdate Start..");
-		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-
-		if(bindingResult.hasErrors()) {
-			System.out.println("validation 에러 발생"+bindingResult.getFieldErrorCount()+bindingResult.toString());
-			
-			model.addAttribute("msg", "fail");
-						
-			return "/system1/admin_userinfo/admin_org_edit";
-		}
-		
-		//--------------------------------------------------
-		int resultCount = orgService.updateBoard(orgInfo);
-		//--------------------------------------------------
-		if(resultCount > 0) {			
-			model.addAttribute("action", "update"); //수행(수정)
-			model.addAttribute("status", "success"); //상태(성공)
-			model.addAttribute("userInfo", orgInfo);
-			model.addAttribute("redirect", "admin_org_list"); //목록으로 이동
-		}else {
-			model.addAttribute("action", "update"); //수행(수정)
-			model.addAttribute("status", "error"); //수행실패
-		}
-
-		System.out.println("-----기관 관리 수정(admin_org_update) END-----");
-		
-		return "forward:/submit_control";
-	}
-	
-	//문서 삭제
-	@ResponseBody
-	@RequestMapping(value = "admin_org_delete")
-	public String adminOrgDelete(Organization orgInfo, HttpServletRequest request, Model model) throws IOException, Exception {
-		
-		System.out.println("-----기관 관리 삭제(admin_org_delete) START-----");
-		
-		System.out.println("org_code->"+orgInfo.getOrg_code());
-		//--------------------------------------------------
-		int resultCount = orgService.deleteBoard(orgInfo);
-		//--------------------------------------------------
-		System.out.println("JmhController resultCount->"+resultCount);
-		if(resultCount > 0) {
-		}else {
-			return "error";
-		}
-		
-		System.out.println("-----기관 관리 삭제(admin_org_delete) END-----");
-		
-		return "success";
-	}
 	
 	//#####################
 	// 일반사용자 공지사항 페이지
 	//#####################
-	//board_notice_list
+	///board_notice_list
 	@GetMapping("/board_notice_list")
 	public String boardNoticeList(BoardNotice boardNotice, String currentPage, HttpServletRequest request, Model model) {
 		System.out.println("-----공지사항 목록(/admin_notice) START-----");
@@ -1214,9 +986,9 @@ public class JmhController {
 		
 		System.out.println("doc_no->"+boardNotice.getDoc_no());
 		
-		//------------------------------------------------------------------
+		//------------------------------------------------------------
 		BoardNotice selectBoardNotice = jmhService.selectBoard(boardNotice);
-		//------------------------------------------------------------------
+		//------------------------------------------------------------
 		System.out.println("subject->"+selectBoardNotice.getSubject());
 		
 		model.addAttribute("board", selectBoardNotice);
@@ -1339,120 +1111,7 @@ public class JmhController {
 	//#####################
 	// 시스템 관리 페이지
 	//#####################
-	//1. 접속 통계
-	@GetMapping("/system_log_list")
-	public String systemLogList(AccessLog accessLog, String currentPage, HttpServletRequest request, Model model) {
-		System.out.println("-----접속 통계 목록(/systemLogList) START-----");
-		
-		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
-		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-		
-		//-------------------------------------------------
-		// 권한 정보 가져옴
-		Code code = new Code();
-		code.setField_name("system_category");
-		List<Code> codeList = uiService.codeList(code);
-		//-------------------------------------------------
-		System.out.println("JmhController systemLogList codeList.size->"+codeList.size());
-		model.addAttribute("CodeList_system_category", codeList);
-		
-		String year_month = accessLog.getYear_month();
-		if(year_month != null) {
-			//------------------------------------------------------------------
-			List<AccessLog> boardList = alogService.searchMonthList(year_month);
-			//------------------------------------------------------------------
-		}
-		
-		model.addAttribute("year_month", accessLog.getYear_month());
-		System.out.println("----접속 통계 목록(systemLogList) END-----");
-		
-		return "/system1/log/system_log/system_log_list";
-		
-	}
 	
-	//2. 접속 이력
-	@GetMapping("/access_log_list")
-	public String accessLogList(AccessLog accessLog, String currentPage, HttpServletRequest request, Model model) {
-		System.out.println("-----접속 이력 목록(/accessLogList) START-----");
-		
-		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
-		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-		
-		// 로그인 이력 목록에 표시되는 문서 건수 Count
-		//-------------------------------------------------
-		int totalCount = alogService.totalCount(accessLog);
-		//-------------------------------------------------
-		
-		//Page 작업
-		Paging 	page = new Paging(totalCount, currentPage);
-		
-		//Parameter --> Page만 추가 Setting
-		accessLog.setStart(page.getStart());
-		accessLog.setEnd(page.getEnd());
-		
-		//--------------------------------------------------------------
-		List<AccessLog> boardList = alogService.boardList(accessLog);
-		//--------------------------------------------------------------
-		
-		model.addAttribute("boardList", boardList); 
-		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("page", page);
-		model.addAttribute("search", accessLog.getSearch()); 	//검색필드
-		model.addAttribute("keyword", accessLog.getKeyword()); 	//검색어
-		
-		System.out.println("----접속 이력 목록(accessLogList) END-----");
-		
-		return "/system1/log/access_log/access_log_list";
-	}
-	
-	//3. 로그인 이력
-	@GetMapping("/login_log_list")
-	public String loginLogList(LoginLog loginLog, String currentPage, HttpServletRequest request, Model model) {
-		System.out.println("-----로그인 이력 목록(/loginLogList) START-----");
-		
-		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
-		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-		
-		// 로그인 이력 목록에 표시되는 문서 건수 Count
-		//-------------------------------------------------
-		int totalCount = llogService.totalCount(loginLog);
-		//-------------------------------------------------
-		
-		//Page 작업
-		Paging 	page = new Paging(totalCount, currentPage);
-		
-		//Parameter --> Page만 추가 Setting
-		loginLog.setStart(page.getStart());
-		loginLog.setEnd(page.getEnd());	
-		
-		//--------------------------------------------------------------
-		List<LoginLog> boardList = llogService.boardList(loginLog);
-		//--------------------------------------------------------------
-		
-		//-------------------------------------------------
-		// 권한 정보 가져옴
-		Code code = new Code();
-		code.setField_name("system_category");
-		List<Code> codeList = uiService.codeList(code);
-		//-------------------------------------------------
-		System.out.println("JmhController loginLogList codeList.size->"+codeList.size());
-		model.addAttribute("CodeList_system_category", codeList);
-
-		model.addAttribute("boardList", boardList); 
-		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("page", page);
-		
-		model.addAttribute("from_date", loginLog.getFrom_date()); 	//기간from
-		model.addAttribute("to_date", loginLog.getTo_date()); 		//기간to
-		model.addAttribute("user_name", loginLog.getUser_name()); 	//사용자
-		model.addAttribute("system_category", loginLog.getSystem_category()); //권한(시스템)
-		model.addAttribute("ip", loginLog.getIp()); //ip
-		
-		System.out.println("----로그인 이력 목록(loginLogList) END-----");
-		
-		return "/system1/log/login_log/login_log_list";
-	}
-			
 	
 	//#####################
 	// 마이 페이지
