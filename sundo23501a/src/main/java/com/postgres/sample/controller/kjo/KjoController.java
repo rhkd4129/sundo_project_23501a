@@ -249,7 +249,7 @@ public class KjoController {
         model.addAttribute("currentPage", checkReport.getCurrentPage());
 
         model.addAttribute("facility_code", checkReport.getFacility_code());
-        model.addAttribute("cate_name", checkReport.getFacility_code());
+        model.addAttribute("cate_name", checkReport.getCate_name());
         model.addAttribute("page",page);
 
         return "system3/kjo/check/selectCheckReportList2";
