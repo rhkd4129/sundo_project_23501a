@@ -173,7 +173,7 @@
 		<![CDATA[
 			SELECT	*
 			FROM	(
-						SELECT	ar.doc_no, ar.facility_category, ar.action_date,
+						SELECT	ar.doc_no, ar.facility_category, ar.facility_code, ar.break_date, ar.action_date,
 								TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') AS create_datetime,
 								u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
 						FROM	action_report ar, user_info u

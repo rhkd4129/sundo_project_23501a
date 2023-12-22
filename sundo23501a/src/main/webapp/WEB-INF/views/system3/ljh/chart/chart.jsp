@@ -11,6 +11,10 @@
 		height: 55px;
 	}
 	
+	footer {
+		margin-top: 20px;
+	}
+	
 	.flex_center {
 		display: flex;
 	}
@@ -18,19 +22,18 @@
 	.chartMenu {
 		border: solid 1px silver;
 		padding: 20px;
-		width: 250px;
+		width: 20%;
 	}
 	
 	.chart {
-		width: 70%;
-		padding: 0px 50px 50px 50px;
-/* 		border: solid 1px; */
+		width: 80%;
+		padding: 0px 50px;
 	}
 	
 	.chart p {
 		text-align: center;
 		padding: 15px;
-		font-size: 15pt;
+		font-size: 17pt;
 		font-weight: bold;
 	}
 	
@@ -55,6 +58,33 @@
 		width: 100%;
 		text-align: center;
 		margin-top: 50px;
+	}
+	
+	#paging {
+		margin: 30px 30px 0px 30px;
+	}
+	
+	.pagination {
+		--bs-pagination-border-color: white;
+		--bs-pagination-color: gray;
+		--bs-pagination-hover-color: black;
+ 		--bs-pagination-hover-bg: white;
+	}
+	
+	.tableCate th {
+		border-left: solid white 1px;
+		border-right: solid white 1px;
+	}
+	
+	.tableCate {
+ 		border-top: solid gray 2px;
+		background: #EAEAEA;
+		height: 40px;
+	}
+	
+	.tableRow {
+		border-bottom: solid lightgray 1px;
+		height: 40px;
 	}
 	
 </style>
@@ -156,15 +186,33 @@
 						<canvas id="errChart"></canvas>
 						
 						<table class="chartTbl">
-							<tr><th>연번</th><th>시설물 종류</th><th>시설물 코드</th><th>고장 일시</th><th>조치 일시</th></tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
+							<tr class="tableCate"><th>연번</th><th>시설물 종류</th><th>시설물 코드</th><th>고장 일시</th><th>조치 일시</th></tr>
+							<c:forEach var="arList" items="${actionRptList }">
+								<tr class="tableRow">
+									<td>${arList.rn}</td>
+									<td>${arList.facility_category}</td>
+									<td>${arList.facility_code}</td>
+									<td>${arList.break_date}</td>
+									<td>${arList.action_date}</td>
+								</tr>
+							</c:forEach>
 						</table>
+						
+						<div id="paging" class="pagination pagination-sm justify-content-center">
+							<c:if test="${page.startPage > page.pageBlock}">
+								<div class="page-link" onclick="location.href='chart?currentPage=${page.startPage - page.pageBlock}'">&laquo;</div>
+							</c:if>
+		
+							<c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+								<div class="page-item" onclick="location.href='chart?currentPage=${i}'">
+									<div class="page-link" style="cursor:pointer">${i}</div>
+								</div>
+							</c:forEach>
+		
+							<c:if test="${page.endPage < page.totalPage}">
+								<div class="page-link" onclick="location.href='chart?currentPage=${page.startPage + page.pageBlock}'">&raquo;</div>
+							</c:if>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -396,7 +396,20 @@ public class LjhController {
 //-----------------------------------------------------------------------------------------
 	// 통계 페이지
 	@RequestMapping("/chart")
-	public String chart(Model model) {
+	public String chart(Model model, String currentPage) {
+		System.out.println("LjhController chart Start");
+		
+		// 페이징 작업
+		int total = ljhService.actionRptCount();
+		
+		Paging paging = new Paging(total, currentPage, 5);
+		ActionReport actionRpt = new ActionReport();
+		actionRpt.setStart(paging.getStart());
+		actionRpt.setEnd(paging.getEnd());
+		List<ActionReport> actionRptList = ljhService.getActionRptListPage(actionRpt);
+		
+		model.addAttribute("actionRptList", actionRptList);
+		model.addAttribute("page", paging);
 		
 		return "/system3/ljh/chart/chart";
 	}
