@@ -7,20 +7,61 @@
     <meta charset="UTF-8">
     <title>실시간 수문정보 관리시스템  </title>
     <link rel="stylesheet" type="text/css" href="/css/map.css">
-
-    <link rel="stylesheet"  href="http://localhost:8090/geoserver/openlayers3/ol.css"   type="text/css">
-    <link rel="stylesheet"  href="http://localhost:8090/geoserver/openlayers3/ol.css"   type="text/css">
-    <link rel="stylesheet" href="http://localhost:8090/geoserver/openlayers3/ol.css" type="text/css">
     <script src="http://localhost:8090/geoserver/openlayers3/ol.js" type="text/javascript"></script>
+    <link rel="stylesheet"  href="http://localhost:8090/geoserver/openlayers3/ol.css"   type="text/css">
+    <style>
+        .ol-popup {
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #cccccc;
+            bottom: 12px;
+            left: -50px;
+            min-width: 280px;
+        }
+        .ol-popup:after, .ol-popup:before {
+            top: 100%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+        .ol-popup:after {
+            border-top-color: white;
+            border-width: 10px;
+            left: 48px;
+            margin-left: -10px;
+        }
+        .ol-popup:before {
+            border-top-color: #cccccc;
+            border-width: 11px;
+            left: 48px;
+            margin-left: -11px;
+        }
+        .ol-popup-closer {
+            text-decoration: none;
+            position: absolute;
+            top: 2px;
+            right: 8px;
+        }
+        .ol-popup-closer:after {
+            content: "✖";
+        }
+    </style>
+
     <script>
         let view;
-        let a;
         let init_pos;
         let map;
         let datatype ="";
         let getdatatype ="";
         let standdatatype ="";
         $(function() {
+
 
             $.ajax({
                 url         : '/main_header_2',
@@ -37,13 +78,12 @@
                     $('#footer').html(data);
                 }
             });
-            a = 'a';
+
             init_pos = ol.proj.fromLonLat([126.9780, 37.5665])
             view = new ol.View({
                 center:init_pos,
                 zoom:10
             })
-
 
             map = new ol.Map({
                 target: 'map',
@@ -74,6 +114,31 @@
                         }),
                         visible: false // 초기에는 레이어를 숨겨둠
                     }),
+
+                    new ol.layer.Image({
+                        source: new ol.source.ImageWMS({
+                            url: 'http://localhost:8090/geoserver/wms',
+                            params: {
+                                'LAYERS':'lee:SEOUL_HANGANG_SUGYE',
+                                'TILED': true
+                            },
+                            serverType: 'geoserver'
+                        }),
+                        visible: false // 초기에는 레이어를 숨겨둠
+                    }),
+
+                    new ol.layer.Image({
+                        source: new ol.source.ImageWMS({
+                            url: 'http://localhost:8090/geoserver/wms',
+                            params: {
+                                'LAYERS':'lee:GYEONGGI_HANGANG_SUGYE',
+                                'TILED': true
+                            },
+                            serverType: 'geoserver'
+                        }),
+                        visible: false // 초기에는 레이어를 숨겨둠
+                    }),
+
                     new ol.layer.Image({
                         source: new ol.source.ImageWMS({
                             url: 'http://localhost:8090/geoserver/wms',
@@ -107,40 +172,67 @@
                         }),
                         visible: false // 초기에는 레이어를 숨겨둠
                     })
-
                 ],
+
                 view: view,
             });
+            // 전역 변수로 현재 열려 있는 팝업을 저장할 변수를 선언
+            // let currentPopup = null;
+            map.on('singleclick', function(evt) {
+                var coordinate = evt.coordinate;
+                console.log("되는거 ")
+                console.log(coordinate)
+                // var hdms = ol.coordinate.toStringHDMS(ol.proj.transform(coordinate, 'EPSG:3857', 'EPSG:4326'));
 
-
-            $('#activateLayerButton').on('click', function () {
-                toggleLayerVisibility(1); // 두 번째 레이어의 가시성 토글
+                let element = document.createElement("div");
+                element.classList.add('ol-popup');
+                element.innerHTML = coordinate;
+                // 현재 열려 있는 팝업이 있으면 삭제
+                if (currentPopup) {
+                    map.removeOverlay(currentPopup);
+                }
+                // 새로운 OverLay 생성
+                let overlay = new ol.Overlay({
+                    element: element,
+                    autoPan: true,
+                    className: "multiPopup",
+                    autoPanMargin: 100,
+                    autoPanAnimation: {
+                        duration: 400
+                    }
+                });
+                // 오버레이의 위치 설정
+                overlay.setPosition(coordinate);
+                // 지도에 추가
+                map.addOverlay(overlay);
+                // 현재 열려 있는 팝업 갱신
+                currentPopup = overlay;
+                // 팝업 닫기 이벤트 처리
+                element.addEventListener('click', function(e) {
+                    var target = e.target;
+                    if (target.className == "ol-popup-closer") {
+                        // 선택한 OverLayer 삭제
+                        map.removeOverlay(overlay);
+                        // 현재 열려 있는 팝업 변수 초기화
+                        currentPopup = null;
+                    }
+                });
             });
 
-            $('#sumun').on('click', function () {
-                    toggleLayerVisibility(2); // 세 번째 레이어의 가시성 토글
+            $('#zoomOut').on('click',function (){
+                var view = map.getView();
+                var currentZoom = view.getZoom();
+                view.setZoom(Math.max(currentZoom - 1, 0));
+            })
+            $('#zoomIn').on('click',function (){
+                var view = map.getView();
+                var currentZoom = view.getZoom();
+                view.setZoom(currentZoom + 1);
             });
 
-
-
-
-
-
-            $('#sumun2').on('click', function () {
-                toggleLayerVisibility(3); // 세 번째 레이어의 가시성 토글
+            $('#btn').on('click',function (){
+                map.getView().setCenter(ol.proj.fromLonLat([126.9780, 37.5665]));
             });
-            $('#sumun3').on('click', function () {
-                toggleLayerVisibility(4); // 세 번째 레이어의 가시성 토글
-            });
-            $('#dam').on('click', function () {
-                toggleLayerVisibility(5); // 세 번째 레이어의 가시성 토글
-            });
-            $('#waterway_pos').on('click', function () {
-                toggleLayerVisibility(6); // 세 번째 레이어의 가시성 토글
-            });
-
-
-
 
         });
 
@@ -152,42 +244,35 @@
 
         function layerClick(currentPage, mapping){
             console.log(currentPage);
-            // console.log(mapping);
-                const ov = {"currentPage": currentPage}
-
-
-                $.ajax({
-                    url: mapping,
-                    data: ov,
-                    success: function (data) {
-                        getdatatype = data.type;
-                        console.log("server get type: " + getdatatype);
-                        /*관측소 요청*/
-                        if (getdatatype == "Observation") {
-                            console.log(data.objList);
-                            showobsrv(getdatatype, data);   //  화면에 뿌리는 함수
-
-                        }
-                        /*관측소 요청*/
-
-                        /*레이어요청*/
-                        else if (getdatatype == "Layer") {
-                            console.log("Layer");
-                            showlayer(getdatatype, data);   //  화면에 뿌리는 함수
-                        }
-                        /*레이어요청*/
-                        /*북마크요청*/
-                        else if (getdatatype == "BookMark") {
-                            console.log("BookMark");
-                            showBookMark(getdatatype, data);   //  화면에 뿌리는 함수
-                        }
-                        /*북마크요청*/
-
-
+            const ov = {"currentPage": currentPage}
+            $.ajax({
+                url: mapping,
+                data: ov,
+                success: function (data) {
+                    getdatatype = data.type;
+                    console.log("server get type: " + getdatatype);
+                    /*관측소 요청*/
+                    if (getdatatype == "Observation") {
+                        toggleLayerVisibility(6);
+                        console.log(data.objList);
+                        showobsrv(getdatatype, data);   //  화면에 뿌리는 함수
                     }
-                })
+                        /*관측소 요청*/
 
-
+                    /*레이어요청*/
+                    else if (getdatatype == "Layer") {
+                        console.log("Layer");
+                        showlayer(getdatatype, data);   //  화면에 뿌리는 함수
+                    }
+                        /*레이어요청*/
+                    /*북마크요청*/
+                    else if (getdatatype == "BookMark") {
+                        console.log("BookMark");
+                        showBookMark(getdatatype, data);   //  화면에 뿌리는 함수
+                    }
+                    /*북마크요청*/
+                }
+            })
         }
 
         let OPEN = false;
@@ -214,7 +299,6 @@
                 $('#layer_mid3').empty();
                 $('#layer_bot').empty();
                 $('#list').empty();
-
             }
             else if (datatype == getdatatype) {
                 datatype = getdatatype;
@@ -229,30 +313,53 @@
         function showBookMark(getdatatype, data) {
             rightlayerShow(getdatatype);
             let list = $('#list');
-
             const newcon = $('<div></div>');
             const newp = $('<p></p>');
             newp.append(data.type);
             newcon.append(newp);
             list.append(newcon);
-
-
         }
 
-        function createDivCheckBox(divClassName, CheckboxId, CheckboxLabel){
-            var newDiv = $('<div>',{class:divClassName})
-            newDiv.text(CheckboxLabel);
-            var  checkBox= $('<input>', {
+        function createDivCheckBox(divClassName, checkboxId, checkboxLabel, layerLevel,color='',call = true) {
+            var newDiv = $('<div>', { class: divClassName });
+
+
+            var checkBox = $('<input>', {
                 type: 'checkbox',
-                id: CheckboxId,
+                id: checkboxId,
                 class: 'checkBox',
-                click: function() {
-                    toggleLayerVisibility(2);
-                }
+                click: function () {
+                    if(call == true){
+                        toggleLayerVisibility(layerLevel);
+                    }
+                    else{
+                       $.ajax({
+                           url         : 'https://api.hrfco.go.kr/A83AF5E2-7930-4FF2-8C3A-3B27DF327F94/dam/info.json',
+                           dataType    : 'json',
+                           success      : function(data) {
+                               console.log("API 데이터 받기 성공")
+                               console.log(data);
+
+                           }
+
+                       })
+                    }
+
+                },
             });
-            newDiv.append(checkBox)
-            return newDiv
+
+            newDiv.append(checkBox);
+            if(color != ''){
+                var legend_box = $('<div>', {class: 'legend_box'});
+                legend_box.css('background-color',color);
+                newDiv.append(legend_box);
+            }
+            newDiv.append(checkboxLabel);
+
+            return newDiv;
         }
+
+
 
         function showlayer(getdatatype, data) {
             rightlayerShow(getdatatype);
@@ -261,30 +368,21 @@
 
             layerMid.append('<div class="list_level_1">하천도</div>');
 
-            seoulHangang = createDivCheckBox("list_level_2","seoulHacun","서울한강");
-
+            seoulHangang = createDivCheckBox("list_level_2","seoulHacun","서울한강",1,'#0a53be');
+            gyeonggiHacun = createDivCheckBox("list_level_2","gyeonggiHacun","경기도한강",2,'#0a53be');
+            seoulHacunSugye = createDivCheckBox("list_level_2","seoulHacunSugye","서울 한강 수계",3,'#55B4D1');
+            gyeonggiHacunSugye = createDivCheckBox("list_level_2","gyeonggiHacunSugye","경기 한강 수계",4,'#55B4D1');
+            sumun = createDivCheckBox("list_level_1","sumun","수문",5,'green');
+            observation = createDivCheckBox("list_level_1","observation","관측소",6,'red');
+            dam = createDivCheckBox("list_level_1","dam","댐",6,'red',false);
             layerMid.append(seoulHangang);
-            layerMid.append('<div class="list_level_2">서울 한강<input type="checkbox" id="checkbox2" class="checkbox" value="서울 한강"></div>');
-            layerMid.append('<div class="list_level_2">경기도 한강<input type="checkbox" id="checkbox3" class="checkbox" value="경기도 한강"></div>');
-            layerMid.append('<div class="list_level_2">서울 한강 수계<input type="checkbox" id="checkbox4" class="checkbox" value="서울 한강 수계"></div>');
-            layerMid.append('<div class="list_level_2">경기 한강 수계<input type="checkbox" id="checkbox5" class="checkbox" value="경기 한강 수계"></div>');
-
-            layerMid.append('<div class="list_level_1">수문<input type="checkbox" id="sumun" class="checkbox" value="수문"></div>');
-            layerMid.append('<div class="list_level_1">관측소<input type="checkbox" id="checkbox7" class="checkbox" value="관측소"></div>');
-            layerMid.append('<div class="list_level_1">수자원시설물</div>');
-
-            // 하위 항목에 대한 처리
-            layerMid.append('<div class="list_level_2">댐<input type="checkbox" id="checkbox9" class="checkbox" value="댐"></div>');
-            layerMid.append('<div class="list_level_2">저수지<input type="checkbox" id="checkbox10" class="checkbox" value="저수지"></div>');
-            layerMid.append('<div class="list_level_2">펌프장<input type="checkbox" id="checkbox11" class="checkbox" value="펌프장"></div>');
-            layerMid.append('<div class="list_level_2">취소문<input type="checkbox" id="checkbox12" class="checkbox" value="취소문"></div>');
-            layerMid.append('<div class="list_level_2">배소문<input type="checkbox" id="checkbox13" class="checkbox" value="배소문"></div>');
-
+            layerMid.append(gyeonggiHacun);
+            layerMid.append(seoulHacunSugye);
+            layerMid.append(gyeonggiHacunSugye);
+            layerMid.append(sumun);
+            layerMid.append(observation);
+            layerMid.append(dam);
         }
-
-
-
-
 
         function showobsrv(getdatatype, data) {
             console.log(data);
@@ -346,27 +444,20 @@
             var paginationDiv = document.createElement('div');
             paginationDiv.setAttribute('id', 'paging');
             layerBot.appendChild(paginationDiv);
-
             var jspPagination = '';
             let obj = data.obj;
             var newPath = 'obsrvlist'; // 적절한 경로로 변경
-
             if (obj.startPage > obj.pageBlock) {
                 jspPagination += '<div id="page-link" onclick="layerClick(' + (obj.startPage - obj.pageBlock) + ', \'' + newPath + '\')">이전</div>';
             }
-
             for (var i = obj.startPage; i <= obj.endPage; i++) {
                 jspPagination += '<div id="page-item" onclick="layerClick(' + i + ', \'' + newPath + '\')"><div class="page-link">' + i + '</div></div>';
             }
-
             if (obj.endPage >= obj.pageBlock) {
                 jspPagination += '<div id="page-link" onclick="layerClick(' + (obj.startPage + obj.pageBlock) + ', \'' + newPath + '\')">다음</div>';
             }
             jspPagination += '</div>';
-
-
             paginationDiv.innerHTML = jspPagination; // 페이징 코드 추가
-
         }
 
 
@@ -381,15 +472,51 @@
             moveToCoordinates(coordinates,10)
         }
 
-        function moveToCoordinates(coordinates, zoom) {     //  화면이동
-            console.log("corr");
-            console.log(coordinates);
-            // let view = new ol.View();
-            console.log(view);
-            view.animate({
-                center: ol.proj.fromLonLat(coordinates),
-                duration: 2000,  // 애니메이션 지속 시간 (2초)
-                zoom: zoom,
+        let currentPopup = null;
+        function moveToCoordinates(coordinate, zoom) {     //  화면이동
+            console.log("안되는거");
+            console.log(coordinate);
+            var view = map.getView();
+            view.setCenter(ol.proj.fromLonLat(coordinate));
+            var currentZoom = view.getZoom();
+            view.setZoom(14);
+
+
+            let element = document.createElement("div");
+            element.classList.add('ol-popup');
+            // 좌표값을 읽기 쉬운 형식으로 변환
+            const coordinatesText = `Longitude: ${coordinate[0]}, Latitude: ${coordinate[1]}`;
+            element.innerHTML = coordinatesText;
+            // element.innerHTML = coordinate;
+            // 현재 열려 있는 팝업이 있으면 삭제
+            if (currentPopup) {
+                map.removeOverlay(currentPopup);
+            }
+            // 새로운 OverLay 생성
+            let overlay = new ol.Overlay({
+                element: element,
+                autoPan: true,
+                className: "multiPopup",
+                autoPanMargin: 100,
+                autoPanAnimation: {
+                    duration: 400
+                }
+            });
+            // 오버레이의 위치 설정
+            overlay.setPosition(coordinate);
+            // 지도에 추가
+            map.addOverlay(overlay);
+            // 현재 열려 있는 팝업 갱신
+            currentPopup = overlay;
+            // 팝업 닫기 이벤트 처리
+            element.addEventListener('click', function (e) {
+                var target = e.target;
+                if (target.className == "ol-popup-closer") {
+                    // 선택한 OverLayer 삭제
+                    map.removeOverlay(overlay);
+                    // 현재 열려 있는 팝업 변수 초기화
+                    currentPopup = null;
+                }
             });
         }
     </script>
@@ -397,19 +524,12 @@
 <body style="height: 84%">
 <header id="header"></header>
 
-<div style="border: solid 1px black">
-    <button id="activateLayerButton">서울 한강 </button>
-    <button id="sumun">경기 한강 </button>
-    <button id="sumun2">수문위치 </button>
-    <button id="sumun3"> 관측소 위치</button>
+
+<div id="zoomButtons">
+    <button id ="zoomIn">+</button>
+    <button id ="zoomOut" >-</button>
 </div>
 
-<div style="border: solid 1px black">
-
-    <button id="dam">댐 </button>
-    <button id="waterway_pos">관개수로 </button>
-    <button id="pump"> 펌프장</button>
-</div>
 <div id="map">
     <div id="layer">
         <div id="left_layer">
@@ -458,16 +578,13 @@
             </div>
             <div id="layer_bot">
                 <div id="paging" class="pagination"></div>
-
             </div>
 
         </div>
 
     </div>
+
 </div>
-
-
-
 <footer class="footer py-2">
     <div id="footer" class="container">
     </div>
