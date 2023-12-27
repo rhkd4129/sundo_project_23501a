@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>한강 수자원관리 종합 플랫폼 - 기관관리</title>
 
 <!--CSS START -->
 <style>
@@ -47,10 +47,10 @@
 		<table width="100%" style="margin-top:10px;">
 			<tr>
 				<td style="text-align:right">
-					<c:if test="${(userInfo.user_id eq board.user_id) or (userInfo.user_id eq 'admin')}">
-						<button type="button" class="btn btn-dark btn-sm" onclick="callAction('edit','admin_notice_edit?doc_no=${board.doc_no}')">수정</button>
-						<button type="button" class="btn btn-dark btn-sm" onclick="callAction('delete','admin_notice_delete?doc_no=${board.doc_no}&attach_path=${board.attach_path}')">삭제</button>
-					</c:if>
+					<%-- <c:if test="${(userInfo.user_id eq board.user_id) or (userInfo.user_id eq 'admin')}"> --%>
+						<button type="button" class="btn btn-dark btn-sm" onclick="callAction('edit','admin_org_edit?org_code=${board.org_code}')">수정</button>
+						<button type="button" class="btn btn-dark btn-sm" onclick="callAction('delete','admin_org_delete?org_code=${board.org_code}')">삭제</button>
+					<%-- </c:if> --%>
 					<button type="button" class="btn btn-dark btn-sm" onclick="closeDoc()">닫기</button>
 				</td>
 			</tr>
@@ -61,35 +61,22 @@
 				<col width="80%"></col>
 			</colgroup>
 			<tr> 
-				<th>작성자</th>
+				<th>기관명</th>
 				<td>
-					${board.user_name}
+					${board.org_name}
 				</td>
 			</tr>
 			<tr>
-				<th>작성일</th>
-				<td><fmt:formatDate value="${board.create_date}" type="date" pattern="yyyy-MM-dd hh:mm:ss"/></td>
+				<th>행정구역</th>
+				<td>${board.org_area_name}</td>
 			</tr>
 			<tr>
-				<th>제목</th>
-				<td>${board.subject}</td>
-			</tr>
-			<c:if test="${board.attach_path ne null}">
-				<tr>
-					<th>파일첨부</th>
-					<td><a href="javascript:popup('/upload/${board.attach_path}',800,600)">${board.attach_name}</a></td>
-				</tr>
-			</c:if>
-			<tr>
-				<th>조회수</th>
-				<td>${board.bd_count}</td>
+				<th>주소</th>
+				<td>${board.org_addr}</td>
 			</tr>
 			<tr>
-				<th>본문</th>
-				<td></td>
-			</tr>
-			<tr>	
-				<td colspan="2" class="pms-body">${board.body}</td>
+				<th>전화번호</th>
+				<td>${board.org_tel}</td>
 			</tr>
 		</table>
 	</div>

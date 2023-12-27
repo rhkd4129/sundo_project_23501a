@@ -6,43 +6,92 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Insert title here</title>
-    <script type="text/javascript"
-            src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <!-- COMMON END -->
-    <style type="text/css">
-        header {
-            height: 55px;
-        }
+<meta charset="UTF-8">
+<title>수자원 시설물 관리시스템 - 점검결과작성</title>
+<script type="text/javascript"
+        src="http://code.jquery.com/jquery-latest.min.js"></script>
+<!-- COMMON END -->
+<style type="text/css">
+header {
+	height: 55px;
+}
+.searchbox {
+	border:2px solid #dee2e6;
+	border-radius: 10px;
+	padding: 10px;
+}
+.listTable {
+	width: 100%;
+	text-align: center;
+}
+.tableCate {
+	border-top: solid gray 2px;
+	background: #EAEAEA;
+	height: 35px;
+}
+.tableCate th {
+	border-left: solid white 1px;
+	border-right: solid white 1px;
+}
+.tableRow {
+	border-bottom: solid lightgray 1px;
+	height: 35px;
+}
+#paging {
+	margin: 10px;
+}
+.underline {
+	border-bottom:2px solid #fff;
+}
+.tableInfo {
+	border-collapse: collapse;
+	width: 100%;
+	margin: 10px 0px;
+}
+.tableInfo th, .tableInfo td {
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
+}
+.tableInfo th {
+	text-align: center;
+	background-color: #f2f2f2;
+}
 
-        container{
-            width: 80%;
-        }
-        ul{
-            padding: 0;
-        }
-        li{
-            list-style: none;
-        }
+container{
+    width: 80%;
+}
+ul{
+    padding: 0;
+}
+li{	
+    list-style: none;
+}
+.ul-item ul, .ul-item li{
+	padding:8px 0px;
+	text-align: left;
+}
 
-    </style>
+</style>
     <script>
 
         $(function() {
 
             $.ajax({
-                url			: '/main_header_3',
-                dataType 	: 'html',
-                success		: function(data) {
+                url         : '/main_header_3',
+                async		: false,
+                dataType    : 'html',
+                success      : function(data) {
                     $('#header').html(data);
                 }
             });
+            $("#sub-list-1").addClass('underline');
 
             $.ajax({
-                url			: '/main_footer',
-                dataType 	: 'html',
-                success		: function(data) {
+                url         : '/main_footer',
+                dataType    : 'html',
+                success      : function(data) {
                     $('#footer').html(data);
                 }
             });
@@ -97,7 +146,6 @@
             console.log("check_grade");
             console.log(check_grade);
             console.log("note");
-            console.log(note);
 
 
             const cr = {
@@ -118,22 +166,30 @@
             };
 
             $.ajax({
-                type: "POST",
+                type: "post",
                 url: "checkresultSave",
                 data: cr,
                 success: function (response) {
                     // 서버 응답에 대한 로직
                     console.log(response);
-                    let url = "/water_resourcesList";
-                    location.replace(url);
-                }
-                ,
-                error: function (error) {
-                    console.log(error);
-                    console.error(error);
+                    let url;
+                    let code;
+                    if (response == 'Error') {
+                        url = '/water_resourcesList';
+                        location.replace(url);
 
-                    alert("값을 정확히 입력하세요");
+                    }
+
+                    console.log(url);
+                    alert('값을 확인하세요');
+                    // location.replace(url);
+                },
+                error: function (data) {
+                    console.log(data);
+                    location.replace('/water_resourcesList');
+
                 }
+
             });
         }
 
@@ -142,232 +198,253 @@
 </head>
 <body>
 
+	<header id="header"></header>
+	<br>
+	<div class="container">
+		<table width="100%" style="height:45px">
+			<tr>
+				<td style="vertical-align:top"><span class="apptitle">점검결과작성</span></td>
+				<td align="right">
+				</td>
+			</tr>
+		</table>
+		<table class="tableInfo">
+            <tr>
+                <th style="width:80px;text-align:right;font-weight:bold;">시설물코드</th>
+                <td>
+                	<input type="hidden" id="facility_code" value="${WaterResources.facility_code}">
+                	<font class="text-primary" style="font-size:15px"><b>${WaterResources.facility_code}</b></font>
+                </td>
+                <th style="width:70px;text-align:right;font-weight:bold;">시설물</th>
+                <td id="facility_category">
+                	<font class="text-success" style="font-size:15px"><b>${WaterResources.facility_category}</b></font>
+                </td>
+                <th style="width:50px;text-align:right;font-weight:bold;">유형</th>
+                <td id="cate_name">
+                	<font class="text-success" style="font-size:15px"><b>${WaterResources.cate_name}</b></font>
+                </td>
+            </tr>
+        </table>
+		<div class="searchbox">
+            <table>
+                <tr>
+                    <td style="width:70px;text-align:right;font-weight:bold;">점검일자</td>
+                    <td><input class="form-control" type="date" name="check_date" id="check_date"></td>
 
-    <header id="header"></header>
-
-
-    <div class="container" style="margin-top: 3%">
-        <div class="row">
-            <div id="center">
-
-                <table class="table">
-                    <tr>
-                        <td>시설물코드</td>
-                        <input type="hidden" id="facility_code" value="${WaterResources.facility_code}">
-                        <td>${WaterResources.facility_code}</td>
-                        <td>시설물</td>
-                        <td id="facility_category">${WaterResources.facility_category }</td>
-                        <td>유형</td>
-                        <td id="cate_name">${WaterResources.cate_name }</td>
-                    </tr>
-                    <tr class="table">
-                        <td>점검일자:</td>
-                        <td><input class="form-control" type="date" name="check_date" id="check_date"></td>
-
-                        <td>기상상황:</td>
-                        <td><select class="form-select" id="weather" name="weather">
-                            <option value="맑음">맑음</option>
-                            <option value="흐림">흐림</option>
-                            <option value="비">비</option>
-                        </select></td>
-                        <td>점검자 소속:</td>
-                        <td><input value="${UserInfo.user_department}"  class="form-control" type="text" name="user_department" id="user_department" disabled>
-                        </td>
-                        <td>직급:</td>
-                        <td><input value="${UserInfo.user_position}" class="form-control" type="text" name="user_position" id="user_position" disabled>
-                        </td>
-                        <td>이름:</td>
-                        <td><input value="${UserInfo.user_name}" class="form-control" type="text" name="user_name" id="user_name" disabled>
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <th>점검위치</th>
-                        <th>점검 항목</th>
-                        <th>평가 점수</th>
-                        <th>비고</th>
-                    </tr>
-
-                    <tr>
-                        <td>마루</td>
-                        <td>
-                            <ul>
-                                <li>균열 및 단차</li>
-                                <li>수축이음부의 열림</li>
-                                <li>기타사항</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li><select class="check_grade form-select" id="check_grade1">
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                </select></li>
-                                <li><select class="check_grade form-select" id="check_grade2">
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                </select></li>
-                                <li><select class="check_grade form-select" id="check_grade3">
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                </select></li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li><input class="note form-control" id="note1" type="text" name="input1"></li>
-                                <li><input class="note form-control" id="note2" type="text" name="input2"></li>
-                                <li><input class="note form-control" id="note3" type="text" name="input3"></li>
-                            </ul>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>상류면</td>
-                        <td>
-                            <ul>
-                                <li>수축이음부의 열림</li>
-                                <li>균열</li>
-                                <li>박락</li>
-                                <li>기타사항</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li><select class="check_grade form-select" id=check_grade4>
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                </select></li>
-                                <li><select class="check_grade form-select" id=check_grade5>
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                </select></li>
-                                <li><select class="check_grade form-select" id=check_grade6>
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                </select></li>
-                                <li><select class="check_grade form-select" id=check_grade7>
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                </select></li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li><input class="note form-control" id="note4" type="text" name="input1"></li>
-                                <li><input class="note form-control" id="note5" type="text" name="input2"></li>
-                                <li><input class="note form-control" id="note6" type="text" name="input3"></li>
-                                <li><input class="note form-control" id="note7" type="text" name="input3"></li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>하류면</td>
-                        <td>
-                            <ul>
-                                <li>균열 및 단차</li>
-                                <li>수축 및 수평시공이음부를 통한 누수</li>
-                                <li>균열 및 박락</li>
-                                <li>기타사항</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li><select class="check_grade form-select" id=check_grade8>
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                </select></li>
-                                <li><select class="check_grade form-select" id=check_grade9>
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                </select></li>
-                                <li><select class="check_grade form-select" id=check_grade10>
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                </select></li>
-                                <li><select class="check_grade form-select" id=check_grade11>
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                </select></li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li><input class="note form-control" id="note8" type="text" name="input2"></li>
-                                <li><input class="note form-control" id="note9" type="text" name="input3"></li>
-                                <li><input class="note form-control" id="note10" type="text" name="input4"></li>
-                                <li><input class="note form-control" id="note11" type="text" name="input4"></li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>검사량</td>
-                        <td>
-                            <ul>
-                                <li>횡방향 검사량에서의 균열</li>
-                                <li>상류 종방향 검사량에서의 균열</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li><select class="check_grade form-select" id=check_grade12>
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                </select></li>
-                                <li><select class="check_grade form-select" id=check_grade13>
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                </select></li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li><input class="note form-control" id="note12" type="text" name="input1"></li>
-                                <li><input class="note form-control" id="note13" type="text" name="input2"></li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>점검결과:</td>
-
-                        <td>
-                            <select class="form-select" id="check_result" name="check_result">
-                                <option value="보수필요">보수필요</option>
-                                <option value="양호">양호</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>특이사항:</td>
-                        <td><input class="form-control" id="spec_memo" type="text"></td>
-                    </tr>
-                </table>
-                <input class="btn btn-dark" type="button" value="목록" onclick="location.href='/water_resourcesList'">
-                <input class="btn btn-dark" type="button" value="삭제">
-                <input class="btn btn-dark" type="button" onclick="window.location.reload()" value="초기화">
-                <input class="btn btn-dark" type="button" value="저장" id="saveButton" onclick="btnclick()">
-
-            </div>
+                    <td style="width:70px;text-align:right;font-weight:bold;">기상상황</td>
+                    <td>
+                    	<select class="form-select" id="weather" name="weather">
+	                        <option value="맑음">맑음</option>
+	                        <option value="흐림">흐림</option>
+	                        <option value="비">비</option>
+	                    </select>
+                    </td>
+                    <td style="width:80px;text-align:right;font-weight:bold;">점검자 소속</td>
+                    <td><input value="${UserInfo.user_department}"  class="form-control" type="text" name="user_department" id="user_department" disabled>
+                    </td>
+                    <td style="width:50px;text-align:right;font-weight:bold;">직급</td>
+                    <td><input value="${UserInfo.user_position}" class="form-control" type="text" name="user_position" id="user_position" disabled>
+                    </td>
+                    <td style="width:50px;text-align:right;font-weight:bold;">이름</td>
+                    <td><input value="${UserInfo.user_name}" class="form-control" type="text" name="user_name" id="user_name" disabled>
+                    </td>
+                </tr>
+            </table>
         </div>
+        
+        <div style="margin:10px 0px;">
+            <table class="listTable">
+            	<colgroup>
+            		<col width="10%">
+            		<col width="30%">
+            		<col width="10%">
+            		<col width="50%">
+            	</colgroup>
+                <tr class="tableCate">
+                    <th>점검위치</th>
+                    <th>점검 항목</th>
+                    <th>평가 점수</th>
+                    <th>비고</th>
+                </tr>
+                <tr class="tableRow">
+                    <td>마루</td>
+                    <td>
+                        <ul class="ul-item">
+                            <li>-균열 및 단차</li>
+                            <li>-수축이음부의 열림</li>
+                            <li>-기타사항</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><select class="check_grade form-select" id="check_grade1">
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                            </select></li>
+                            <li><select class="check_grade form-select" id="check_grade2">
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                            </select></li>
+                            <li><select class="check_grade form-select" id="check_grade3">
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                            </select></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><input class="note form-control" id="note1" type="text" name="input1"></li>
+                            <li><input class="note form-control" id="note2" type="text" name="input2"></li>
+                            <li><input class="note form-control" id="note3" type="text" name="input3"></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr class="tableRow">
+                    <td>상류면</td>
+                    <td>
+                        <ul class="ul-item">
+                            <li>-수축이음부의 열림</li>
+                            <li>-균열</li>
+                            <li>-박락</li>
+                            <li>-기타사항</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><select class="check_grade form-select" id=check_grade4>
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                            </select></li>
+                            <li><select class="check_grade form-select" id=check_grade5>
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                            </select></li>
+                            <li><select class="check_grade form-select" id=check_grade6>
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                            </select></li>
+                            <li><select class="check_grade form-select" id=check_grade7>
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                            </select></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><input class="note form-control" id="note4" type="text" name="input1"></li>
+                            <li><input class="note form-control" id="note5" type="text" name="input2"></li>
+                            <li><input class="note form-control" id="note6" type="text" name="input3"></li>
+                            <li><input class="note form-control" id="note7" type="text" name="input3"></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr class="tableRow">
+                    <td>하류면</td>
+                    <td>
+                        <ul class="ul-item">
+                            <li>-균열 및 단차</li>
+                            <li>-수축 및 수평시공이음부를 통한 누수</li>
+                            <li>-균열 및 박락</li>
+                            <li>-기타사항</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><select class="check_grade form-select" id=check_grade8>
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                            </select></li>
+                            <li><select class="check_grade form-select" id=check_grade9>
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                            </select></li>
+                            <li><select class="check_grade form-select" id=check_grade10>
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                            </select></li>
+                            <li><select class="check_grade form-select" id=check_grade11>
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                            </select></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><input class="note form-control" id="note8" type="text" name="input2"></li>
+                            <li><input class="note form-control" id="note9" type="text" name="input3"></li>
+                            <li><input class="note form-control" id="note10" type="text" name="input4"></li>
+                            <li><input class="note form-control" id="note11" type="text" name="input4"></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr class="tableRow">
+                    <td>검사량</td>
+                    <td>
+                        <ul class="ul-item">
+                            <li>-횡방향 검사량에서의 균열</li>
+                            <li>-상류 종방향 검사량에서의 균열</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><select class="check_grade form-select" id=check_grade12>
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                            </select></li>
+                            <li><select class="check_grade form-select" id=check_grade13>
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                            </select></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><input class="note form-control" id="note12" type="text" name="input1"></li>
+                            <li><input class="note form-control" id="note13" type="text" name="input2"></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr class="tableRow" style="background-color:#f0faff">
+                    <td><b>점검결과 :</b></td>
+
+                    <td colspan="3" style="padding:5px 0px">
+                        <select class="form-select" id="check_result" name="check_result">
+                            <option value="보수필요">보수필요</option>
+                            <option value="양호">양호</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="tableRow" style="background-color:#f0faff">
+                    <td><b>특이사항 :</b></td>
+                    <td colspan="3" style="padding:5px 0px"><input class="form-control" id="spec_memo" type="text"></td>
+                </tr>
+            </table>
+            <div align="right" style="margin-top:10px">
+	            <input class="btn btn-dark" type="button" value="목록" onclick="location.href='/water_resourcesList'">
+	            <input class="btn btn-dark" type="button" value="삭제">
+	            <input class="btn btn-dark" type="button" onclick="window.location.reload()" value="초기화">
+	            <input class="btn btn-dark" type="button" value="저장" id="saveButton" onclick="btnclick()">
+			</div>
+		</div>
     </div>
 
-    <footer class="footer py-2">
-        <div id="footer" class="container">
-        </div>
-    </footer>
+	<footer class="footer py-2">
+	    <div id="footer" class="container">
+	    </div>
+	</footer>
 
 </body>
 </html>

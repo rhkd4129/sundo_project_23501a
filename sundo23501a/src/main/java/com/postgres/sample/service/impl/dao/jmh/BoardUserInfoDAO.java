@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 
-import com.postgres.sample.dto.BoardNotice;
 import com.postgres.sample.dto.Code;
 import com.postgres.sample.dto.UserInfo;
 
 @Mapper("BoardUserInfoDAO")
 public interface BoardUserInfoDAO {
-	public List<Code> 			JmhCodeList2(Code code);
+	public List<Code>			JmhCodeList(Code code);				//분류
 	public int 					JmhTotalCount(UserInfo userInfo);	//총문서 수
 	public int 					JmhSearchCount(UserInfo userInfo);	//검색결과 수
 	public List<UserInfo> 		JmhSearchList(UserInfo userInfo);	//검색결과 목록

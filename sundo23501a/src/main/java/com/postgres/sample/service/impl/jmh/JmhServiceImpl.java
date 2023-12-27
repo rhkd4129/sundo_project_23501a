@@ -23,6 +23,7 @@ public class JmhServiceImpl extends EgovAbstractServiceImpl implements JmhServic
 
 	private final BoardNoticeDAO	boardNoticeDAO;
 	
+	
 	//--------------------------------------------------------------------------------------
 	//---------공지사항
 	//--------------------------------------------------------------------------------------	
@@ -90,11 +91,24 @@ public class JmhServiceImpl extends EgovAbstractServiceImpl implements JmhServic
 		int resultCount = 0;		
 		Date sysdate = new Date();
 		boardNotice.setCreate_date(sysdate);		
-		//----------------------------------------------
+		//-------------------------------------------------------
 		resultCount = boardNoticeDAO.JmhInsertBoard(boardNotice);
-		//----------------------------------------------
+		//-------------------------------------------------------
 		System.out.println("JmhServiceImpl insertBoard resultCount->"+resultCount);
 		System.out.println("JmhServiceImpl insertBoard END...");
+		//return resultCount;
+		return boardNotice.getDoc_no();
+	}
+	//파일첨부 등록
+	@Override
+	public int insertAttach(BoardNotice boardNotice) {
+		System.out.println("JmhServiceImpl insertAttach START...");
+		int resultCount = 0;
+		//--------------------------------------------------------
+		resultCount = boardNoticeDAO.JmhInsertAttach(boardNotice);
+		//--------------------------------------------------------
+		System.out.println("JmhServiceImpl insertAttach resultCount->"+resultCount);
+		System.out.println("JmhServiceImpl insertAttach END...");
 		return resultCount;
 	}
 
@@ -136,6 +150,18 @@ public class JmhServiceImpl extends EgovAbstractServiceImpl implements JmhServic
 		System.out.println("JmhServiceImpl deleteBoard END...");
 		return resultCount;
 	}
+	//파일첨부 삭제
+	@Override
+	public int deleteAttach(BoardNotice boardNotice) {
+		System.out.println("JmhServiceImpl deleteAttach START...");
+		int resultCount = 0;
+		//--------------------------------------------------------
+		resultCount = boardNoticeDAO.JmhDeleteAttach(boardNotice);
+		//--------------------------------------------------------
+		System.out.println("JmhServiceImpl deleteAttach resultCount->"+resultCount);
+		System.out.println("JmhServiceImpl deleteAttach END...");
+		return resultCount;
+	}
 
 	//조회수
 	@Override
@@ -157,7 +183,7 @@ public class JmhServiceImpl extends EgovAbstractServiceImpl implements JmhServic
 		List<Code> codeList = null;
 		System.out.println("JmhServiceImpl codeList Start...");
 		//-------------------------------------------------
-		codeList = boardNoticeDAO.JmhCodeList2(code);
+		codeList = boardNoticeDAO.JmhCodeList(code);
 		//-------------------------------------------------
 		System.out.println("JmhServiceImpl codeList.size()->" +codeList.size());
 		

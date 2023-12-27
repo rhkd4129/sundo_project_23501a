@@ -5,8 +5,9 @@ import java.util.Map;
 
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 
-import com.postgres.sample.dto.BoardNotice;
+import com.postgres.sample.dto.AccessLog;
 import com.postgres.sample.dto.Code;
+import com.postgres.sample.dto.LoginLog;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.UserInfo;
 
@@ -14,6 +15,8 @@ import com.postgres.sample.dto.UserInfo;
 public interface UserInfoDAO {
 	public UserInfo 			JmhUserLoginCheck(UserInfo userInfo); 	//로그인체크
 	public UserInfo 			JmhUserLoginSystemCheck(UserInfo userInfo); //로그인체크+권한체크
+	public UserInfo 			JmhUserLoginUseFlagCheck(UserInfo userInfo); //로그인체크+권한체크+사용여부Y체크
+	
 	public List<Code> 			JmhCodeList(Code code); 				//시스템(권한)
 	public List<Organization> 	JmhOrgList();							//기간코드/기관명 정보
 	public UserInfo 			JmhIdConfirm(String user_id); 			//ID 중복체크
@@ -33,5 +36,8 @@ public interface UserInfoDAO {
 	public int 					JmhUpdateBoard(UserInfo userInfo);		//수정
 	public int 					JmhDeleteBoard(UserInfo userInfo);		//삭제
 	public int 					JmhReadCount(UserInfo userInfo); 		//조회수
+
+	public int 					JmhInsertLoginLog(LoginLog loginLog);	//로그인이력
+	public int 					JmhInsertAccessLog(AccessLog accessLog);//접속이력
 
 }

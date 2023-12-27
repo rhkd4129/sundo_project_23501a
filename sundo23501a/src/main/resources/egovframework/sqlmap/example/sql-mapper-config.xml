@@ -3,30 +3,34 @@
 
 <configuration>
     <typeAliases>
-		<typeAlias alias="egovMap" type="org.egovframe.rte.psl.dataaccess.util.EgovMap"/>
-		<typeAlias alias="boardVO" type="com.postgres.sample.dto.BoardVO"/>
+		<typeAlias alias="EgovMap" type="org.egovframe.rte.psl.dataaccess.util.EgovMap"/>
 		
-		<typeAlias alias="accessLog" type="com.postgres.sample.dto.AccessLog"/>
-		<typeAlias alias="actionReport" type="com.postgres.sample.dto.ActionReport"/>
-		<typeAlias alias="alarm" type="com.postgres.sample.dto.Alarm"/>
-		<typeAlias alias="boardNotice" type="com.postgres.sample.dto.BoardNotice"/>
-		<typeAlias alias="breakReport" type="com.postgres.sample.dto.BreakReport"/>
-		<typeAlias alias="checkReport" type="com.postgres.sample.dto.CheckReport"/>
-		<typeAlias alias="checkItemInfo" type="com.postgres.sample.dto.CheckItemInfo"/>
-		<typeAlias alias="checkList" type="com.postgres.sample.dto.CheckList"/>
-		<typeAlias alias="code" type="com.postgres.sample.dto.Code"/>
-		<typeAlias alias="fileAttach" type="com.postgres.sample.dto.FileAttach"/>
-		<typeAlias alias="flow" type="com.postgres.sample.dto.Flow"/>
-		<typeAlias alias="loginLog" type="com.postgres.sample.dto.LoginLog"/>
-		<typeAlias alias="observation" type="com.postgres.sample.dto.Observation"/>
-		<typeAlias alias="organization" type="com.postgres.sample.dto.Organization"/>
-		<typeAlias alias="rainFall" type="com.postgres.sample.dto.RainFall"/>
-		<typeAlias alias="userInfo" type="com.postgres.sample.dto.UserInfo"/>
-		<typeAlias alias="waterGate" type="com.postgres.sample.dto.WaterGate"/>
-		<typeAlias alias="WaterLevel" type="com.postgres.sample.dto.WaterLevel"/>
-		<typeAlias alias="waterResources" type="com.postgres.sample.dto.WaterResources"/>
-		<typeAlias alias="orgArea" type="com.postgres.sample.dto.OrgArea"/>
+		<typeAlias alias="AccessLog" type="com.postgres.sample.dto.AccessLog"/>
+		<typeAlias alias="ActionReport" type="com.postgres.sample.dto.ActionReport"/>
+		<typeAlias alias="Alarm" type="com.postgres.sample.dto.Alarm"/>
+		<typeAlias alias="BoardNotice" type="com.postgres.sample.dto.BoardNotice"/>
+		<typeAlias alias="BoardVO" type="com.postgres.sample.dto.BoardVO"/>
+		<typeAlias alias="BreakReport" type="com.postgres.sample.dto.BreakReport"/>
+		<typeAlias alias="CategoryVO" type="com.postgres.sample.dto.CategoryVO"/>
+		<typeAlias alias="CheckItemInfo" type="com.postgres.sample.dto.CheckItemInfo"/>
+		<typeAlias alias="CheckList" type="com.postgres.sample.dto.CheckList"/>
+		<typeAlias alias="CheckReport" type="com.postgres.sample.dto.CheckReport"/>
+		<typeAlias alias="Code" type="com.postgres.sample.dto.Code"/>
+		<typeAlias alias="FileAttach" type="com.postgres.sample.dto.FileAttach"/>
+		<typeAlias alias="Flow" type="com.postgres.sample.dto.Flow"/>
+		<typeAlias alias="HijResponse" type="com.postgres.sample.dto.HijResponse"/>
+		<typeAlias alias="KjoResponse" type="com.postgres.sample.dto.HijResponse"/>
+		<typeAlias alias="LjhResponse" type="com.postgres.sample.dto.HijResponse"/>
 		<typeAlias alias="LKH_WaterResources" type="com.postgres.sample.dto.LKH_WaterResources"/>
-		<typeAlias alias="categoryVO" type="com.postgres.sample.dto.CategoryVO"/>
+		<typeAlias alias="LoginLog" type="com.postgres.sample.dto.LoginLog"/>
+		<typeAlias alias="Observation" type="com.postgres.sample.dto.Observation"/>
+		<typeAlias alias="Organization" type="com.postgres.sample.dto.Organization"/>
+		<typeAlias alias="OrgArea" type="com.postgres.sample.dto.OrgArea"/>
+		<typeAlias alias="Paging" type="com.postgres.sample.dto.Paging"/>
+		<typeAlias alias="RainFall" type="com.postgres.sample.dto.RainFall"/>
+		<typeAlias alias="UserInfo" type="com.postgres.sample.dto.UserInfo"/>
+		<typeAlias alias="WaterGate" type="com.postgres.sample.dto.WaterGate"/>
+		<typeAlias alias="WaterLevel" type="com.postgres.sample.dto.WaterLevel"/>
+		<typeAlias alias="WaterResources" type="com.postgres.sample.dto.WaterResources"/>
     </typeAliases>
 </configuration>

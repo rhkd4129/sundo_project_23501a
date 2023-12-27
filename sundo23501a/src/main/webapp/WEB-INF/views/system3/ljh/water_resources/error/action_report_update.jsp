@@ -5,11 +5,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>수자원 시설물 관리시스템 - 고장 결과 보고서</title>
 <style type="text/css">
 	.title {
 		text-align: center;
-		font-size: 25pt;
+		font-size: 25px;
+		font-weight: bold;
 	}
 	
 	table {
@@ -62,8 +63,9 @@
 	header {
 		height: 55px;
 	}
-	
-	
+.underline {
+	border-bottom:2px solid #fff;
+}	
 </style>
 <script type="text/javascript">
 
@@ -71,11 +73,13 @@
 
 		$.ajax({
 			url			: '/main_header_3',
+			async		: false,
 			dataType 	: 'html',
 			success		: function(data) {
 				$('#header').html(data);
 			}
 		});
+		$("#sub-list-4").addClass('underline');
 	
 		$.ajax({
 			url			: '/main_footer',
@@ -241,14 +245,14 @@
 						<tbody>
 							<tr>
 								<th>고장/발생 일자</th>
-								<td colspan="2"><input type="date" class="date" name="break_date" value="${actionRpt.break_date }"></td>
+								<td colspan="2"><input type="date" class="date form-control" name="break_date" value="${actionRpt.break_date }"></td>
 								<th>조치/복구 일자</th>
-								<td colspan="2"><input type="date" class="date" name="action_date" value="${actionRpt.action_date }"></td>					
+								<td colspan="2"><input type="date" class="date form-control" name="action_date" value="${actionRpt.action_date }"></td>					
 							</tr>
-							<tr><th>고장내역</th><td colspan="5"><textarea rows="4" name="break_content">${actionRpt.break_content }</textarea></td></tr>
-							<tr><th>조치내역</th><td colspan="5"><textarea rows="4" name="action_content">${actionRpt.action_content }</textarea></td></tr>
-							<tr><th>특이사항</th><td colspan="5"><textarea rows="4" name="spec_memo">${actionRpt.spec_memo }</textarea></td>
-							<tr><th>향후계획</th><td colspan="5"><textarea rows="4" name="future_plan">${actionRpt.future_plan }</textarea></td></tr>
+							<tr><th>고장내역</th><td colspan="5"><textarea rows="3" class="form-control" name="break_content">${actionRpt.break_content }</textarea></td></tr>
+							<tr><th>조치내역</th><td colspan="5"><textarea rows="3" class="form-control" name="action_content">${actionRpt.action_content }</textarea></td></tr>
+							<tr><th>특이사항</th><td colspan="5"><textarea rows="3" class="form-control" name="spec_memo">${actionRpt.spec_memo }</textarea></td>
+							<tr><th>향후계획</th><td colspan="5"><textarea rows="3" class="form-control" name="future_plan">${actionRpt.future_plan }</textarea></td></tr>
 						</tbody>
 					</table>
 					<div class="btns">

@@ -26,7 +26,39 @@
 		And    user_pw = #{user_pw}
 		And	   system_category = #{system_category}
 	</select>
+	<select id="JmhUserLoginUseFlagCheck" parameterType="UserInfo" resultType="UserInfo">
+		Select u.*, c.cate_name system_name, o.org_name
+		FROM USER_INFO u
+			 LEFT OUTER JOIN CODE c
+				 ON u.system_category = c.cate_code
+				 AND c.field_name = 'system_category'
+			 LEFT OUTER JOIN ORGANIZATION o
+				 ON u.org_code = o.org_code
+		Where  user_id = #{user_id}
+		And    user_pw = #{user_pw}
+		And	   system_category = #{system_category}
+		And	   use_flag = 'Y'
+	</select>
 	
+	<insert id="JmhInsertLoginLog" parameterType="LoginLog">
+		<selectKey resultType="int" keyProperty="log_no" order="BEFORE">
+        	SELECT COALESCE(MAX(log_no),0)+1 FROM LOGIN_LOG
+    	</selectKey>
+		INSERT INTO 
+		LOGIN_LOG(log_no, user_id, login_datetime, ip, create_datetime)
+		VALUES (#{log_no}, #{user_id}, NOW(), #{ip}, NOW())
+	</insert>
+
+	<insert id="JmhInsertAccessLog" parameterType="AccessLog">
+		<selectKey resultType="int" keyProperty="log_no" order="BEFORE">
+        	SELECT COALESCE(MAX(log_no),0)+1 FROM ACCESS_LOG
+    	</selectKey>
+		INSERT INTO 
+		ACCESS_LOG(log_no, program_url, user_id, access_datetime, ip, create_datetime)
+		VALUES (#{log_no}, #{program_url}, #{user_id}, NOW(), #{ip}, NOW())
+	</insert>
+
+
 	<!-- 기간명 가져오기 -->
 	<select id="JmhOrgList" resultType="Organization">
 		SELECT *

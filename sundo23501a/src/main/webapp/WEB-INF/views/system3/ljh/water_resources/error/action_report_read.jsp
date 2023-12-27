@@ -5,13 +5,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>수자원 시설물 관리시스템 - 고장 결과 보고서</title>
 
 
 <style type="text/css">
 	.title {
 		text-align: center;
-		font-size: 25pt;
+		font-size: 25px;
+		font-weight: bold;
 	}
 	
 	table {
@@ -45,7 +46,9 @@
 	header {
 		height: 55px;
 	}
-
+.underline {
+	border-bottom:2px solid #fff;
+}
 </style>
 
 <script>
@@ -54,11 +57,13 @@
 
 		$.ajax({
 			url			: '/main_header_3',
+			async		: false,
 			dataType 	: 'html',
 			success		: function(data) {
 				$('#header').html(data);
 			}
 		});
+		$("#sub-list-4").addClass('underline');
 
 		$.ajax({
 			url			: '/main_footer',
@@ -97,15 +102,14 @@
 </script>
 </head>
 <body>
-
-
 	<header id="header"></header>
-
-	<div class="container" style="margin-top: 3%">
+	<br>
+	<div class="container">
 		<div class="row">
 			<div id="center">
-				<p class="title">조치 결과 보고서 상세 페이지</p>
-				<div>
+				<div align="center"><span class="apptitle" style="height:45px">조치 결과 보고서 상세 페이지</span></div>
+				
+				<div style="margin-top:20px">
 					<table>
 						<thead>
 						<tr>

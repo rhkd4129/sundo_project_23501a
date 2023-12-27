@@ -115,7 +115,7 @@ public class EgovWebMvcConfiguration extends WebMvcConfigurationSupport {
 				.addPathPatterns("/**")
 
 				// Interceptor 적용하지 않음
-				.excludePathPatterns("/main_header", "/main_footer", "/board_notice_list", "/board_notice_read"
+				.excludePathPatterns("/main_header", "/main_footer", "/org_intro", "/board_notice_list", "/board_notice_read"
 						, "/user_login", "/user_join_write", "/user_join_agree", "/user_find_pw"
 						, "/user_find_pw_new/**", "/user_find_id", "/user_find_id_result", "/user_find_pw_auth"
 						, "/send_save_mail", "/write_user_info", "/id_confirm", "/user_find_pw_update", "/user_login_check"

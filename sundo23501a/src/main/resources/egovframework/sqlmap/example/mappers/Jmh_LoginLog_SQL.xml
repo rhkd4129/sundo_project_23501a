@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.postgres.sample.service.impl.dao.jmh.LoginLogDAO">
+
+	<!-- 총 문서수 -->
+	<select id="JmhTotalCount" parameterType="LoginLog" resultType="int">
+		SELECT Count(*) 
+		FROM LOGIN_LOG
+	</select>
+
+	<!-- 검색 문서수 -->
+	<select id="JmhSearchCount" parameterType="LoginLog" resultType="int">
+		SELECT Count(*)
+		FROM (
+			SELECT p.*, u.user_name, u.system_category   					
+			FROM LOGIN_LOG p
+				LEFT OUTER JOIN USER_INFO u
+				ON p.user_id = u.user_id
+			ORDER BY p.log_no DESC) a
+		WHERE 1=1
+			<choose>
+					<when test="system_category != 'all'">
+						 AND a.system_category = #{system_category} 
+					</when>
+				</choose>
+				<choose>
+					<when test="user_name != ''">
+						 AND a.user_name like '%' || #{user_name} || '%'
+					</when>
+				</choose>
+				<choose>
+					<when test="ip != ''">
+						 AND a.ip like '%' || #{ip} || '%'
+					</when>
+				</choose>
+				<choose>
+					<when test="from_date != '' and to_date == ''">
+						 AND <![CDATA[ TO_CHAR(a.login_datetime, 'YYYY-MM-DD') >= #{from_date} ]]>
+					</when>
+					<when test="from_date == '' and to_date != ''">
+						 AND <![CDATA[ TO_CHAR(a.login_datetime, 'YYYY-MM-DD') <= #{to_date} ]]>
+					</when>
+					<when test="from_date != '' and to_date != ''">
+						 AND TO_CHAR(a.login_datetime, 'YYYY-MM-DD') BETWEEN #{from_date} AND #{to_date}
+					</when>
+					<otherwise>						 
+					</otherwise>
+				</choose>
+	</select>
+	
+	<!-- 문서 목록 -->
+	<select id="JmhBoardList" parameterType="LoginLog" resultType="LoginLog">
+		SELECT *
+		FROM
+		(
+			SELECT (row_number() over()) AS rn, a.*, c.cate_name system_name 
+			FROM (
+				SELECT p.*, u.user_name, u.system_category   					
+				FROM LOGIN_LOG p
+					  	LEFT OUTER JOIN USER_INFO u
+					  	  ON p.user_id = u.user_id
+				ORDER BY p.log_no DESC) a
+				LEFT OUTER JOIN CODE c
+				  ON a.system_category = c.cate_code
+				 AND c.field_name = 'system_category'
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+
+	<!-- 검색 목록 -->
+	<select id="JmhSearchList" parameterType="LoginLog" resultType="LoginLog">
+		SELECT *
+		FROM
+		(
+			SELECT (row_number() over()) AS rn, a.*, c.cate_name system_name 
+			FROM (
+				SELECT p.*, u.user_name, u.system_category   					
+				FROM LOGIN_LOG p
+					LEFT OUTER JOIN USER_INFO u
+					ON p.user_id = u.user_id
+				ORDER BY p.log_no DESC) a
+				LEFT OUTER JOIN CODE c
+				  ON a.system_category = c.cate_code
+				 AND c.field_name = 'system_category'
+			WHERE 1=1			
+				<choose>
+					<when test="system_category != 'all'">
+						 AND a.system_category = #{system_category} 
+					</when>
+				</choose>
+				<choose>
+					<when test="user_name != ''">
+						 AND a.user_name like '%' || #{user_name} || '%'
+					</when>
+				</choose>
+				<choose>
+					<when test="ip != ''">
+						 AND a.ip like '%' || #{ip} || '%'
+					</when>
+				</choose>
+				<choose>
+					<when test="from_date != '' and to_date == ''">
+						 AND <![CDATA[ TO_CHAR(a.login_datetime, 'YYYY-MM-DD') >= #{from_date} ]]>
+					</when>
+					<when test="from_date == '' and to_date != ''">
+						 AND <![CDATA[ TO_CHAR(a.login_datetime, 'YYYY-MM-DD') <= #{to_date} ]]>
+					</when>
+					<when test="from_date != '' and to_date != ''">
+						 AND TO_CHAR(a.login_datetime, 'YYYY-MM-DD') BETWEEN #{from_date} AND #{to_date}
+					</when>
+					<otherwise>						 
+					</otherwise>
+				</choose>			
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+		
+	</select>
+
+</mapper>

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>한강 수자원관리 종합 플랫폼 - 사용자관리</title>
 
 <!--CSS START -->
 <!-- CSS END -->
@@ -27,7 +27,7 @@ $(function() {
 		}
 	});
 
-	var USE_FLAG = "${board.use_flag}";
+	var USE_FLAG = "${userInfo.use_flag}";
 	if(USE_FLAG == 'N') {
 		$('#idUseFlag').prop('checked', false);
 	}else{
@@ -42,8 +42,11 @@ $(function() {
 <!-- CONTENT -->
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 			<div class="container-fluid">
-					<form name="formUserInfo" action="admin_userinfo_update" method="post">
-						<input type="hidden" class="form-control" name="user_pw" value="${board.user_pw}" readonly>
+					<form:form action="admin_userinfo_update" method="post" 
+						                   name="formUserInfo"
+						                   modelAttribute="userInfo"
+						                   onsubmit="return admin_userinfo_update()" width="100%">
+						<input type="hidden" class="form-control" name="user_pw" value="${userInfo.user_pw}" readonly>
 						<div style="height:34px">
 							<span class="apptitle">문서 수정</span>
 						</div>
@@ -66,7 +69,7 @@ $(function() {
 				        			<select name="system_category"  class="form-select">
 				        				<c:forEach var="code" items="${CodeList_system_category}" varStatus="status">
 											<option value="${code.cate_code}" 
-											<c:if test="${status.count == board.system_category}">selected</c:if>
+											<c:if test="${status.count == userInfo.system_category}">selected</c:if>
 											>${code.cate_name}</option>				        				
 				        				</c:forEach>
 				        			</select>
@@ -74,19 +77,31 @@ $(function() {
 							</tr>	
 							<tr> 
 								<th>작성자</th>
-								<td><input type="text" class="form-control" name="user_name" required="required" value="${board.user_name}"></td>
+								<td>
+									<input type="text" class="form-control" name="user_name" value="${userInfo.user_name}" required="required">
+									<small style="color: red"><form:errors path="user_name"/></small>
+								</td>
 							</tr>
 							<tr> 
 								<th>아이디</th>
-								<td><input type="text" class="form-control" name="user_id" value="${board.user_id}" readonly></td>
+								<td>
+									<input type="text" class="form-control" name="user_id" value="${userInfo.user_id}" readonly>
+									<small style="color: red"><form:errors path="user_id"/></small>
+								</td>
 							</tr>
 							<tr>
 								<th>전화번호</th>
-								<td><input type="text" class="form-control" name="user_tel" required="required" value="${board.user_tel}"></td>
+								<td>
+									<input type="text" class="form-control" name="user_tel" value="${userInfo.user_tel}" required="required">
+									<small style="color: red"><form:errors path="user_tel"/></small>
+								</td>
 							</tr>
 							<tr>
 								<th>이메일</th>
-								<td><input type="text" class="form-control" name="user_email" required="required" value="${board.user_email}"></td>
+								<td>
+									<input type="text" class="form-control" name="user_email" value="${userInfo.user_email}" required="required">
+									<small style="color: red"><form:errors path="user_email"/></small>
+								</td>
 							</tr>
 							<tr>
 								<th>기관정보</th>
@@ -100,30 +115,28 @@ $(function() {
 							</tr>
 							<tr>
 								<th>소속부서</th>
-								<td><input type="text" class="form-control" name="user_department" required="required" value="${board.user_department}"></td>
-							</tr>
-							<tr>
-								<th>직급</th>
-								<td><input type="text" class="form-control" name="user_position" required="required" value="${board.user_position}"></td>
-							</tr>
-							<tr>
-								<th>사용여부</th>
-								<td><input type="hidden" name="use_flag" value="${board.use_flag}">
-									<div class="form-check form-switch">
-										<input class="form-check-input" type="checkbox" role="switch" id="idUseFlag" checked="" value="${board.use_flag}">
-									</div>
+								<td>
+									<input type="text" class="form-control" name="user_department" value="${userInfo.user_department}" required="required">
+									<small style="color: red"><form:errors path="user_department"/></small>
 								</td>
 							</tr>
 							<tr>
-								<th>작성일</th>
-								<td><input type="text" class="form-control" name="create_datetime" value="<fmt:formatDate value="${board.create_datetime}" type="date" pattern="yyyy-MM-dd hh:mm:ss"/>" readonly></td>
+								<th>직급</th>
+								<td>
+									<input type="text" class="form-control" name="user_position" value="${userInfo.user_position}" required="required">
+									<small style="color: red"><form:errors path="user_position"/></small>
+								</td>
 							</tr>
 							<tr>
-								<th>수정일</th>
-								<td><input type="text" class="form-control" name="modify_datetime" value="<fmt:formatDate value="${board.modify_datetime}" type="date" pattern="yyyy-MM-dd hh:mm:ss"/>" readonly></td>
+								<th>사용여부</th>
+								<td><input type="hidden" name="use_flag" value="${userInfo.use_flag}">
+									<div class="form-check form-switch">
+										<input class="form-check-input" type="checkbox" role="switch" id="idUseFlag" checked="" value="${userInfo.use_flag}">
+									</div>
+								</td>
 							</tr>
 						</table>
-					</form>
+					</form:form>
 			</div>
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 </body>

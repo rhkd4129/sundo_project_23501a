@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>한강 수자원관리 종합 플랫폼 - 공지사항</title>
 
 <!--CSS START -->
 <!-- CSS END -->
@@ -75,15 +75,15 @@ $(function() {
 											<td>
 												<input type="hidden" name="attach_name" value="${board.attach_name}">
 												<input type="hidden" name="attach_path" value="${board.attach_path}">
+												<input type="hidden" name="attach_saved_name" value="${board.attach_saved_name}">
 												<input type="hidden" name="attach_delete_flag" id="idAttachDeleteFlag" value="">
 												<div id="idAttachFile">
-													<c:if test="${board.attach_path ne null}">
-														<a href="/upload/${board.attach_path}" target="_blank">${board.attach_name}</a>
-														&nbsp;&nbsp;<img src="/common/images/btn_icon_delete2.png" onclick="deleteFlagAttach()" style="cursor:pointer">
-														<%-- <img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${board.attach_path}" width="100"> --%>
+													<c:if test="${board.attach_name ne null}">
+														<a href="${board.attach_path}/${board.attach_saved_name}" target="_blank">${board.attach_name}</a>
+														&nbsp;&nbsp;<img src="/images/btn_icon_delete2.png" onclick="deleteFlagAttach()" style="cursor:pointer">
 													</c:if>													
 												</div>																						
-												<div id="idAttachInput" <c:if test="${board.attach_path ne null}">style="display:none;"</c:if> >
+												<div id="idAttachInput" <c:if test="${board.attach_name ne null}">style="display:none;"</c:if> >
 													<input type="file" class="form-control form-control-sm" name="file1">
 												</div>
 											</td>
@@ -95,7 +95,7 @@ $(function() {
 								<th>본문</th>
 								<td>							
 									<div class="input-group">
-										<textarea class="form-control" aria-label="With textarea" name="body" rows="15">${board.doc_body}</textarea>
+										<textarea class="form-control" aria-label="With textarea" name="body" rows="15">${board.body}</textarea>
 									</div>
 								</td>
 							</tr>

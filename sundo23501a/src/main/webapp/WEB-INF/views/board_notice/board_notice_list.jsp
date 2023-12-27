@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>한강 수자원관리 종합 플랫폼 - 공지사항</title>
 
 <!--CSS START -->
 <!-- CSS END -->
@@ -103,6 +103,23 @@
 <style type="text/css">
 header {
     height: 55px;
+}
+hr{
+	margin:0px;
+}
+.table > thead {
+	border-top:2px solid #888888;
+}
+.searchbox {
+	border:2px solid #dee2e6;
+	border-radius: 10px;
+	padding: 10px;
+}
+.searchbox th, td {
+	padding: 2px;
+}
+.tr-link {
+	cursor:pointer;
 }
 </style>
 </head>
@@ -226,7 +243,7 @@ header {
 								</c:choose>
 								<a class="page-link" href="javascript:gotoPage('${i}')">${i}</a></li>
 							</c:forEach>						
-						    <c:if test="${page.endPage > page.totalPage}">
+						    <c:if test="${page.endPage < page.totalPage}">
 						    	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage+page.pageBlock}')">다음</a></li>
 						    </c:if>
 						    

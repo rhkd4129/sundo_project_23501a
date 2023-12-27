@@ -67,9 +67,9 @@
         select * from
         (
         select row_number() over() as rn,ui.user_name, cr.doc_no, cr.facility_code,
-               to_char(cr.modify_datetime, 'yyyy-MM-dd') as check_date, cr.weather,
-               cr.user_id, cr.check_result, cr.spec_memo,wr.facility_category,
-               org.org_name,
+        to_char(cr.modify_datetime, 'yyyy-MM-dd') as check_date, cr.weather,
+        cr.user_id, cr.check_result, cr.spec_memo,wr.facility_category,
+        org.org_name,
         ar.org_area_name,ui.user_department
         from check_report cr join water_resources wr
         on cr.facility_code = wr.facility_code
@@ -111,7 +111,7 @@
         select count(*) as total from
         (
         select row_number() over() as rn,ui.user_name, cr.*, wr.facility_category,
-               org.org_name, ar.org_area_name,ui.user_department
+        org.org_name, ar.org_area_name,ui.user_department
         from check_report cr join water_resources wr
         on cr.facility_code = wr.facility_code
         INNER JOIN org_area ar ON wr.org_area =ar.org_area
@@ -213,38 +213,47 @@
 
     <select id="PaingWaterResourceAndCheckReport" parameterType="waterResources" resultType="waterResources">
 
+
+
         select ROW_NUMBER() over() as rn, tab.facility_category,tab.facility_code,tab.facility_addr,tab.org_area_name,
-               to_char(tab.modify_datetime,'yyyy-MM-dd') as firstdate,tab.check_result,ui.user_name,tab.org_name, ui.user_department from
+               tab.firstdate,cc.check_result,ui.user_name, tab.org_name,ui.user_department from
             (
-                select wr.facility_category,wr.facility_code,wr.facility_addr,oz.org_area_name, cr.modify_datetime,cr.check_result,cr.user_id, org.org_name
+                select wr.facility_category,wr.facility_code,wr.facility_addr,oz.org_area_name,
+                       cr.firstdate, org.org_name, (select max(doc_no) from check_report where facility_code = wr.facility_code) as doc_no
                 from water_resources wr
-                         left outer join (select distinct max(modify_datetime) as modify_datetime, facility_code ,check_result ,user_id
-                                          from check_report group by facility_code,check_result,user_id)cr
-                                         on	wr.facility_code = cr.facility_code
+                         left outer join (select distinct to_char(max(modify_datetime),'yyyy-MM-dd') as firstdate,
+                                                          facility_code
+                                          from check_report
+                                          group by facility_code)cr
+                                         on   wr.facility_code = cr.facility_code
+
                          left join org_area oz
                                    on wr.org_area = oz.org_area
                          left join organization org
                                    on wr.org_area = org.org_area
-            ) tab
+            ) as tab
+                left join check_report cc
+                          on cc.doc_no = tab.doc_no
                 left join user_info ui
-                          on tab.user_id = ui.user_id
-        offset ${start}-1 limit 10
+                          on cc.user_id = ui.user_id
+
+        offset #{start}-1 limit 10
     </select>
     <select id="searchCntWRAndCR" parameterType="waterResources" resultType="waterResources">
         select count(*) as total from
         (
-            select wr.facility_category,wr.facility_code,wr.facility_addr,oz.org_area_name,
-                cr.firstdate,cr.check_result,cr.user_id, org.org_name
-            from water_resources wr
-                left outer join (select distinct to_char(max(modify_datetime),'yyyy-MM-dd') as firstdate,
-                    facility_code ,check_result ,user_id
-                    from check_report
-                    group by facility_code,check_result,user_id)cr
-                on   wr.facility_code = cr.facility_code
-                left join org_area oz
-                on wr.org_area = oz.org_area
-                left join organization org
-                on wr.org_area = org.org_area
+        select wr.facility_category,wr.facility_code,wr.facility_addr,oz.org_area_name,
+        cr.firstdate,cr.check_result,cr.user_id, org.org_name
+        from water_resources wr
+        left outer join (select distinct to_char(max(modify_datetime),'yyyy-MM-dd') as firstdate,
+        facility_code ,check_result ,user_id
+        from check_report
+        group by facility_code,check_result,user_id)cr
+        on   wr.facility_code = cr.facility_code
+        left join org_area oz
+        on wr.org_area = oz.org_area
+        left join organization org
+        on wr.org_area = org.org_area
 
         <choose>
             <when test="firstdate eq '' and secdate eq ''">
@@ -279,21 +288,22 @@
     <select id="searchWRAndCR" parameterType="waterResources" resultType="waterResources">
 
         select ROW_NUMBER() over() as rn, tab.facility_category,tab.facility_code,tab.facility_addr,tab.org_area_name,
-        tab.firstdate,tab.check_result,ui.user_name, tab.org_name,ui.user_department
+        tab.firstdate,cc.check_result,ui.user_name, tab.org_name,ui.user_department
         from
         (
-            select wr.facility_category,wr.facility_code,wr.facility_addr,oz.org_area_name,
-                cr.firstdate,cr.check_result,cr.user_id, org.org_name
-            from water_resources wr
-                left outer join (select distinct to_char(max(modify_datetime),'yyyy-MM-dd') as firstdate,
-                    facility_code ,check_result ,user_id
-                    from check_report
-                    group by facility_code,check_result,user_id)cr
-                on   wr.facility_code = cr.facility_code
-                left join org_area oz
-                on wr.org_area = oz.org_area
-                left join organization org
-                on wr.org_area = org.org_area
+        select wr.facility_category,wr.facility_code,wr.facility_addr,oz.org_area_name,
+        cr.firstdate, org.org_name, (select max(doc_no) from check_report where facility_code = wr.facility_code) as doc_no
+        from water_resources wr
+        left outer join (select distinct to_char(max(modify_datetime),'yyyy-MM-dd') as firstdate,
+        facility_code
+        from check_report
+        group by facility_code)cr
+        on   wr.facility_code = cr.facility_code
+
+        left join org_area oz
+        on wr.org_area = oz.org_area
+        left join organization org
+        on wr.org_area = org.org_area
         <choose>
             <when test="firstdate eq '' and secdate eq ''">
             </when>
@@ -308,8 +318,10 @@
             </otherwise>
         </choose>
         ) as tab
+        left join check_report cc
+        on cc.doc_no = tab.doc_no
         left join user_info ui
-        on tab.user_id = ui.user_id
+        on cc.user_id = ui.user_id
         where tab.facility_category like '%' || #{facility_category} || '%'
         and tab.org_area_name like '%' || #{org_area} || '%'
         and tab.org_name like '%' || #{org_name} || '%'
@@ -405,18 +417,18 @@
     </select>
 
     <select id="findCheckListAndCodeByDocNo" parameterType="checkList" resultType="checkList">
-        select row_number() over() as rn,* from	(
-        select cl.facility_code,cl.doc_no,cd.cate_code,cl.checklist_no, cd.cate_name as check_category,cd2.cate_name as check_item,cl.check_grade,cl.note from check_list cl
-                                                                                                                                                  left join (
-            select * from code  where field_name = 'check_category' --or field_name='check_item'
-        ) cd
-                                                                                                                                                            on cl.check_category = cd.cate_code
-                                                                                                                                                  left join (
-            select * from code  where field_name='check_item'
-        ) cd2
-                                                                                                                                                            on cl.check_item = cd2.cate_code
-        where doc_no = #{doc_no}
-        order by cate_code, checklist_no desc)
+        select row_number() over() as rn,* from   (
+                                                      select cl.facility_code,cl.doc_no,cd.cate_code,cl.checklist_no, cd.cate_name as check_category,cd2.cate_name as check_item,cl.check_grade,cl.note from check_list cl
+                                                                                                                                                                                                                 left join (
+                                                          select * from code  where field_name = 'check_category' --or field_name='check_item'
+                                                      ) cd
+                                                                                                                                                                                                                           on cl.check_category = cd.cate_code
+                                                                                                                                                                                                                 left join (
+                                                          select * from code  where field_name='check_item'
+                                                      ) cd2
+                                                                                                                                                                                                                           on cl.check_item = cd2.cate_code
+                                                      where doc_no = #{doc_no}
+                                                      order by cate_code, checklist_no desc)
     </select>
     <select id="findCheckReportByFcCode" parameterType="checkReport" resultType="checkReport">
         select ROW_NUMBER() over() as rn,*
@@ -431,7 +443,7 @@
                where cr.facility_code = #{facility_code}
                order by cr.doc_no desc
              )
-             offset #{start}-1 limit 10
+                 offset #{start}-1 limit 10
     </select>
     <select id="cntCheckReportByFcCode" parameterType="checkReport" resultType="checkReport">
         select count(*) as total

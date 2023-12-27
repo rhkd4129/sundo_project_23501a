@@ -5,11 +5,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>수자원 시설물 관리시스템 - 고장 보고서</title>
 <style type="text/css">
 	.title {
 		text-align: center;
-		font-size: 25pt;
+		font-size: 25px;
+		font-weight: bold;
 	}
 	
 	table {
@@ -50,6 +51,9 @@
 	header {
 		height: 55px;
 	}
+.underline {
+	border-bottom:2px solid #fff;
+}
 </style>
 
 <script>
@@ -58,11 +62,13 @@
 
 		$.ajax({
 			url			: '/main_header_3',
+			async		: false,
 			dataType 	: 'html',
 			success		: function(data) {
 				$('#header').html(data);
 			}
 		});
+		$("#sub-list-4").addClass('underline');
 
 		$.ajax({
 			url			: '/main_footer',

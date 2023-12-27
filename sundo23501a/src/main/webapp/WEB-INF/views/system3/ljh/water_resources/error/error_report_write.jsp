@@ -5,11 +5,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>수자원 시설물 관리시스템 - 고장 보고서</title>
 <style type="text/css">
-	.title {
+ 	.title {
 		text-align: center;
-		font-size: 25pt;
+		font-size: 25px;
+		font-weight: bold;
 	}
 	
 	table {
@@ -52,23 +53,11 @@
 		width: 200px;
 	}
 	
-	.handling_content {
-		width: 95%;
-		height: 35px;
-	}
-	
-	.handling_flag {
-		width: 4%;
-	}
-	
 	.btns {
 		text-align: right;
 		margin-top: 20px;
 	}
 	
-	button {
-		width: 80px;
-	}
 	
 	.cate {
 		width: 150px;
@@ -88,8 +77,10 @@
 
 	header {
 		height: 55px;
-	}
-	
+	} 
+.underline {
+	border-bottom:2px solid #fff;
+}	
 </style>
 
 
@@ -99,11 +90,13 @@
 
 		$.ajax({
 			url			: '/main_header_3',
+			async		: false,
 			dataType 	: 'html',
 			success		: function(data) {
 				$('#header').html(data);
 			}
 		});
+		$("#sub-list-4").addClass('underline');
 
 		$.ajax({
 			url			: '/main_footer',
@@ -273,14 +266,22 @@
 								</tr>
 								</thead>
 								<tbody>
-								<tr><th class="cate">제목</th><td colspan="5"><input type="text" class="subject" name="subject" required="required"></td></tr>
-								<tr><th class="cate">고장일자</th><td colspan="5"><input type="date" class="date" name="break_date" required="required"></td></tr>
-								<tr><th class="cate">고장원인</th><td colspan="5"><textarea rows="4" name="break_cause"></textarea></td></tr>
-								<tr><th class="cate">현재상황</th><td colspan="5"><textarea rows="4" name="current_state"></textarea></td></tr>
-								<tr><th class="cate">즉시처리</th><td colspan="5">
-									<input type="checkbox" class="handling_flag" name="handling_flag" value="Y">
-									<input type="text" class="handling_content" name="handling_content"></td></tr>
-								<tr><th class="cate">향후계획</th><td colspan="5"><textarea rows="4" name="future_plan"></textarea></td></tr>
+								<tr><th class="cate">제목</th><td colspan="5"><input type="text" class="form-control subject" name="subject" required="required"></td></tr>
+								<tr><th class="cate">고장일자</th><td colspan="5"><input type="date" class="form-control date" name="break_date" required="required"></td></tr>
+								<tr><th class="cate">고장원인</th><td colspan="5"><textarea rows="4" name="break_cause" class="form-control"></textarea></td></tr>
+								<tr><th class="cate">현재상황</th><td colspan="5"><textarea rows="4" name="current_state" class="form-control"></textarea></td></tr>
+								<tr>
+									<th class="cate">즉시처리</th>
+									<td colspan="5">
+										<table style="border:0px">
+											<tr style="border:0px">
+												<td width="30" style="border:0px"><input type="checkbox" name="handling_flag" value="Y"></td>
+												<td width="*" style="border:0px"><input type="text" class="form-control" name="handling_content"></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr><th class="cate">향후계획</th><td colspan="5"><textarea rows="4" name="future_plan" class="form-control"></textarea></td></tr>
 								</tbody>
 							</table>
 							<table class="alarmTbl">

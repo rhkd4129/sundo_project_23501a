@@ -6,11 +6,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>수자원 시설물 관리시스템 - 고장 결과 보고서</title>
 <style type="text/css">
 	.title {
 		text-align: center;
-		font-size: 25pt;
+		font-size: 25px;
+		font-weight: bold;
 	}
 	
 	table {
@@ -67,7 +68,9 @@
 	header {
 		height: 55px;
 	}
-
+.underline {
+	border-bottom:2px solid #fff;
+}
 </style>
 
 	<script>
@@ -76,11 +79,13 @@
 
 			$.ajax({
 				url			: '/main_header_3',
+				async		: false,
 				dataType 	: 'html',
 				success		: function(data) {
 					$('#header').html(data);
 				}
 			});
+			$("#sub-list-4").addClass('underline');
 
 			$.ajax({
 				url			: '/main_footer',
@@ -226,7 +231,8 @@
 		<div class="row">
 			<div id="center">
 				<div>
-					<p class="title">조치 결과 보고서 작성</p>
+					<p class="title">고장 결과 보고서 작성</p>		
+			
 					<form action="action_report_write" method="post" name="actionForm" onsubmit="return chk()">
 						<table>
 							<thead>
@@ -290,13 +296,13 @@
 							</thead>
 							<tbody>
 							<tr>
-								<th>고장/발생 일자</th><td colspan="2"><input type="date" class="date" name="break_date" required="required"></td>
-								<th>조치/복구 일자</th><td colspan="2"><input type="date" class="date" name="action_date" required="required"></td>
+								<th>고장/발생 일자</th><td colspan="2"><input type="date" class="date form-control" name="break_date" required="required"></td>
+								<th>조치/복구 일자</th><td colspan="2"><input type="date" class="date form-control" name="action_date" required="required"></td>
 							</tr>
-							<tr><th>고장내역</th><td colspan="5"><textarea name="break_content" required="required" rows="4"></textarea></td></tr>
-							<tr><th>조치내역</th><td colspan="5"><textarea name="action_content" required="required" rows="4"></textarea></td></tr>
-							<tr><th>특이사항</th><td colspan="5"><textarea name="spec_memo" rows="4"></textarea></td></tr>
-							<tr><th>향후계획</th><td colspan="5"><textarea name="future_plan" rows="4"></textarea></td></tr>
+							<tr><th>고장내역</th><td colspan="5"><textarea name="break_content" required="required" rows="3" class="form-control"></textarea></td></tr>
+							<tr><th>조치내역</th><td colspan="5"><textarea name="action_content" required="required" rows="3" class="form-control"></textarea></td></tr>
+							<tr><th>특이사항</th><td colspan="5"><textarea name="spec_memo" rows="3" class="form-control"></textarea></td></tr>
+							<tr><th>향후계획</th><td colspan="5"><textarea name="future_plan" rows="3" class="form-control"></textarea></td></tr>
 							</tbody>
 						</table>
 						<div class="btns">

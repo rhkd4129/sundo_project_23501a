@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>한강 수자원관리 종합 플랫폼 - 기관관리</title>
 
 <!--CSS START -->
 <!-- CSS END -->
@@ -35,9 +35,8 @@ $(function() {
 <!-- CONTENT -->
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 			<div class="container-fluid">
-					<form name="formPrjBdData" action="admin_notice_update" method="post" enctype="multipart/form-data">
-						<input type="hidden" name="doc_no" value="${board.doc_no}">
-						<input type="hidden" name="user_id" value="${board.user_id}">
+					<form name="formOrg" action="admin_org_update" method="post">
+						<input type="hidden" name="org_code" value="${board.org_code}">
 						<div style="height:34px">
 							<span class="apptitle">문서 수정</span>
 						</div>
@@ -55,50 +54,29 @@ $(function() {
 								<col width="80%"></col>
 							</colgroup>
 							<tr>
-								<th>작성자</th>
-								<td><input type="text" class="form-control" name="user_name" value="${board.user_name}" readonly></td>
+								<th>기관명</th>
+								<td><input type="text" class="form-control" name="org_name" required="required" value="${board.org_name}"></td>
 							</tr>
 							<tr>
-								<th>작성일</th>
-								
-								<td><input type="text" class="form-control" name="create_date_str" value="<fmt:formatDate value="${board.create_date}" type="date" pattern="yyyy-MM-dd hh:mm:ss"/>" readonly></td>
-							</tr>
-							<tr>
-								<th>제목</th>
-								<td><input type="text" class="form-control" name="subject" required="required" value="${board.subject}"></td>
-							</tr>			
-							<tr>
-								<th>파일첨부</th>
+								<th>행정구역</th>								
 								<td>
-									<table width="100%">
-										<tr>
-											<td>
-												<input type="hidden" name="attach_name" value="${board.attach_name}">
-												<input type="hidden" name="attach_path" value="${board.attach_path}">
-												<input type="hidden" name="attach_delete_flag" id="idAttachDeleteFlag" value="">
-												<div id="idAttachFile">
-													<c:if test="${board.attach_path ne null}">
-														<a href="/upload/${board.attach_path}" target="_blank">${board.attach_name}</a>
-														&nbsp;&nbsp;<img src="/common/images/btn_icon_delete2.png" onclick="deleteFlagAttach()" style="cursor:pointer">
-														<%-- <img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${board.attach_path}" width="100"> --%>
-													</c:if>													
-												</div>																						
-												<div id="idAttachInput" <c:if test="${board.attach_path ne null}">style="display:none;"</c:if> >
-													<input type="file" class="form-control form-control-sm" name="file1">
-												</div>
-											</td>
-										</tr>
-									</table>								
+									<select class="form-select" name="org_area" style="font-size:0.8rem">
+										<c:forEach var="obj" items="${orgAreaList}">
+											<option value="${obj.org_area}" 
+											<c:if test="${board.org_area == obj.org_area}">selected</c:if>
+											>${obj.org_area_name}</option>
+										</c:forEach>
+									</select>
 								</td>
 							</tr>
 							<tr>
-								<th>본문</th>
-								<td>							
-									<div class="input-group">
-										<textarea class="form-control" aria-label="With textarea" name="body" rows="15">${board.doc_body}</textarea>
-									</div>
-								</td>
+								<th>주소</th>
+								<td><input type="text" class="form-control" name="org_addr" required="required" value="${board.org_addr}"></td>
 							</tr>
+							<tr>
+								<th>전화번호</th>
+								<td><input type="text" class="form-control" name="org_tel" required="required" value="${board.org_tel}"></td>
+							</tr>			
 						</table>
 					</form>
 			</div>
