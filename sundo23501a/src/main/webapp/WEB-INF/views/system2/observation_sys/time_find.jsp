@@ -71,6 +71,18 @@ header {
 				$('#footer').html(data);
 			}
 		});
+		
+		$('select[name=selectType]').change(function(){
+			var type = $(this).val();
+			if(type == "hour") {
+				//시자료 hour
+				location.href = "/time_find";
+			}else{
+				//통계 statistics
+				$(location).attr("href", "/timeChart");
+			}
+		});
+		
 	});
 
 	function search_1(currentPage){
@@ -144,11 +156,6 @@ header {
 		});
 	}
 	
-	//통계 검색
-	function search_2(){
-		
-	}
-	
 	// 검색 버튼
 	function tw_search(){
 		var type = $('#type').val();
@@ -157,9 +164,11 @@ header {
 			search_1();
 		}else{
 			//통계 statistics
-			search_2();
+			$(location).attr("href", "/timeChart");
 		}
 	}
+	
+
 </script>
 </head>
 <body>
@@ -183,9 +192,9 @@ header {
 				<tr>
 					<th style="width:70px;text-align:right;font-weight:bold;">자료유형</th>
 					<td>
-						<select id="type" class="form-select form-select">
-							<option value="hour" selected="selected" id="hour">시자료</option>
-							<option value="statistics" id="statistics">통계</option>
+						<select id="type"  name="selectType" class="form-select">
+							<option value="hour" selected="selected">시자료</option>
+							<option value="statistics">통계</option>
 						</select>
 					</td>
 					<th style="width:70px;text-align:right;font-weight:bold;">조회기간</th>

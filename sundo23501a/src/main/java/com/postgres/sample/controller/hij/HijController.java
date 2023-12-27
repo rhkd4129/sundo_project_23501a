@@ -338,7 +338,7 @@ public class HijController {
     }
     
  //--------------------------------------------------------------------------------------  
- // 2. 관측소 - 시자료 - 강우량
+ // 3. 관측소 - 시자료 - 강우량
  //--------------------------------------------------------------------------------------
       // 강우량 목록
       @GetMapping("/time_find_R")
@@ -421,7 +421,7 @@ public class HijController {
       	return hijResponse;
       }
   //--------------------------------------------------------------------------------------  
-  // 2. 관측소 - 시자료 - 우량
+  // 4. 관측소 - 시자료 - 우량
   //--------------------------------------------------------------------------------------
        // 우량 목록
        @GetMapping("/time_find_F")
@@ -510,4 +510,27 @@ public class HijController {
 
        	return hijResponse;
        }
+       
+       
+	//--------------------------------------------------------------------------------------  
+	// 5. 관측소 - 통계 - 수위정보
+	//--------------------------------------------------------------------------------------
+      @GetMapping(value = "/timeChart")
+      public String waterLevelChart(HttpServletRequest request, Model model){
+    	  
+    	  return "/system2/observation_sys/timeChart";
+      }
+      
+      @ResponseBody
+      @RequestMapping(value="/chart_W")
+      public HijResponse chart_W(HttpServletRequest request, WaterLevel waterLevel, Model model) {
+      
+	  List<WaterLevel> waterLevelList = hs.waterLevelList(waterLevel);	// waterLevel 리스트
+	  
+	  HijResponse hijResponse = new HijResponse();
+	  hijResponse.setList(waterLevelList);
+	  
+	  return hijResponse;
+      }
+      
 }
