@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.postgres.sample.dto.AccessLog;
 import com.postgres.sample.dto.BoardNotice;
 import com.postgres.sample.dto.Code;
+import com.postgres.sample.dto.JmhDaysDataVO;
 import com.postgres.sample.dto.LoginLog;
 import com.postgres.sample.dto.OrgArea;
 import com.postgres.sample.dto.Organization;
@@ -122,6 +124,13 @@ public class JmhController {
 	public String mainMenuPage(HttpServletRequest request, Model model) {
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		model.addAttribute("userInfo", userInfoDTO);
+		
+		Date date = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
+		System.out.println("오늘월->" + df.format(date));
+		String year_month = df.format(date);
+		model.addAttribute("year_month", year_month);
+		
 		return "/system1/adminpage_menu";
 	}
 	
@@ -1421,8 +1430,9 @@ public class JmhController {
 	// 시스템 관리 페이지
 	//#####################
 	//1. 접속 통계
+	@ResponseBody
 	@GetMapping("/system_log_list")
-	public String systemLogList(AccessLog accessLog, String currentPage, HttpServletRequest request, Model model) {
+	public ModelAndView systemLogList(AccessLog accessLog, String currentPage, HttpServletRequest request, Model model) {
 		System.out.println("-----접속 통계 목록(/systemLogList) START-----");
 		
 		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
@@ -1437,11 +1447,68 @@ public class JmhController {
 		System.out.println("JmhController systemLogList codeList.size->"+codeList.size());
 		model.addAttribute("CodeList_system_category", codeList);
 		
+		List<JmhDaysDataVO> boardList = null;
 		String year_month = accessLog.getYear_month();
+		System.out.println("year_month:"+year_month);
 		if(year_month != null) {
-			//------------------------------------------------------------------
-			List<AccessLog> boardList = alogService.searchMonthList(year_month);
-			//------------------------------------------------------------------
+			//---------------------------------------------------
+			boardList = alogService.searchMonthList(year_month);
+			//---------------------------------------------------
+			System.out.println("접속통계 boardList.size="+boardList.size());
+		}else {
+			Date date = new Date();
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
+			System.out.println("오늘월->" + df.format(date));
+			year_month = df.format(date);
+			accessLog.setYear_month(year_month);
+		}
+		/*
+		model.addAttribute("year_month", accessLog.getYear_month());
+		model.addAttribute("boardList", boardList);
+		System.out.println("----접속 통계 목록(systemLogList) END-----");
+		insertAccessLog(request, model);
+		
+		return "/system1/log/system_log/system_log_list";
+		*/
+		
+		ModelAndView mv = new ModelAndView();
+	    mv.setViewName("/system1/log/system_log/system_log_list"); // 뷰의 이름
+	    mv.addObject("year_month", accessLog.getYear_month()); //
+	    mv.addObject("boardList", boardList); //
+	    
+		System.out.println("----접속 통계 목록(systemLogList) END-----");
+		insertAccessLog(request, model);
+
+		return mv;
+		
+	}
+	
+	//1-2. 접속 통계(검색)
+	@ResponseBody
+	@GetMapping("/system_log_search")
+	public List<JmhDaysDataVO> systemLogSearch(AccessLog accessLog, String currentPage, HttpServletRequest request, Model model) {
+		System.out.println("-----접속 통계 검색(/systemLogSearch) START-----");
+		
+		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		//-------------------------------------------------
+		// 권한 정보 가져옴
+		Code code = new Code();
+		code.setField_name("system_category");
+		List<Code> codeList = uiService.codeList(code);
+		//-------------------------------------------------
+		System.out.println("JmhController systemLogList codeList.size->"+codeList.size());
+		model.addAttribute("CodeList_system_category", codeList);
+		
+		List<JmhDaysDataVO> boardList = null;
+		String year_month = accessLog.getYear_month();
+		System.out.println("year_month:"+year_month);
+		if(year_month != null) {
+			//---------------------------------------------------
+			boardList = alogService.searchMonthList(year_month);
+			//---------------------------------------------------
+			System.out.println("접속통계 boardList.size="+boardList.size());
 		}else {
 			Date date = new Date();
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
@@ -1450,11 +1517,10 @@ public class JmhController {
 			accessLog.setYear_month(year_month);
 		}
 		
-		model.addAttribute("year_month", accessLog.getYear_month());
-		System.out.println("----접속 통계 목록(systemLogList) END-----");
+		System.out.println("----접속 통계 검색(systemLogSearch) END-----");
 		insertAccessLog(request, model);
-		
-		return "/system1/log/system_log/system_log_list";
+
+		return boardList;
 		
 	}
 	

@@ -72,14 +72,15 @@ header {
 			}
 		});
 		
+		// 시자료 눌렀을때 시자료 페이지, 통계누르면 통계 페이지
 		$('select[name=selectType]').change(function(){
 			var type = $(this).val();
 			if(type == "hour") {
 				//시자료 hour
-				location.href = "/time_find";
+				location.href = "/time_find?river_code="+$("#river_code").val();
 			}else{
 				//통계 statistics
-				$(location).attr("href", "/timeChart");
+				$(location).attr("href", "/time_chart_list?river_code="+$("#river_code").val());
 			}
 		});
 		
@@ -164,7 +165,7 @@ header {
 			search_1();
 		}else{
 			//통계 statistics
-			$(location).attr("href", "/timeChart");
+			$(location).attr("href", "/time_chart_list?river_code="+$("#river_code").val());
 		}
 	}
 	
@@ -220,7 +221,7 @@ header {
 					<th width="100"><span class="sub-tab" id="sub-tab-1"><a href="/time_find?river_code=${waterLevelList.get(0).river_code}">수위정보</a></span></th>
 					<th width="100"><span class="sub-tab" id="sub-tab-2"><a href="/time_find_R?river_code=${waterLevelList.get(0).river_code}">강우량정보</a></span></th>
 					<th width="100"><span class="sub-tab" id="sub-tab-3"><a href="/time_find_F?river_code=${waterLevelList.get(0).river_code}">우량정보</a></span></th>
-					<th width="100"><span class="sub-tab" id="sub-tab-4"><a href="/time_find_F?river_code=${waterLevelList.get(0).river_code}">수문정보</a></span></th>
+					<%-- <th width="100"><span class="sub-tab" id="sub-tab-4"><a href="/time_find_F?river_code=${waterLevelList.get(0).river_code}">수문정보</a></span></th> --%>
 				</tr>
 			</table>
 		</div>

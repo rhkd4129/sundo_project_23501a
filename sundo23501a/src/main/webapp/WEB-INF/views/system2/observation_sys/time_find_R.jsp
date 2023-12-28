@@ -71,6 +71,19 @@ header {
 				$('#footer').html(data);
 			}
 		});
+		
+		// 시자료 눌렀을때 시자료 페이지, 통계누르면 통계 페이지
+		$('select[name=selectType]').change(function(){
+			var type = $(this).val();
+			if(type == "hour") {
+				//시자료 hour
+				location.href = "/time_find_R?river_code="+$("#river_code").val();
+			}else{
+				//통계 statistics
+				$(location).attr("href", "/time_chart_list_R?river_code="+$("#river_code").val());
+			}
+		});
+		
 	});
 
 	function search_1(currentPage){
@@ -157,7 +170,7 @@ header {
 			search_1();
 		}else{
 			//통계 statistics
-			search_2();
+			$(location).attr("href", "/time_chart_list_R?river_code="+$("#river_code").val());
 		}
 	}
 </script>
@@ -183,7 +196,7 @@ header {
 				<tr>
 					<th style="width:70px;text-align:right;font-weight:bold;">자료유형</th>
 					<td>
-						<select id="type" class="form-select" >
+						<select id="type" name="selectType" class="form-select" >
 							<option value="hour" selected="selected" id="hour">시자료</option>
 							<option value="statistics" id="statistics">통계</option>
 						</select>
@@ -211,7 +224,7 @@ header {
 					<th width="100"><span class="sub-tab" id="sub-tab-1"><a href="/time_find?river_code=${rainFallList.get(0).river_code}">수위정보</a></span></th>
 					<th width="100"><span class="sub-tab" id="sub-tab-2"><a href="/time_find_R?river_code=${rainFallList.get(0).river_code}">강우량정보</a></span></th>
 					<th width="100"><span class="sub-tab" id="sub-tab-3"><a href="/time_find_F?river_code=${rainFallList.get(0).river_code}">우량정보</a></span></th>
-					<th width="100"><span class="sub-tab" id="sub-tab-4"><a href="/time_find_F?river_code=${rainFallList.get(0).river_code}">수문정보</a></span></th>
+					<%-- <th width="100"><span class="sub-tab" id="sub-tab-4"><a href="/time_find_F?river_code=${rainFallList.get(0).river_code}">수문정보</a></span></th> --%>
 				</tr>
 			</table>
 		</div>

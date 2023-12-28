@@ -19,6 +19,7 @@
 		<typeAlias alias="FileAttach" type="com.postgres.sample.dto.FileAttach"/>
 		<typeAlias alias="Flow" type="com.postgres.sample.dto.Flow"/>
 		<typeAlias alias="HijResponse" type="com.postgres.sample.dto.HijResponse"/>
+		<typeAlias alias="JmhDaysDataVO" type="com.postgres.sample.dto.JmhDaysDataVO"/>
 		<typeAlias alias="KjoResponse" type="com.postgres.sample.dto.HijResponse"/>
 		<typeAlias alias="LjhResponse" type="com.postgres.sample.dto.HijResponse"/>
 		<typeAlias alias="LKH_WaterResources" type="com.postgres.sample.dto.LKH_WaterResources"/>
@@ -32,5 +33,6 @@
 		<typeAlias alias="WaterGate" type="com.postgres.sample.dto.WaterGate"/>
 		<typeAlias alias="WaterLevel" type="com.postgres.sample.dto.WaterLevel"/>
 		<typeAlias alias="WaterResources" type="com.postgres.sample.dto.WaterResources"/>
+		
     </typeAliases>
 </configuration>

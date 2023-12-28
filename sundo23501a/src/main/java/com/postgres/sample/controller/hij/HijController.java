@@ -338,7 +338,7 @@ public class HijController {
     }
     
  //--------------------------------------------------------------------------------------  
- // 3. 관측소 - 시자료 - 강우량
+ // 2. 관측소 - 시자료 - 강우량
  //--------------------------------------------------------------------------------------
       // 강우량 목록
       @GetMapping("/time_find_R")
@@ -421,7 +421,7 @@ public class HijController {
       	return hijResponse;
       }
   //--------------------------------------------------------------------------------------  
-  // 4. 관측소 - 시자료 - 우량
+  // 2. 관측소 - 시자료 - 우량
   //--------------------------------------------------------------------------------------
        // 우량 목록
        @GetMapping("/time_find_F")
@@ -511,26 +511,120 @@ public class HijController {
        	return hijResponse;
        }
        
+       //--------------------------------------------------------------------------------------  
+       // 5. 관측소 - 통계 - 수위정보
+       //--------------------------------------------------------------------------------------
+       @ResponseBody
+       @GetMapping("/time_chart_list")
+       public ModelAndView waterLevelChartList(WaterLevel waterLevel, HttpServletRequest request, Model model){
+    	   System.out.println("---- 관측소 - 통계 - 수위정보 목록(waterLevelChartList) START-----");
+			
+			if(waterLevel.getStart_date() == null) {
+				waterLevel.setStart(1);
+				waterLevel.setEnd(1);
+				List<WaterLevel> waterLevelList = hs.waterLevelList(waterLevel);   // waterLevel 리스트
+				System.out.println("첫번째 관측일:"+waterLevelList.get(0).getObserve_date());
+				waterLevel.setStart_date(waterLevelList.get(0).getObserve_date());
+			}
+			WaterLevel waterLevelStat = hs.waterLevelStat(waterLevel);   // waterLevel 리스트
+				
+			
+			ModelAndView mv = new ModelAndView();
+		    mv.setViewName("/system2/observation_sys/time_chart_list"); // 뷰의 이름
+		    mv.addObject("start_date", waterLevel.getStart_date());
+		    mv.addObject("waterLevelStat", waterLevelStat);
+		    
+			System.out.println("---- 관측소 - 통계 - 수위정보 목록(waterLevelChartList) END-----");
+			//insertAccessLog(request, model);
+			
+			return mv;
+		}
+
+       //검색
+       @ResponseBody
+       @GetMapping("/time_chart_search")
+       public WaterLevel waterLevelChartSearch(WaterLevel waterLevel, HttpServletRequest request, Model model){
+    	   System.out.println("---- 관측소 - 통계 - 수위정보 검색(waterLevelChartSearch) START-----");
+			
+			if(waterLevel.getStart_date() == null) {
+				waterLevel.setStart(1);
+				waterLevel.setEnd(1);
+				List<WaterLevel> waterLevelList = hs.waterLevelList(waterLevel);   // waterLevel 리스트
+				System.out.println("첫번째 관측일:"+waterLevelList.get(0).getObserve_date());
+				waterLevel.setStart_date(waterLevelList.get(0).getObserve_date());
+			}
+			WaterLevel waterLevelStat = hs.waterLevelStat(waterLevel);   // waterLevel 리스트
+			
+	    	System.out.println("---- 관측소 - 통계 - 수위정보 검색(waterLevelChartSearch) END-----");
+			insertAccessLog(request, model);
+			
+			return waterLevelStat;
+		}
        
-	//--------------------------------------------------------------------------------------  
-	// 5. 관측소 - 통계 - 수위정보
-	//--------------------------------------------------------------------------------------
-      @GetMapping(value = "/timeChart")
-      public String waterLevelChart(HttpServletRequest request, Model model){
-    	  
-    	  return "/system2/observation_sys/timeChart";
-      }
-      
-      @ResponseBody
-      @RequestMapping(value="/chart_W")
-      public HijResponse chart_W(HttpServletRequest request, WaterLevel waterLevel, Model model) {
-      
-	  List<WaterLevel> waterLevelList = hs.waterLevelList(waterLevel);	// waterLevel 리스트
-	  
-	  HijResponse hijResponse = new HijResponse();
-	  hijResponse.setList(waterLevelList);
-	  
-	  return hijResponse;
-      }
-      
+       //--------------------------------------------------------------------------------------  
+       // 5. 관측소 - 통계 - 강우량 정보
+       //--------------------------------------------------------------------------------------
+       @ResponseBody
+       @GetMapping("/time_chart_list_R")
+       public ModelAndView rainFallChartListR(RainFall rainFall, HttpServletRequest request, Model model){
+    	   System.out.println("---- 관측소 - 통계 - 강우량 정보 목록(rainFallChartListR) START-----");
+			
+			if(rainFall.getStart_date() == null) {
+				System.out.println("1.조회기간:null");
+				System.out.println("1.river_code:"+rainFall.getRiver_code());
+				rainFall.setStart(1);
+				rainFall.setEnd(1);
+				List<RainFall> rainFallList = hs.rainFallList(rainFall);   // rainFall 리스트
+				System.out.println("첫번째 관측일:"+rainFallList.get(0).getObserve_date());
+				rainFall.setStart_date(rainFallList.get(0).getObserve_date());
+			}else {
+				System.out.println("2.조회기간:"+rainFall.getStart_date());
+				System.out.println("2.river_code:"+rainFall.getRiver_code());
+			}
+			RainFall rainFallStat = hs.rainFallStat(rainFall);   // rainFall 리스트
+			
+			System.out.println("rainFallStat 01시:"+rainFallStat.getHour_01());
+			System.out.println("rainFallStat 20시:"+rainFallStat.getHour_20());
+			//model.addAttribute("rainFallList", rainFallStat);				
+			//return "/system2/observation_sys/timeChart";			
+			
+			ModelAndView mv = new ModelAndView();
+		    mv.setViewName("/system2/observation_sys/time_chart_list_R"); // 뷰의 이름
+		    mv.addObject("start_date", rainFall.getStart_date());
+		    mv.addObject("rainFallStat", rainFallStat);
+		    
+			System.out.println("---- 관측소 - 통계 - 강우량 정보 목록(rainFallChartListR) END-----");
+			//insertAccessLog(request, model);
+			
+			return mv;
+		}
+
+       //검색
+       @ResponseBody
+       @GetMapping("/time_chart_search_R")
+       public RainFall rainFallChartSearchR(RainFall rainFall, HttpServletRequest request, Model model){
+    	   System.out.println("---- 관측소 - 통계 - 강수량 정보 검색(rainFallChartSearchR) START-----");
+			
+			if(rainFall.getStart_date() == null) {
+				System.out.println("1조회기간:null");
+				System.out.println("1river_code:"+rainFall.getRiver_code());
+				rainFall.setStart(1);
+				rainFall.setEnd(1);
+				List<RainFall> rainFallList = hs.rainFallList(rainFall);   // rainFall 리스트
+				System.out.println("첫번째 관측일:"+rainFallList.get(0).getObserve_date());
+				rainFall.setStart_date(rainFallList.get(0).getObserve_date());
+			}else {
+				System.out.println("2조회기간:"+rainFall.getStart_date());
+				System.out.println("2river_code:"+rainFall.getRiver_code());
+			}
+			RainFall rainFallStat = hs.rainFallStat(rainFall);   // rainFall 리스트
+			
+	    
+			System.out.println("---- 관측소 - 통계 - 강수량 정보 검색(rainFallChartSearchR) END-----");
+			insertAccessLog(request, model);
+			
+			return rainFallStat;
+		}
+       
 }
+

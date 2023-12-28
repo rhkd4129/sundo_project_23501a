@@ -152,7 +152,7 @@ $(function () {
             <ul class="big_menu">
                 <li>시스템 관리 <i class="arrow fas fa-angle-right">▼</i></li>
                 <ul class="small_menu">
-                    <a href="/system_log_list"><li>접속 통계</li></a>
+                    <a href="/system_log_list?year_month=${year_month}"><li>접속 통계</li></a>
                     <a href="/access_log_list"><li>접속 이력</li></a>
                     <a href="/login_log_list"><li>로그인 이력</li></a>
                 </ul>

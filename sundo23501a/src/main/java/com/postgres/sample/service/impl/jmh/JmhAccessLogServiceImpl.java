@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.postgres.sample.dto.AccessLog;
+import com.postgres.sample.dto.JmhDaysDataVO;
 import com.postgres.sample.service.impl.dao.jmh.AccessLogDAO;
 import com.postgres.sample.service.jmh.JmhAccessLogService;
 
@@ -83,10 +84,10 @@ public class JmhAccessLogServiceImpl extends EgovAbstractServiceImpl implements 
 	}
 
 	@Override
-	public List<AccessLog> searchMonthList(String year_month) {
+	public List<JmhDaysDataVO> searchMonthList(String year_month) {
 		System.out.println("JmhAccessLogServiceImpl searchMonthList START...");
 		
-		List<AccessLog> boardList = null;
+		List<JmhDaysDataVO> boardList = null;
 		System.out.println("year_month->"+year_month);
 		//------------------------------------------------------
 		boardList = accessLogDAO.JmhSearchMonthList(year_month);

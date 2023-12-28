@@ -96,7 +96,8 @@
                         source: new ol.source.ImageWMS({
                             url: 'http://localhost:8090/geoserver/wms',
                             params: {
-                                'LAYERS': 'lee:SEOUL_HANGANG_HACUN',
+                                //'LAYERS': 'lee:SEOUL_HANGANG_HACUN',
+                                'LAYERS':'sundo:SEOUL_HANGANG_HACHUN',
                                 'TILED': true
                             },
                             serverType: 'geoserver'
@@ -109,6 +110,7 @@
                             url: 'http://localhost:8090/geoserver/wms',
                             params: {
                                 'LAYERS':'lee:GYEONGGI_HANGANG_HACUN',
+                                
                                 'TILED': true
                             },
                             serverType: 'geoserver'
@@ -144,7 +146,7 @@
                         source: new ol.source.ImageWMS({
                             url: 'http://localhost:8090/geoserver/wms',
                             params: {
-                                'LAYERS':'lee:SUMUN_POS',
+                                'LAYERS':'sundo:SUMUN_POS',
                                 'TILED': true
                             },
                             serverType: 'geoserver'

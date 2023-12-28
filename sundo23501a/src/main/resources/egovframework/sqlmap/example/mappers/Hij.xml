@@ -140,10 +140,29 @@
 						   ORDER BY observe_date DESC
 						  )a
 				)
-		WHERE rn BETWEEN #{start} and #{end}
-				
+		WHERE rn BETWEEN #{start} and #{end}				
 	</select>
-	
+
+	<!-- 시자료 수위 리스트 : 통계-->
+	<select id="ijWaterLevelStat" parameterType="WaterLevel" resultType="WaterLevel">
+		SELECT *
+		FROM(
+			SELECT (row_number() over()) AS rn, a.*
+			FROM(
+				SELECT W.*, T.observe_post, T.observe_code, T.observe_type,
+					(SELECT cate_name FROM code WHERE field_name = 'observe_type' AND cate_code = T.observe_Type) observe_type_name
+					FROM 
+					   water_level W
+					   LEFT OUTER JOIN Observation T
+					   ON W.river_code = T.river_code
+					   WHERE W.river_code=#{river_code}
+					   ORDER BY observe_date DESC
+					  )a
+			WHERE a.observe_date = #{start_date}
+			)			
+		WHERE rn BETWEEN 1 and 1
+	</select>
+
 	<!-- waterLevel Total -->
 	<select id="ijWaterLevelTotal" resultType="int">
 		SELECT COUNT(*)
@@ -213,6 +232,27 @@
 						  )a
 				)
 		WHERE rn BETWEEN #{start} and #{end}
+				
+	</select>
+
+	<!-- 시자료 강우량 통계 -->
+	<select id="ijRainFallStat" parameterType="RainFall" resultType="RainFall">
+		SELECT *
+		FROM(
+				SELECT (row_number() over()) AS rn, a.*
+				FROM(
+					SELECT R.*, T.observe_post, T.observe_code, T.observe_type,
+						(SELECT cate_name FROM code WHERE field_name = 'observe_type' AND cate_code = T.observe_Type) observe_type_name
+						FROM 
+						   rainfall R
+						   LEFT OUTER JOIN Observation T
+						   ON R.river_code = T.river_code
+						   WHERE R.river_code=#{river_code}
+						   ORDER BY observe_date DESC
+				)a
+				WHERE a.observe_date = #{start_date}
+			)
+		WHERE rn BETWEEN 1 and 1
 				
 	</select>
 	

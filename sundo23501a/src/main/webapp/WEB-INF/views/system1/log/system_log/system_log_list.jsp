@@ -18,6 +18,9 @@
   
 
 <script type="text/javascript">
+
+	var monthArray = new Array(32);
+
 	$(function() {
 		
 		$.ajax({
@@ -61,114 +64,100 @@
 		}else{
 			$('#idNewWinFlag').prop('checked', true);
 		}
-			
+		
+		$("#year_month").change(function(){
+			searchYearMonth();
+		});
+		
+		//검색
+		searchYearMonth();
+		
 	});	
+
+	function searchYearMonth() {
+		
+		//var params = getUrlParams();
+		//var p_year_month = params.year_month;
+		var p_year_month = $("#year_month").val();
+		
+		$.ajax({
+			url			: '/system_log_search',
+			data		: {year_month:p_year_month},
+			dataType	: 'json',
+			success		: function(data) {
+				displayData(data);
+			},
+			error : function(request, status, error) {
+				console.log(error)
+			}
+		});
+
+	}	
 	
+	function displayData(list) {
+		
+		//배열 초기화		
+		for (var i = 0; i <= 31; i++) {
+			monthArray[i] = [i,0,0,0];
+		}
+
+		//배열 값셋팅
+		//system_category-day, count
+		$.each(list, function (index, item) {
+			var temp = item.day;
+			var system_category = temp.substring(0, temp.indexOf("-"));
+			var day = temp.substring(temp.indexOf("-")+1, temp.length);
+			var count = item.count;
+
+			console.log(index.toString() + ": system_category="+system_category);
+			console.log(index.toString() + ": day="+day);
+			console.log(index.toString() + ": count="+count);
+			
+			if(system_category == "1") { //관리자
+				monthArray[day][0] = parseInt(day);
+				monthArray[day][1] = parseInt(count);
+			}else if(system_category == "2") { //실시간 수문관리
+				monthArray[day][0] = parseInt(day);
+				monthArray[day][2] = parseInt(count);
+			}else if(system_category == "3") { //수자원 시설물
+				monthArray[day][0] = parseInt(day);
+				monthArray[day][3] = parseInt(count);
+			}
+		});
+
+		console.log(monthArray);
+		
+		google.charts.load('current', {packages: ['corechart', 'line']});
+		google.charts.setOnLoadCallback(drawCurveTypes);
+
+	}
+
+	function drawCurveTypes() {
+		
+		var data = new google.visualization.DataTable();
+		data.addColumn('number', 'X');
+		data.addColumn('number', '관리자');
+		data.addColumn('number', '실시간 수문 정보 관리 시스템');
+		data.addColumn('number', '수자원 시설물 운영 관리 시스템');
+
+		data.addRows(monthArray);
+
+		var options = {
+			hAxis: {
+				title: '날짜'
+			},
+			vAxis: {
+				title: '접속통계'
+			},
+			series: {
+				1: {curveType: 'function'}
+			}
+		};
+
+		var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+		chart.draw(data, options);
+	}
 	
-</script>
-
-<script type="text/javascript">
-
-google.charts.load('current', {packages: ['corechart', 'line']});
-google.charts.setOnLoadCallback(drawBasic);
-google.charts.setOnLoadCallback(drawBasic2);
-google.charts.setOnLoadCallback(drawBasic3);
-
-function drawBasic() {
-
-      var data = new google.visualization.DataTable();
-      data.addColumn('number', 'X');
-      data.addColumn('number', '관리자');
-      
-      data.addRows([
-        [0, 0],   [1, 40],  [2, 33],  [3, 27],  [4, 18],  [5, 9],
-        [6, 31],  [7, 17],  [8, 23],  [9, 10],  [10, 52], [11, 15],
-        [12, 40], [13, 30], [14, 22], [15, 17], [16, 34], [17, 38],
-        [18, 22], [19, 24], [20, 12], [21, 15], [22, 36], [23, 47],
-        [24, 30], [25, 20], [26, 22], [27, 41], [28, 39], [29, 13],
-        [30, 25], [31, 30]
-      ]);
-
-      
-      var options = {
-        hAxis: {
-          title: '날짜'
-        },
-        vAxis: {
-          title: '접속통계'
-        }
-      };
-
-      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-
-      chart.draw(data, options);
-      
-      $('#chart_div').find('path').attr('stroke', '#ff5500');
-}
-function drawBasic2() {
-
-    var data = new google.visualization.DataTable();
-    data.addColumn('number', 'X');
-    data.addColumn('number', '실시간 수문 정보 관리 시스템');
-    
-    data.addRows([
-      [0, 0],   [1, 10],  [2, 23],  [3, 17],  [4, 18],  [5, 9],
-      [6, 11],  [7, 27],  [8, 33],  [9, 40],  [10, 32], [11, 35],
-      [12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 48],
-      [18, 52], [19, 54], [20, 42], [21, 55], [22, 56], [23, 57],
-      [24, 60], [25, 50], [26, 52], [27, 51], [28, 49], [29, 53],
-      [30, 55], [31, 60]
-    ]);
-
-    
-    var options = {
-      hAxis: {
-        title: '날짜'
-      },
-      vAxis: {
-        title: '접속통계'
-      }
-    };
-
-    var chart = new google.visualization.LineChart(document.getElementById('chart_div2'));
-
-    chart.draw(data, options);
-    
-    $('#chart_div2').find('path').attr('stroke', '#0055dd');
-}
-function drawBasic3() {
-
-    var data = new google.visualization.DataTable();
-    data.addColumn('number', 'X');
-    data.addColumn('number', '수자원 시설물 운영 관리 시스템');
-    
-    data.addRows([
-      [0, 0],   [1, 20],  [2, 53],  [3, 57],  [4, 28],  [5, 29],
-      [6, 31],  [7, 37],  [8, 33],  [9, 40],  [10, 12], [11, 15],
-      [12, 20], [13, 40], [14, 22], [15, 37], [16, 34], [17, 18],
-      [18, 12], [19, 24], [20, 12], [21, 25], [22, 26], [23, 17],
-      [24, 40], [25, 30], [26, 22], [27, 11], [28, 39], [29, 13],
-      [30, 25], [31, 30]
-    ]);
-
-    
-    var options = {
-      hAxis: {
-        title: '날짜'
-      },
-      vAxis: {
-        title: '접속통계'
-      }
-    };
-
-    var chart = new google.visualization.LineChart(document.getElementById('chart_div3'));
-
-    chart.draw(data, options);
-    
-    $('#chart_div3').find('path').attr('stroke', '#55aa00');
-}
-
-
 </script>
 
 <style type="text/css">
@@ -226,9 +215,9 @@ hr{
 											<table>
 												<tr>
 													<td style="padding-right:10px;font-weight:bold;">월선택</td>
-													<td><input type="month" name="year_month" class="form-control" value="${year_month}"></td>
+													<td><input type="month" name="year_month" id="year_month" class="form-control" value="${year_month}"></td>
 													<td style="padding:0px 10px 0px 20px">
-														<button type="submit" class="btn btn-dark btn-sm">검색</button>
+														<button type="button" class="btn btn-dark btn-sm" onclick="searchYearMonth()">검색</button>
 														<button type="button" class="btn btn-outline-secondary btn-sm" onclick="goto('system_log_list')" style="cursor:pointer">
 										         			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
 																<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"></path>
@@ -276,15 +265,23 @@ hr{
 								<tr>
 									<c:forEach var="code" items="${CodeList_system_category}" varStatus="status">
 										<td><div style="width:100px;height:2px;margin-left:30px;border:1px solid 
-										<c:if test="${status.count == 1}">#ff5500</c:if>
-										<c:if test="${status.count == 2}">#0055dd</c:if>
-										<c:if test="${status.count == 3}">#55aa00</c:if>
+										<c:if test="${status.count == 1}">#3366cc</c:if>
+										<c:if test="${status.count == 2}">#dc3912</c:if>
+										<c:if test="${status.count == 3}">#ff9900</c:if>
 										"></div></td>
 										<td><b>${code.cate_name}</b></td>
-									</c:forEach>
+									</c:forEach>							
+									
 								</tr>
 							</table>
-						</div>						
+						</div>
+						<div style="display:none">
+							<table>
+								<c:forEach var="data" items="${boardList}">
+									<tr><td>${data.day}, ${data.count}</td></tr> 
+								</c:forEach>
+							</table>
+						</div>	
 					</div>
 				</div>
 				<div id="idFrameDoc">

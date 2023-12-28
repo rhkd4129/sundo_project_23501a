@@ -134,10 +134,10 @@ th {
 						<td>
 							<select name="org_code" class="form-select">
 								<c:forEach var="org" items="${OrgList}">
-									<option value="${org.org_code}">${org.org_name}</option>
-									<input type="hidden" name="org_area" value="${org.org_area}">
+									<option value="${org.org_code}">${org.org_name}</option>									
 								</c:forEach>
 							</select>
+							<input type="hidden" name="org_area" value="${org.org_area}">
 						</td>
 					</tr>
 				</table>

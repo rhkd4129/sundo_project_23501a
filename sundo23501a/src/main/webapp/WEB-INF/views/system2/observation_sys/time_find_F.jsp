@@ -123,7 +123,7 @@ header {
 					<th width="100"><span class="sub-tab" id="sub-tab-1"><a href="/time_find?river_code=${flowList.get(0).river_code}">수위정보</a></th>
 					<th width="100"><span class="sub-tab" id="sub-tab-2"><a href="/time_find_R?river_code=${flowList.get(0).river_code}">강우량정보</a></th>
 					<th width="100"><span class="sub-tab" id="sub-tab-3"><a href="/time_find_F?river_code=${flowList.get(0).river_code}">우량정보</a></th>
-					<th width="100"><span class="sub-tab" id="sub-tab-4"><a href="/time_find_F?river_code=${flowList.get(0).river_code}">수문정보</a></th>
+					<%-- <th width="100"><span class="sub-tab" id="sub-tab-4"><a href="/time_find_F?river_code=${flowList.get(0).river_code}">수문정보</a></th> --%>
 				</tr>
 			</table>
 		</div>

@@ -131,6 +131,15 @@ public class HijServiceImpl extends EgovAbstractServiceImpl implements HijServic
 		List<WaterLevel> waterLevelList = hd.ijWaterLevelList(waterLevel);
 		return waterLevelList;
 	}
+	// 시자료 목록 : 통계
+	@Override
+	public WaterLevel waterLevelStat(WaterLevel waterLevel) {
+		System.out.println("HijServiceImpl waterLevelStat START");
+		WaterLevel waterLevelStat = hd.ijWaterLevelStat(waterLevel);
+		return waterLevelStat;
+	}
+
+	
 	// 수위 전체값
 	@Override
 	public int waterLevelTotal() {
@@ -171,6 +180,13 @@ public class HijServiceImpl extends EgovAbstractServiceImpl implements HijServic
 	}
 
 	@Override
+	public RainFall rainFallStat(RainFall rainFall) {
+		System.out.println("HijServiceImpl rainFallStat START");
+		RainFall rainFallStat = hd.ijRainFallStat(rainFall);
+		return rainFallStat;
+	}
+
+	@Override
 	public RainFall getRainFall(RainFall rainFall) {
 		System.out.println("HijServiceImpl getRainFall START");
 		rainFall = hd.ijGetRainFall(rainFall);
@@ -198,7 +214,6 @@ public class HijServiceImpl extends EgovAbstractServiceImpl implements HijServic
 		return flowList;
 	}
 	
-
 	@Override
 	public Flow getFlow(Flow flow) {
 		System.out.println("HijServiceImpl getFlow START");

@@ -1,0 +1,47 @@
+--사용자 5명 추가
+INSERT INTO USER_INFO (user_id, user_pw, system_category, user_name, user_email, user_tel, org_code, user_department, user_position, use_flag, create_datetime, modify_datetime) 
+		VALUES('jmh123', 'jmh123', '1', '조미혜', 'jmh123@test.com', '010-1111-2222', 'KOR', '관리팀', '사원', 'Y', now(), now());
+INSERT INTO USER_INFO (user_id, user_pw, system_category, user_name, user_email, user_tel, org_code, user_department, user_position, use_flag, create_datetime, modify_datetime) 
+		VALUES('hij123', 'hij123', '2', '황인정', 'hij123@test.com', '010-1111-2222', 'KOR', '관리팀', '사원', 'Y', now(), now());
+INSERT INTO USER_INFO (user_id, user_pw, system_category, user_name, user_email, user_tel, org_code, user_department, user_position, use_flag, create_datetime, modify_datetime) 
+		VALUES('lkh123', 'lkh123', '2', '이광현', 'lkh123@test.com', '010-1111-2222', 'KOR', '관리팀', '사원', 'Y', now(), now());
+INSERT INTO USER_INFO (user_id, user_pw, system_category, user_name, user_email, user_tel, org_code, user_department, user_position, use_flag, create_datetime, modify_datetime) 
+		VALUES('ljh123', 'ljh123', '3', '이진희', 'ljh123@test.com', '010-1111-2222', 'KOR', '관리팀', '사원', 'Y', now(), now());
+INSERT INTO USER_INFO (user_id, user_pw, system_category, user_name, user_email, user_tel, org_code, user_department, user_position, use_flag, create_datetime, modify_datetime) 
+		VALUES('kjo123', 'kjo123', '3', '강준우', 'kjo123@test.com', '010-1111-2222', 'KOR', '관리팀', '사원', 'Y', now(), now());
+
+
+--CODE 3개 추가
+INSERT INTO CODE(field_name, cate_code, field_title, cate_name) VALUES('search_category', '1_all', '목록검색', '전체');
+INSERT INTO CODE(field_name, cate_code, field_title, cate_name) VALUES('search_category', '1_subject', '목록검색', '제목');
+INSERT INTO CODE(field_name, cate_code, field_title, cate_name) VALUES('search_category', '1_subject_body', '목록검색', '제목+내용');
+
+
+--행정구역
+--INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL', '서울특별시');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('KYOUNGKI_DO', '경기도');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_JONGRO_GU', '서울특별시 종로구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_YONGSAN_GU', '서울특별시 용산구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_JUNG_GU','서울특별시 중구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_SUNGDONG_GU','서울특별시 성동구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_KWANGJIN_GU','서울특별시 광진구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_DONGDAEMUN_GU','서울특별시 동대문구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_JUNGRANG_GU','서울특별시 중랑구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_SUNGBUK_GU','서울특별시 성북구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_KANGBUK_GU','서울특별시 강북구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_DOBONG_GU','서울특별시 도봉구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_NOWON_GU','서울특별시 노원구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_EUNPYOUNG_GU','서울특별시 은평구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_SEODAEMUN_GU','서울특별시 서대문구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_MAPO_GU','서울특별시 마포구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_YANGCHUN_GU','서울특별시 양천구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_KANGSEO_GU','서울특별시 강서구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_GURO_GU','서울특별시 구로구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_KUMCHUN_GU','서울특별시 금천구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_YOUNGDUNGPO_GU','서울특별시 영등포구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_DONGJAKGU','서울특별시 동작구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_KWANAK_GU','서울특별시 관악구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_SEOCHO_GU','서울특별시 서초구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_KANGNAM_GU','서울특별시 강남구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_SONGPA_GU','서울특별시 송파구');
+INSERT INTO ORG_AREA(org_area, org_area_name) VALUES('SEOUL_KANGDONG_GU','서울특별시 강동구');

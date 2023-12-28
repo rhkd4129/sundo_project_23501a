@@ -36,49 +36,60 @@
 
 <script>
 
-		$(function() {
+	$(function() {
 
-			$.ajax({
-				url			: '/main_header_2',
-				async		: false,
-				dataType 	: 'html',
-				success		: function(data) {
-					$('#header').html(data);
-				}
-			});
-			$("#sub-list-1").addClass('underline');
+		$.ajax({
+			url			: '/main_header_2',
+			async		: false,
+			dataType 	: 'html',
+			success		: function(data) {
+				$('#header').html(data);
+			}
+		});
+		$("#sub-list-1").addClass('underline');
 
-			$.ajax({
-				url			: '/main_footer',
-				dataType 	: 'html',
-				success		: function(data) {
-					$('#footer').html(data);
-				}
-			});
-		});		
-
+		$.ajax({
+			url			: '/main_footer',
+			dataType 	: 'html',
+			success		: function(data) {
+				$('#footer').html(data);
+			}
+		});
+	});					
 		
- $(function() {
-  const ctx = document.getElementById('myChart');
-
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
+		
+	 $(function() {
+		 $.ajax({
+			url			: '/chart_W' ,
+			dataType	: 'json',
+			success		: function(data){
+				console.log(data);
+				alert(data);
+				var 
+			}
+		 })
+		 
+		 
+	  const ctx = document.getElementById('myChart');
+	
+	  new Chart(ctx, {
+	    type: 'bar',
+	    data: {
+	      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+	      datasets: [{
+	        label: '# of Votes',
+	        data: [12, 19, 3, 5, 2, 3],
+	        borderWidth: 1
+	      }]
+	    },
+	    options: {
+	      scales: {
+	        y: {
+	          beginAtZero: true
+	        }
+	      }
+	    }
+	  });
   
  })
 </script>

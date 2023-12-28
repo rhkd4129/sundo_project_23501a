@@ -33,6 +33,7 @@ public interface HijDao {
 	
 	// 2. 관측소 - 시자료 - 수위
 	public List<WaterLevel> ijWaterLevelList(WaterLevel waterLevel);//수위정보
+	public WaterLevel ijWaterLevelStat(WaterLevel waterLevel);//수위정보-통계
 	public int ijWaterLevelTotal();
 	public WaterLevel ijGetWaterLevel(WaterLevel waterLevel); //수위 조회
 	public int ijTEdit(WaterLevel waterLevel);	// 수위 수정
@@ -41,6 +42,7 @@ public interface HijDao {
 	
 	//3. 관측소 - 시자료 - 강우량
 	public List<RainFall> ijRainFallList(RainFall rainFall);
+	public RainFall ijRainFallStat(RainFall rainFall); //강우량-통계
 	public int ijRainFallTotal();
 	public RainFall ijGetRainFall(RainFall rainFall);
 	public int ijTEditR(RainFall rainFall);
