@@ -1,6 +1,7 @@
 package com.postgres.sample.dto;
 
-import java.util.Date;
+
+import java.sql.Date;
 
 import lombok.Data;
 
@@ -11,7 +12,7 @@ public class RainFall {
 //	관측일시				N/A	DATE
 	
 	private String river_code;
-	private Date observe_datetime;
+	private Date observe_date;
 	private Double hour_01;
 	private Double hour_02;
 	private Double hour_03;
@@ -38,33 +39,19 @@ public class RainFall {
 	private Double hour_24;
 	
 	
-//	RAINFALL
-//	observe_no(PK)	N/A	Double
-//	river_code(PK)(FK)	N/A	VARCHAR(30)
-//	observe_datetime	N/A	DATE
-//	hour_01	N/A	Double
-//	hour_02	N/A	Double
-//	hour_03	N/A	Double
-//	hour_04	N/A	Double
-//	hour_05	N/A	Double
-//	hour_06	N/A	Double
-//	hour_07	N/A	Double
-//	hour_08	N/A	Double
-//	hour_09	N/A	Double
-//	hour_10	N/A	Double
-//	hour_11	N/A	Double
-//	hour_12	N/A	Double
-//	hour_13	N/A	Double
-//	hour_14	N/A	Double
-//	hour_15	N/A	Double
-//	hour_16	N/A	Double
-//	hour_17	N/A	Double
-//	hour_18	N/A	Double
-//	hour_19	N/A	Double
-//	hour_20	N/A	Double
-//	hour_21	N/A	Double
-//	hour_22	N/A	Double
-//	hour_23	N/A	Double
-//	hour_24	N/A	Double
+	
+	//페이징작업
+	private String rn;
+	private String search;   	private String keyword;
+	private String pageNum;		private int total;
+	private int start; 		 	private int end;
+	private String currentPage;
+	
+	//조회용
+	private String 	observe_post;
+	private Integer observe_code;
+	private Date  start_date;
+	private Date  end_date;
+	private String observe_date_str;
 
 }

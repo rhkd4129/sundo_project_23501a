@@ -1,6 +1,8 @@
 package com.postgres.sample.dto;
 
-import java.util.Date;
+
+
+import java.sql.Date;
 
 import lombok.Data;
 
@@ -12,7 +14,7 @@ public class WaterLevel {
 
 
 	private String river_code;
-	private Date observe_datetime;
+	private Date observe_date;
 	private Double hour_01;
 	private Double hour_02;
 	private Double hour_03;
@@ -37,4 +39,20 @@ public class WaterLevel {
 	private Double hour_22;
 	private Double hour_23;
 	private Double hour_24;
+	
+	//조회용
+	private String 	observe_post;
+	private Integer observe_code;
+	private Date  start_date;
+	private Date  end_date;
+	private String observe_date_str;
+
+	//페이징작업
+	private String rn;
+	private String search;   	private String keyword;
+	private String pageNum;		private int total;
+	private int start; 		 	private int end;
+	private String currentPage;
 }
+
+

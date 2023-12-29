@@ -15,4 +15,20 @@ public class BoardNotice {
 	private Date 	create_datetime;
 	private Date 	modify_datetime;
 
+	//파일첨부용
+	private String	tbl_name;
+	private Integer attach_no;
+	private String 	attach_name;
+	private String 	attach_path;
+	private String 	attach_saved_name;
+
+	//조회용
+	private int		rn;					//목록 rownum번호
+	private int		start;				//페이지 시작번호
+	private int		end;				//페이지 끝번호
+	private String	user_name;			//작성자명
+	private String  attach_delete_flag; //편집저장시 기존첨부 삭제여부(D)
+	private String	search;				//검색대상 필드
+	private String	keyword;			//검색어 키워드
+
 }

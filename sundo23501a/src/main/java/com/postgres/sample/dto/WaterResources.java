@@ -16,19 +16,33 @@ public class WaterResources {
 	
 	private Double 	latitude;
 	private Double 	longitude;
-	private String 	create_datetime;
-	private String 	modify_datetime;
+	private Date 	create_datetime;
+	private Date 	modify_datetime;
 	
 
 	//조회용
 
     private String first_area;
     private String second_area;
+	private String check_result;
+	private String user_name;
+	private String currentPage;
+	//	검색용
+	private String 		firstdate;
+	private String 		secdate;
+	private String 		user_department;
+
 
 	private String org_area_name;// 행정기관 이름
 	private String cate_name; 		// ex) 목재댐
 	
 	private String org_name;	//운영기관 이름
+
+	//그래프 조회용
+	private Integer category_1;
+	private Integer category_2;
+	private Integer category_3;
+	private Integer category_4;
 
 
 

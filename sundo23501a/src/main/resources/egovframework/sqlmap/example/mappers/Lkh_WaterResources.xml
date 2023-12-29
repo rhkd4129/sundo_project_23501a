@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.postgres.sample.service.impl.dao.lkh.LKH_WaterResourcesDAO">
-	
-	
+
+
     <select id="SelectWaterResourceList" resultType="waterResources"  parameterType="waterResources">
 			SELECT *
 			FROM
@@ -45,17 +45,20 @@
 		OFFSET #{start}-1
 		LIMIT 10
     </select>
-	
-	
+
+
+
+
+
+
 	<select id="countWaterResource"  resultType="waterResources">
-			select 
+			select
 				count(*) as total
-			from 
+			from
 				water_resources w, organization o
 			where
 				w.org_code = o.org_code
 	</select>
-
 
 
 	<select id="waterResourceDetail" parameterType="String" resultType="waterResources">
@@ -75,12 +78,10 @@
 			) code ON wr.facility_type = code.cate_code
 
 		WHERE  wr.facility_code =#{facility_code}
-
 	</select>
 
 
-	
-		<insert id="waterResourcesInsert" parameterType="waterResources">
+	<insert id="waterResourcesInsert" parameterType="waterResources">
     INSERT INTO water_resources (
         facility_code,
         facility_category,
@@ -88,10 +89,10 @@
         facility_type,
         org_code,
         org_area,
-        latitude,
-        longitude
-     <!--     create_datetime,
-        modify_datetime-->
+		latitude,
+        longitude,
+        create_datetime,
+        modify_datetime
     ) VALUES (
         #{facility_code},
         #{facility_category},
@@ -99,53 +100,46 @@
         #{facility_type},
         #{org_code},
         #{org_area},
-    
         #{latitude},
-        #{longitude}
-         <!-- 
-        CURRENT_TIMESTAMP,
-        CURRENT_TIMESTAMP -->
-    );
-</insert>
+        #{longitude},
+        CURRENT_DATE,
+		CURRENT_DATE
+    )
+	</insert>
 
 
-
-	
-	
-	
-	
 	<select id="findfacilityCategory" resultType="waterResources">
-		select 
+		select
 			facility_category
-		from 
-			water_resources 
-		group by 
+		from
+			water_resources
+		group by
 			facility_category
-		
+
 	</select>
 
-	
+
 	<select id="organizationCategory" resultType="Organization">
-		select 
+		select
 			org_code ,org_name
-		from 
+		from
 			Organization
 	</select>
-	
+
 
 	<select id="OrgAreaCategory" resultType="OrgArea">
 		select * from org_area
 	</select>
-	
-	
+
+
 	<select id="facilityCategoryType" resultType="code" parameterType="String">
-	    SELECT 
+	    SELECT
 	        cate_code, cate_name
-	    FROM 
+	    FROM
 	        code
-	    WHERE 
+	    WHERE
 	        field_name = 'facility_type' AND cate_code like '%' || #{divison} || '%'
-	    ORDER BY 
+	    ORDER BY
 	        cate_code
 	</select>
 
@@ -159,5 +153,21 @@
 	</select>
 
 
+
+	<select id="orgAreaLineGraph" resultType="waterResources">
+		SELECT
+			wr.org_area,org_area_name,
+			SUM(CASE WHEN wr.facility_category = '댐' THEN 1 ELSE 0 END) AS category_1,
+			SUM(CASE WHEN wr.facility_category = '저수지' THEN 1 ELSE 0 END) AS category_2,
+			SUM(CASE WHEN wr.facility_category = '펌프장' THEN 1 ELSE 0 END) AS category_3,
+			SUM(CASE WHEN wr.facility_category = '관개수로' THEN 1 ELSE 0 END) AS category_4
+		FROM
+			water_resources wr , org_area o
+		where
+			wr.org_area = o.org_area
+		group by
+			wr.org_area,o.org_area_name
+
+	</select>
 </mapper>
 

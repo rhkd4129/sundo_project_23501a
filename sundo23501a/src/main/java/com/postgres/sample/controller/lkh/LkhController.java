@@ -2,6 +2,8 @@ package com.postgres.sample.controller.lkh;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,14 +13,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.postgres.sample.dto.AccessLog;
 import com.postgres.sample.dto.Code;
 import com.postgres.sample.dto.LKH_WaterResources;
 import com.postgres.sample.dto.OrgArea;
 import com.postgres.sample.dto.Organization;
 import com.postgres.sample.dto.Paging;
+import com.postgres.sample.dto.UserInfo;
 import com.postgres.sample.dto.WaterResources;
-import com.postgres.sample.service.impl.dao.lkh.LKH_WaterResourcesDAO;
-import com.postgres.sample.service.kjo.BoardService;
+import com.postgres.sample.service.jmh.JmhUserInfoService;
 import com.postgres.sample.service.lkh.WaterResourcesService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,18 +30,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequiredArgsConstructor
+
 public class LkhController {
 	private final WaterResourcesService waterResourcesService;
+
+    private final JmhUserInfoService uiService;		//사용자 관리
+	//접속이력 남기는 메소드
+	public void insertAccessLog(HttpServletRequest request, Model model) {
+		System.out.println("JmhController insertAccessLog Start..");
+		//접속이력
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		String requestURI = request.getRequestURI();        //  요청받은 페이지
+		String ip = request.getRemoteAddr();
+		String user_id = userInfoDTO.getUser_id();
+		
+		AccessLog accessLog = new AccessLog();
+		accessLog.setProgram_url(requestURI);
+		accessLog.setIp(ip);
+		accessLog.setUser_id(user_id);
+		//-------------------------------------------------
+		int result = uiService.InsertAccessLog(accessLog);
+		//-------------------------------------------------		
+		System.out.println("JmhController insertAccessLog End..");
+	}
+	
 	@ResponseBody
 	@GetMapping("/waterResourcesListA")
 	public ResponseEntity<LKH_WaterResources> waterResourcesListA(
-			@RequestParam(required = false) LKH_WaterResources lkh_waterResources,
-			@RequestParam(required = false) String currentPage) {
+			LKH_WaterResources lkh_waterResources,
+			@RequestParam(required = false) String currentPage,
+			HttpServletRequest request, Model model) {
 		System.out.println("이건되냐?");
-//		if(lkh_waterResources.getKeyword_facility_code() == null){
-//			System.out.println("널임");
-//			System.out.println(lkh_waterResources.getKeyword_facility_code());
-//		}
+
 
 		WaterResources waterResources = new WaterResources();
 		waterResources.setTotal(waterResourcesService.countWaterResource().getTotal());
@@ -52,6 +76,7 @@ public class LkhController {
 		lkhWaterResources.setWaterResourcesList(waterResourcesList);
 		lkhWaterResources.setPaging(page);
 
+		insertAccessLog(request, model); //접속이력
 
 		return ResponseEntity.ok(lkhWaterResources);
 	}
@@ -61,7 +86,7 @@ public class LkhController {
 	public String waterResourcesList(
 			 LKH_WaterResources lkh_WaterResources,
 			 @RequestParam(required = false) String currentPage,
-			Model model) {
+			 HttpServletRequest request, Model model) {
 		
 		
 		  WaterResources waterResources = new  WaterResources();
@@ -76,21 +101,24 @@ public class LkhController {
 		  List<WaterResources> findfacility_category = waterResourcesService.findfacilityCategory();
 		  List<Organization> organization_category= waterResourcesService.organizationCategory();
 		  List<OrgArea> orgArea_category = waterResourcesService.OrgAreaCategory();
+		  List<WaterResources> waterResourcesList = waterResourcesService.SelectWaterResourceList(waterResources);
 
 
+		  model.addAttribute("waterResourcesList",waterResourcesList);
 		  model.addAttribute("orgArea_category", orgArea_category);
 		  model.addAttribute("findfacility_category", findfacility_category);
 		  model.addAttribute("organization_category", organization_category);
 		  model.addAttribute("page",page);
 	
+			insertAccessLog(request, model); //접속이력
 		
-		return "lkh/waterResource/waterResourcesList";
+		return "system2/lkh/waterResource/waterResourcesList";
 			//해버렷다 ...
 	}
 	
 
 	@GetMapping("/waterResourcesInsertForm")
-	public String waterResourcesInsertForm(Model model) {
+	public String waterResourcesInsertForm(HttpServletRequest request, Model model) {
 		
 		 
 		List<Organization> organization_category= waterResourcesService.organizationCategory();
@@ -102,41 +130,50 @@ public class LkhController {
 		model.addAttribute("orgArea_category", orgArea_category);
 		model.addAttribute("codeList", codeList);
 		model.addAttribute("findfacility_category", findfacility_category);
-		return "lkh/waterResource/waterResourceInsetForm";
+
+		insertAccessLog(request, model); //접속이력
+
+		return "system2/lkh/waterResource/waterResourceInsetForm";
 	}
 	
 	@ResponseBody
 	@GetMapping("/facilityCategoryType")
-	public List<Code> facilityCategoryType(String divison) {
+	public List<Code> facilityCategoryType(String divison, HttpServletRequest request, Model model) {
 		List<Code> codeList = waterResourcesService.facilityCategoryType(divison);
+		
+		insertAccessLog(request, model); //접속이력
+
 		return codeList;
 	}
 	
 	
 	@PostMapping("/waterResourcesInsert")
-	public String waterResourcesInsert(WaterResources waterResources) {
+	public String waterResourcesInsert(WaterResources waterResources, HttpServletRequest request, Model model) {
 		System.out.println(waterResources.getFacility_code());
-
-
+		System.out.println(waterResources.getFacility_addr());
+		System.out.println(waterResources.getFacility_code());
 		int result = waterResourcesService.waterResourcesInsert(waterResources);
-		
-		
 		System.out.print("결과"+result);
+		
+		insertAccessLog(request, model); //접속이력
+
 		return "redirect:/waterResourcesList";
 	}
 	
 
 	@GetMapping("waterResourcesListDetail")
-	public String waterResourceDetail(Model  model,String facility_code) {
+	public String waterResourceDetail(String facility_code, HttpServletRequest request, Model model) {
 		WaterResources waterResources = waterResourcesService.waterResourceDetail(facility_code);
 		model.addAttribute("waterResources",waterResources);
 
-		return "lkh/waterResource/waterResourceDetail";
+		insertAccessLog(request, model); //접속이력
+
+		return "system2/lkh/waterResource/waterResourceDetail";
 	}
 	
 	
 	@GetMapping("/waterResourcesUpdateForm")
-	public String waterResourcesUpdateForm(String facility_code ,Model model) {
+	public String waterResourcesUpdateForm(String facility_code, HttpServletRequest request, Model model) {
 
 		WaterResources waterResources = waterResourcesService.waterResourceDetail(facility_code);
 
@@ -151,13 +188,17 @@ public class LkhController {
 		model.addAttribute("findfacility_category", findfacility_category);
 		model.addAttribute("waterResources", waterResources);
 
+		insertAccessLog(request, model); //접속이력
 
-		return "lkh/waterResource/waterResourceUpdateForm";
+		return "system2/lkh/waterResource/waterResourceUpdateForm";
 	}
 	
 	@PostMapping("/waterResourcesUpdate")
-	public String waterResourcesUpdate(WaterResources waterResources) {
+	public String waterResourcesUpdate(WaterResources waterResources, HttpServletRequest request, Model model) {
 		/* int result = waterResourcesService.waterResourcesUpdate(waterResources); */
+		
+		insertAccessLog(request, model); //접속이력
+
 		return "redirect:/waterResourcesList";
 	}
 
@@ -165,7 +206,7 @@ public class LkhController {
 
 	@GetMapping("/waterResourceStatistics")
 	public String waterResourceStatistics(Model model){
-		return "lkh/waterResource/waterResourceStatistics";
+		return "system2/lkh/waterResource/waterResourceStatistics";
 	}
 
 
@@ -173,8 +214,29 @@ public class LkhController {
 	@GetMapping("/doughnut_chart")
 	public List<Integer> waterResourceStatistics(){
 		System.out.println("doughnutChart");
-		List<Integer> bac = waterResourcesService.doughnutChart();
-		System.out.println("doughnutCaaaaaaaaaaaaaaaaaahart");
 		return waterResourcesService.doughnutChart();
 	}
+
+
+	@ResponseBody
+	@GetMapping("/orgAreaLineGraph")
+	public List<WaterResources> orgAreaLineGraph(HttpServletRequest request, Model model){
+		System.out.println("orgAreaLineGraph");
+		List<WaterResources> abc = waterResourcesService.orgAreaLineGraph();
+		
+		insertAccessLog(request, model); //접속이력
+
+		return  waterResourcesService.orgAreaLineGraph();
+
+	}
+
+	@GetMapping("/observation_rainfull")
+	public List<WaterResources> observation_rainfull(HttpServletRequest request, Model model){
+
+		insertAccessLog(request, model); //접속이력
+
+		return  waterResourcesService.orgAreaLineGraph();
+
+	}
+
 }

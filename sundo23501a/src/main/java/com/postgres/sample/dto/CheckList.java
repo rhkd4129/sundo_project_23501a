@@ -10,5 +10,11 @@ public class CheckList {
 	private String 	check_item;
 	private String 	check_grade	;
 	private String 	note;
+	private Integer checklist_no;
+
+	//	조회용
+	private int		total;
+	private String 	cate_code;
+	private Integer 	rn;
 
 }
