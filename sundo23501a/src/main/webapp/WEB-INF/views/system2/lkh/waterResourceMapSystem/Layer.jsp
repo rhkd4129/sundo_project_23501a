@@ -177,48 +177,6 @@
 
                 view: view,
             });
-            // 전역 변수로 현재 열려 있는 팝업을 저장할 변수를 선언
-            // let currentPopup = null;
-            map.on('singleclick', function(evt) {
-                var coordinate = evt.coordinate;
-                console.log("되는거 ")
-                console.log(coordinate)
-                // var hdms = ol.coordinate.toStringHDMS(ol.proj.transform(coordinate, 'EPSG:3857', 'EPSG:4326'));
-
-                let element = document.createElement("div");
-                element.classList.add('ol-popup');
-                element.innerHTML = coordinate;
-                // 현재 열려 있는 팝업이 있으면 삭제
-                if (currentPopup) {
-                    map.removeOverlay(currentPopup);
-                }
-                // 새로운 OverLay 생성
-                let overlay = new ol.Overlay({
-                    element: element,
-                    autoPan: true,
-                    className: "multiPopup",
-                    autoPanMargin: 100,
-                    autoPanAnimation: {
-                        duration: 400
-                    }
-                });
-                // 오버레이의 위치 설정
-                overlay.setPosition(coordinate);
-                // 지도에 추가
-                map.addOverlay(overlay);
-                // 현재 열려 있는 팝업 갱신
-                currentPopup = overlay;
-                // 팝업 닫기 이벤트 처리
-                element.addEventListener('click', function(e) {
-                    var target = e.target;
-                    if (target.className == "ol-popup-closer") {
-                        // 선택한 OverLayer 삭제
-                        map.removeOverlay(overlay);
-                        // 현재 열려 있는 팝업 변수 초기화
-                        currentPopup = null;
-                    }
-                });
-            });
 
             $('#zoomOut').on('click',function (){
                 var view = map.getView();
@@ -254,7 +212,6 @@
                     console.log("server get type: " + getdatatype);
                     /*관측소 요청*/
                     if (getdatatype == "Observation") {
-                        toggleLayerVisibility(6);
                         console.log(data.objList);
                         showobsrv(getdatatype, data);   //  화면에 뿌리는 함수
                     }
@@ -366,18 +323,17 @@
             seoulHacunSugye = createDivCheckBox("list_level_2","seoulHacunSugye","서울 한강 수계",3,'#55B4D1');
             gyeonggiHacunSugye = createDivCheckBox("list_level_2","gyeonggiHacunSugye","경기 한강 수계",4,'#55B4D1');
             sumun = createDivCheckBox("list_level_1","sumun","수문",5,'green');
-            observation = createDivCheckBox("list_level_1","observation","관측소",6,'red');
             dam = createDivCheckBox("list_level_1","dam","댐",6,'red',false);
             layerMid.append(seoulHangang);
             layerMid.append(gyeonggiHacun);
             layerMid.append(seoulHacunSugye);
             layerMid.append(gyeonggiHacunSugye);
             layerMid.append(sumun);
-            layerMid.append(observation);
 
         }
 
         function showobsrv(getdatatype, data) {
+            console.log('dd');
             console.log(data);
             rightlayerShow(getdatatype);
 
@@ -423,12 +379,16 @@
             let list = $('#list');
 
             list.empty();
+
             $.each(objList, function (key, values) {
+
                 const newcon = $('<div></div>');
                 newcon.click(function () {
-                    getLatLong(values.observe_code);
+
+                    getLatLong(values.river_code,values.latitude , values.longitude,values.river_addr,values.river_detail_addr,values.river_name);
+
                 });
-                newcon.append(values.observe_post);
+                newcon.append(values.river_name);
                 newcon.append('<input type="hidden" value="' + values.latitude + '" id="lat' + values.observe_code + '">');
                 newcon.append('<input type="hidden" value="' + values.longitude + '" id="long' + values.observe_code + '">');
                 list.append(newcon);
@@ -453,65 +413,207 @@
             paginationDiv.innerHTML = jspPagination; // 페이징 코드 추가
         }
 
-
-        function getLatLong(observe_code){  //  좌표 반환
-            console.log(observe_code);
-            let latvalue = $('#lat' + observe_code).val();
-            let longvalue = $('#long' + observe_code).val();
-            // console.log(latvalue);
-            // console.log(longvalue);
-            alert("latvalue"+latvalue +"longvalue"+ longvalue);
-            const coordinates = [parseFloat(longvalue), parseFloat(latvalue)];  // 좌표를 배열로 변환
-            moveToCoordinates(coordinates,10)
-        }
-
         let currentPopup = null;
-        function moveToCoordinates(coordinate, zoom) {     //  화면이동
-            console.log("안되는거");
-            console.log(coordinate);
+
+
+
+
+        function getLatLong(river_code,y,x,addr,detail_addr,river_name){  //  좌표 반환
+
+            const coordinate = [parseFloat(x), parseFloat(y)];  // 좌표를 배열로 변환
             var view = map.getView();
+            // console.log(ol.proj.fromLonLat([latvalue,]))
+            console.log(ol.proj.fromLonLat(coordinate));
             view.setCenter(ol.proj.fromLonLat(coordinate));
-            var currentZoom = view.getZoom();
-            view.setZoom(14);
+            view.setZoom(13);
 
 
-            let element = document.createElement("div");
-            element.classList.add('ol-popup');
-            // 좌표값을 읽기 쉬운 형식으로 변환
-            const coordinatesText = `Longitude: ${coordinate[0]}, Latitude: ${coordinate[1]}`;
-            element.innerHTML = coordinatesText;
-            // element.innerHTML = coordinate;
-            // 현재 열려 있는 팝업이 있으면 삭제
-            if (currentPopup) {
-                map.removeOverlay(currentPopup);
-            }
-            // 새로운 OverLay 생성
-            let overlay = new ol.Overlay({
-                element: element,
-                autoPan: true,
-                className: "multiPopup",
-                autoPanMargin: 100,
-                autoPanAnimation: {
-                    duration: 400
+            $.ajax({
+                url: 'realTimeObservationDetail',
+                data: { river_code: river_code },
+                dataType:'json',
+                success: function (data) {
+                    ///////////////////////////////
+                    let element = document.createElement("div");
+                    element.classList.add('ol-popup');
+                    $('<div>').text('관측소: ' + data.river_name).appendTo(element);
+                    $('<div>').text('수위 :' + data.waterLevel_record).appendTo(element);
+                    $('<div>').text('강수량 : ' + data.rainfall_record).appendTo(element);
+                    $('<div>').text('상세주소 : ' + data.river_addr + data.river_detail_addr).appendTo(element);
+                    $('<div>').text('표준코드 : ' + data.river_code).appendTo(element);
+                    // 현재 열려 있는 팝업이 있으면 삭제
+                    if (currentPopup) {
+                        map.removeOverlay(currentPopup);
+                    }
+                    // 새로운 OverLay 생성
+                    let overlay = new ol.Overlay({
+                        element: element,
+                        autoPan: true,
+                        className: "multiPopup",
+                        autoPanMargin: 100,
+                        autoPanAnimation: {
+                            duration: 250
+                        }
+                    });
+                    overlay.setPosition(ol.proj.fromLonLat(coordinate));
+                    map.addOverlay(overlay);
+                    // 오버레이의 위치 설정
+                    // 지도에 추가
+                    // 현재 열려 있는 팝업 갱신
+                    currentPopup = overlay;
+                    // 팝업 닫기 이벤트 처리
+                    element.addEventListener('click', function (e) {
+                        var target = e.target;
+                        if (target.className == "ol-popup-closer") {
+                            // 선택한 OverLayer 삭제
+                            map.removeOverlay(overlay);
+                            // 현재 열려 있는 팝업 변수 초기화
+                            currentPopup = null;
+                        }
+                    });
+                },
+                error: function (xhr, status, error) {
+                    let element = document.createElement("div");
+                    element.classList.add('ol-popup');
+                    $('<div>').text('관측소: ' + river_name).appendTo(element);
+                    $('<div>').text('상세주소 : ' + addr + detail_addr).appendTo(element);
+                    $('<div>').text('표준코드 : ' +river_code).appendTo(element);
+                    $('<div>').text('수위 :error!').appendTo(element);
+                    $('<div>').text('수위 :error!').appendTo(element);
+
+                    // 현재 열려 있는 팝업이 있으면 삭제
+                    if (currentPopup) {
+                        map.removeOverlay(currentPopup);
+                    }
+                    // 새로운 OverLay 생성
+                    let overlay = new ol.Overlay({
+                        element: element,
+                        autoPan: true,
+                        className: "multiPopup",
+                        autoPanMargin: 100,
+                        autoPanAnimation: {
+                            duration: 250
+                        }
+                    });
+                    overlay.setPosition(ol.proj.fromLonLat(coordinate));
+                    map.addOverlay(overlay);
+                    // 오버레이의 위치 설정
+                    // 지도에 추가
+                    // 현재 열려 있는 팝업 갱신
+                    currentPopup = overlay;
+                    // 팝업 닫기 이벤트 처리
+                    element.addEventListener('click', function (e) {
+                        var target = e.target;
+                        if (target.className == "ol-popup-closer") {
+                            // 선택한 OverLayer 삭제
+                            map.removeOverlay(overlay);
+                            // 현재 열려 있는 팝업 변수 초기화
+                            currentPopup = null;
+                        }
+                    });
                 }
-            });
-            // 오버레이의 위치 설정
-            overlay.setPosition(coordinate);
-            // 지도에 추가
-            map.addOverlay(overlay);
-            // 현재 열려 있는 팝업 갱신
-            currentPopup = overlay;
-            // 팝업 닫기 이벤트 처리
-            element.addEventListener('click', function (e) {
-                var target = e.target;
-                if (target.className == "ol-popup-closer") {
-                    // 선택한 OverLayer 삭제
-                    map.removeOverlay(overlay);
-                    // 현재 열려 있는 팝업 변수 초기화
-                    currentPopup = null;
-                }
-            });
+            })
+
+
+
         }
+
+
+
+        <%--function moveToCoordinates(coordinate) {     //  화면이동--%>
+        <%--    console.log("----------");--%>
+        <%--    console.log(coordinate);--%>
+        <%--    var view = map.getView();--%>
+        <%--    view.setCenter(ol.proj.fromLonLat(coordinate));--%>
+        <%--    view.setZoom(14);--%>
+
+
+
+        <%--    let element = document.createElement("div");--%>
+        <%--    element.classList.add('ol-popup');--%>
+        <%--    // 좌표값을 읽기 쉬운 형식으로 변환--%>
+        <%--    const coordinatesText = `Longitude: ${coordinate[0]}, Latitude: ${coordinate[1]}`;--%>
+
+        <%--    element.innerHTML = coordinatesText;--%>
+
+        <%--    // 현재 열려 있는 팝업이 있으면 삭제--%>
+        <%--    if (currentPopup) {--%>
+        <%--        map.removeOverlay(currentPopup);--%>
+        <%--    }--%>
+
+        <%--    // 새로운 OverLay 생성--%>
+        <%--    let overlay = new ol.Overlay({--%>
+        <%--        element: element,--%>
+        <%--        autoPan: true,--%>
+        <%--        className: "multiPopup",--%>
+        <%--        autoPanMargin: 100,--%>
+        <%--        autoPanAnimation: {--%>
+        <%--            duration: 250--%>
+        <%--        }--%>
+        <%--    });--%>
+        <%--    overlay.setPosition(ol.proj.fromLonLat(coordinate));--%>
+        <%--    map.addOverlay(overlay);--%>
+        <%--    // 오버레이의 위치 설정--%>
+
+
+
+        <%--    // 지도에 추가--%>
+
+        <%--    // 현재 열려 있는 팝업 갱신--%>
+        <%--    currentPopup = overlay;--%>
+        <%--    // 팝업 닫기 이벤트 처리--%>
+        <%--    element.addEventListener('click', function (e) {--%>
+        <%--        var target = e.target;--%>
+        <%--        if (target.className == "ol-popup-closer") {--%>
+        <%--            // 선택한 OverLayer 삭제--%>
+        <%--            map.removeOverlay(overlay);--%>
+        <%--            // 현재 열려 있는 팝업 변수 초기화--%>
+        <%--            currentPopup = null;--%>
+        <%--        }--%>
+        <%--    });--%>
+        <%--}--%>
+        //
+        // map.on('singleclick', function(evt) {
+        //     var coordinate = evt.coordinate;
+        //     console.log("되는거 ")
+        //     console.log(coordinate)
+        //     // var hdms = ol.coordinate.toStringHDMS(ol.proj.transform(coordinate, 'EPSG:3857', 'EPSG:4326'));
+        //
+        //     let element = document.createElement("div");
+        //     element.classList.add('ol-popup');
+        //     element.innerHTML = coordinate;
+        //     // 현재 열려 있는 팝업이 있으면 삭제
+        //     if (currentPopup) {
+        //         map.removeOverlay(currentPopup);
+        //     }
+        //     // 새로운 OverLay 생성
+        //     let overlay = new ol.Overlay({
+        //         element: element,
+        //         autoPan: true,
+        //         className: "multiPopup",
+        //         autoPanMargin: 100,
+        //         autoPanAnimation: {
+        //             duration: 400
+        //         }
+        //     });
+        //     // 오버레이의 위치 설정
+        //     overlay.setPosition(coordinate);
+        //     // 지도에 추가
+        //     map.addOverlay(overlay);
+        //     // 현재 열려 있는 팝업 갱신
+        //     currentPopup = overlay;
+        //     // 팝업 닫기 이벤트 처리
+        //     element.addEventListener('click', function(e) {
+        //         var target = e.target;
+        //         if (target.className == "ol-popup-closer") {
+        //             // 선택한 OverLayer 삭제
+        //             map.removeOverlay(overlay);
+        //             // 현재 열려 있는 팝업 변수 초기화
+        //             currentPopup = null;
+        //         }
+        //     });
+        // });
+
     </script>
 </head>
 <body style="height: 84%">
