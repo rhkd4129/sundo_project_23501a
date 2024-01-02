@@ -479,7 +479,7 @@
                     $('<div>').text('상세주소 : ' + addr + detail_addr).appendTo(element);
                     $('<div>').text('표준코드 : ' +river_code).appendTo(element);
                     $('<div>').text('수위 :error!').appendTo(element);
-                    $('<div>').text('수위 :error!').appendTo(element);
+                    $('<div>').text('강수량 :error!').appendTo(element);
 
                     // 현재 열려 있는 팝업이 있으면 삭제
                     if (currentPopup) {
