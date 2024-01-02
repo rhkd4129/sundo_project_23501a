@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.postgres.sample.dto.AccessLog;
 import com.postgres.sample.dto.BoardNotice;
 import com.postgres.sample.dto.Code;
+import com.postgres.sample.dto.JmhDaysDataVO;
 import com.postgres.sample.dto.LoginLog;
 import com.postgres.sample.dto.OrgArea;
 import com.postgres.sample.dto.Organization;
@@ -49,7 +51,7 @@ import com.postgres.sample.service.jmh.JmhAccessLogService;
 import com.postgres.sample.service.jmh.JmhLoginLogService;
 import com.postgres.sample.service.jmh.JmhOrgService;
 import com.postgres.sample.service.jmh.JmhService;
-import com.postgres.sample.service.jmh.UserInfoService;
+import com.postgres.sample.service.jmh.JmhUserInfoService;
 
 
 @Controller
@@ -60,7 +62,7 @@ public class JmhController {
 	
 	private static final Logger Logger = LoggerFactory.getLogger(JmhController.class);
 	
-	private final UserInfoService uiService;		//사용자 관리
+	private final JmhUserInfoService uiService;		//사용자 관리
 	private final JmhOrgService orgService;			//기관 관리
 	private final JmhService jmhService;			//공지사항
 	private final JmhAccessLogService alogService; 	//접속 이력
@@ -78,13 +80,13 @@ public class JmhController {
 		return "/main";
 	}
 	
-	@RequestMapping(value = "/board_notice")
-	public String boardNotice(HttpServletRequest request, Model model) {
-		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-		model.addAttribute("userInfo", userInfoDTO);
-		return "/main_header";
+	// 일반사용자 기관소개 페이지
+	@RequestMapping(value = "/org_intro")
+	public String orgIntro(HttpServletRequest request, Model model) {
+		
+		return "/board_notice/org_intro";
 	}
-
+	
 	@RequestMapping(value = "/main_header")
 	public String mainHeaderPage(HttpServletRequest request, Model model) {
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
@@ -99,16 +101,18 @@ public class JmhController {
 
 	//-------------------------------------------------------------------------------
 	// 관리자 페이지로 이동
-	@RequestMapping(value = "adminpage_main")
+	@RequestMapping(value = "/adminpage_main")
 	public String adminPageMain(HttpServletRequest request, Model model) {
-		System.out.println("JmhController adminPageMain Start..");		// 세션값 받음
+		/*System.out.println("JmhController adminPageMain Start..");		// 세션값 받음
 		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
 		System.out.println("userInfo.getUser_id() -> " + userInfo.getUser_id());		
 		//-----------------------------------------------------------------
 		UserInfo userInfoDto = uiService.idConfirm(userInfo.getUser_id());
 		//-----------------------------------------------------------------
-		model.addAttribute("userInfoDto", userInfoDto);		
-		return "/system1/adminpage_main";
+		model.addAttribute("userInfoDto", userInfoDto);
+		insertAccessLog(request, model);
+		return "/system1/adminpage_main";*/
+		return "redirect:/admin_userinfo_list"; //사용자 관리 바로 이동
 	}
 	@RequestMapping(value = "/main_header_1")
 	public String mainHeader1Page(HttpServletRequest request, Model model) {
@@ -120,21 +124,30 @@ public class JmhController {
 	public String mainMenuPage(HttpServletRequest request, Model model) {
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		model.addAttribute("userInfo", userInfoDTO);
+		
+		Date date = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
+		System.out.println("오늘월->" + df.format(date));
+		String year_month = df.format(date);
+		model.addAttribute("year_month", year_month);
+		
 		return "/system1/adminpage_menu";
 	}
 	
 	//-------------------------------------------------------------------------------
 	// 실시간 수문정보 관리시스템 페이지로 이동
-	@RequestMapping(value = "observation_main")
+	@RequestMapping(value = "/observation_main")
 	public String observationMain(HttpServletRequest request, Model model) {
-		System.out.println("JmhController adminPageMain Start..");		// 세션값 받음
+		/*System.out.println("JmhController adminPageMain Start..");		// 세션값 받음
 		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
 		System.out.println("userInfo.getUser_id() -> " + userInfo.getUser_id());		
 		//-----------------------------------------------------------------
 		UserInfo userInfoDto = uiService.idConfirm(userInfo.getUser_id());
 		//-----------------------------------------------------------------
 		model.addAttribute("userInfoDto", userInfoDto);		
-		return "/system2/observation_main";
+		insertAccessLog(request, model);
+		return "/system2/observation_main";*/
+		return "redirect:/realTimeSystem/layer"; // 지도페이지로 바로 이동
 	}
 	@RequestMapping(value = "/main_header_2")
 	public String mainHeader2Page(HttpServletRequest request, Model model) {
@@ -160,16 +173,18 @@ public class JmhController {
 
 	//-------------------------------------------------------------------------------
 	// 수자원 시설물 관리시스템 페이지로 이동
-	@RequestMapping(value = "water_main")
+	@RequestMapping(value = "/water_main")
 	public String waterMain(HttpServletRequest request, Model model) {
-		System.out.println("JmhController adminPageMain Start..");		// 세션값 받음
+		/*System.out.println("JmhController adminPageMain Start..");		// 세션값 받음
 		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
 		System.out.println("userInfo.getUser_id() -> " + userInfo.getUser_id());		
 		//-----------------------------------------------------------------
 		UserInfo userInfoDto = uiService.idConfirm(userInfo.getUser_id());
 		//-----------------------------------------------------------------
 		model.addAttribute("userInfoDto", userInfoDto);		
-		return "/system3/water_main";
+		insertAccessLog(request, model);
+		return "/system3/water_main";*/
+		return "redirect:/water_resourcesList"; //점검결과작성 바로 이동
 	}
 	@RequestMapping(value = "/main_header_3")
 	public String mainHeader3Page(HttpServletRequest request, Model model) {
@@ -245,7 +260,7 @@ public class JmhController {
 			session.setAttribute("userInfo", userInfoDTO); // 세션 생성 + 저장
 			
 			//-------------------------------------------
-			//로그인 이력 남기기
+			//★로그인 이력 남기기
 			String ip = request.getRemoteAddr();
 			System.out.println("ip:"+ip);
 			LoginLog loginLog = new LoginLog();
@@ -261,9 +276,30 @@ public class JmhController {
 		}
 		
 	}
+	
+	//접속이력 남기는 메소드
+	public void insertAccessLog(HttpServletRequest request, Model model) {
+		System.out.println("JmhController insertAccessLog Start..");
+		//접속이력
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		String requestURI = request.getRequestURI();        //  요청받은 페이지
+		String ip = request.getRemoteAddr();
+		String user_id = userInfoDTO.getUser_id();
+		
+		AccessLog accessLog = new AccessLog();
+		accessLog.setProgram_url(requestURI);
+		accessLog.setIp(ip);
+		accessLog.setUser_id(user_id);
+		//-------------------------------------------------
+		int result = uiService.InsertAccessLog(accessLog);
+		//-------------------------------------------------		
+		System.out.println("JmhController insertAccessLog End..");
+	}
+	
 	//--------------------------------------------------------------------------------------			
 	// 로그아웃
-	@RequestMapping(value = "user_logout")
+	@RequestMapping(value = "/user_logout")
 	public String userLogout(HttpSession session) {
 		// 세션 정보 삭제
 		session.invalidate();
@@ -575,6 +611,7 @@ public class JmhController {
 		model.addAttribute("user_name", userInfo.getUser_name()); 				//성명
 		
 		System.out.println("----사용자 관리 목록(admin_userinfo_list) END-----");
+		insertAccessLog(request, model);
 		
 		return "/system1/admin_userinfo/admin_userinfo_list";
 	}
@@ -598,6 +635,7 @@ public class JmhController {
 		model.addAttribute("userInfoDTO", userInfoDTO); //로그인사용자 정보
 		
 		System.out.println("-----사용자 관리 작성(admin_userinfo_write) END-----");
+		insertAccessLog(request, model);
 		
 		return "/system1/admin_userinfo/admin_userinfo_write";
 	}
@@ -622,13 +660,14 @@ public class JmhController {
 		model.addAttribute("board", selectUserInfo);
 		
 		System.out.println("-----사용자 관리 조회(admin_userinfo_read) END-----");
+		insertAccessLog(request, model);
 		
 		return "/system1/admin_userinfo/admin_userinfo_read";
 	}
 
 	//수정화면 열기
 	@RequestMapping(value = "admin_userinfo_edit")
-	public String adminUserInfoEdit(UserInfo userInfo, Model model) {
+	public String adminUserInfoEdit(UserInfo userInfo, HttpServletRequest request, Model model) {
 		System.out.println("-----사용자 관리 수정화면 열기(admin_userinfo_edit) START-----");
 		
 		System.out.println("user_id->"+userInfo.getUser_id());
@@ -657,6 +696,7 @@ public class JmhController {
 		model.addAttribute("userInfo", selectUserInfo);
 		
 		System.out.println("-----사용자 관리 수정화면 열기(admin_userinfo_edit) END-----");
+		insertAccessLog(request, model);
 
 		return "/system1/admin_userinfo/admin_userinfo_edit";
 	}
@@ -695,6 +735,7 @@ public class JmhController {
 		}
 
 		System.out.println("-----사용자 관리 수정(admin_userinfo_update) END-----");
+		insertAccessLog(request, model);
 		
 		return "forward:/submit_control";
 	}
@@ -716,6 +757,7 @@ public class JmhController {
 		}
 		
 		System.out.println("-----사용자 관리 삭제(admin_userinfo_delete) END-----");
+		insertAccessLog(request, model);
 		
 		return "success";
 	}
@@ -760,6 +802,7 @@ public class JmhController {
 		model.addAttribute("org_name", orgInfo.getOrg_name()); 	//기관 명칭
 		
 		System.out.println("----기관 관리 목록(admin_org_list) END-----");
+		insertAccessLog(request, model);
 		
 		return "/system1/admin_org/admin_org_list";
 	}
@@ -784,6 +827,7 @@ public class JmhController {
 		model.addAttribute("userInfoDTO", userInfoDTO); //로그인사용자 정보
 		
 		System.out.println("-----기관 관리 작성(admin_org_write) END-----");
+		insertAccessLog(request, model);
 		
 		return "/system1/admin_org/admin_org_write";
 	}
@@ -804,6 +848,7 @@ public class JmhController {
 		model.addAttribute("redirect", "admin_org_list"); //목록으로 이동
  
 		System.out.println("-----기관 관리 등록(admin_org_insert) END-----");
+		insertAccessLog(request, model);
 		
 		return "forward:/submit_control";
 	}
@@ -828,13 +873,14 @@ public class JmhController {
 		model.addAttribute("board", selectOrganization);
 		
 		System.out.println("-----기관 관리 조회(admin_org_read) END-----");
+		insertAccessLog(request, model);
 		
 		return "/system1/admin_org/admin_org_read";
 	}
 
 	//수정화면 열기
 	@RequestMapping(value = "admin_org_edit")
-	public String adminOrgEdit(Organization orgInfo, Model model) {
+	public String adminOrgEdit(Organization orgInfo, HttpServletRequest request, Model model) {
 		System.out.println("-----기관 관리 수정화면 열기(admin_org_edit) START-----");
 		
 		System.out.println("org_code->"+orgInfo.getOrg_code());
@@ -854,6 +900,7 @@ public class JmhController {
 		model.addAttribute("board", selectOrganization);
 		
 		System.out.println("-----기관 관리 수정화면 열기(admin_org_edit) END-----");
+		insertAccessLog(request, model);
 
 		return "/system1/admin_org/admin_org_edit";
 	}
@@ -892,6 +939,7 @@ public class JmhController {
 		}
 
 		System.out.println("-----기관 관리 수정(admin_org_update) END-----");
+		insertAccessLog(request, model);
 		
 		return "forward:/submit_control";
 	}
@@ -914,9 +962,13 @@ public class JmhController {
 		}
 		
 		System.out.println("-----기관 관리 삭제(admin_org_delete) END-----");
+		insertAccessLog(request, model);
 		
 		return "success";
 	}
+	
+	
+
 	
 	//#####################
 	// 일반사용자 공지사항 페이지
@@ -1033,6 +1085,7 @@ public class JmhController {
 		model.addAttribute("search_codelist", search_codelist); 	//검색 분류
 		
 		System.out.println("----공지사항 목록(admin_notice_list) END-----");
+		insertAccessLog(request, model);
 		
 		return "/system1/admin_notice/admin_notice_list";
 	}
@@ -1056,6 +1109,7 @@ public class JmhController {
 		model.addAttribute("userInfoDTO", userInfoDTO); //로그인사용자 정보
 		
 		System.out.println("-----공지사항 게시판 작성(admin_notice_write) END-----");
+		insertAccessLog(request, model);
 		
 		return "/system1/admin_notice/admin_notice_write";
 	}
@@ -1081,20 +1135,32 @@ public class JmhController {
 			//---------------------------------------------------------------------------------------
 			
 			// Service --> DB CRUD
+			boardNotice.setTbl_name("BOARD_NOTICE");
 			boardNotice.setAttach_name(file1.getOriginalFilename()); 
-			boardNotice.setAttach_path(savedName);			
+			boardNotice.setAttach_path("/upload");
+			boardNotice.setAttach_saved_name(savedName);			
 		}
 		
 		//----------------------------------------------------
 		int resultCount = jmhService.insertBoard(boardNotice);
 		//----------------------------------------------------
-		
+		System.out.println("$$$$"+resultCount);
+		if(resultCount > 0) {
+			if(file1.getSize() > 0) {
+				//don_no받아서 파일첨부 등록
+				boardNotice.setDoc_no(resultCount);
+				//-----------------------------------------------------------
+				int resultAttachCount = jmhService.insertAttach(boardNotice);
+				//-----------------------------------------------------------
+			}
+		}
 		model.addAttribute("action", "insert"); //수행(작성)
 		model.addAttribute("status", "success"); //상태(성공)
 		model.addAttribute("boardNotice", boardNotice);
 		model.addAttribute("redirect", "admin_notice_list"); //목록으로 이동
  
 		System.out.println("-----공지사항 게시판 등록(admin_notice_insert) END-----");
+		insertAccessLog(request, model);
 		
 		return "forward:/submit_control";
 	}
@@ -1189,9 +1255,9 @@ public class JmhController {
 
 		System.out.println("doc_no->"+boardNotice.getDoc_no());
 
-		//-----------------------------------------------------------
+		//-------------------------------------------------------------
 		int resultCount = jmhService.readCount(boardNotice); //조회수 증가
-		//-----------------------------------------------------------
+		//-------------------------------------------------------------
 				
 		//------------------------------------------------------------
 		BoardNotice selectBoardNotice = jmhService.selectBoard(boardNotice);
@@ -1203,13 +1269,14 @@ public class JmhController {
 		model.addAttribute("board", selectBoardNotice);
 		
 		System.out.println("-----공지사항 게시판 조회(admin_notice_read) END-----");
+		insertAccessLog(request, model);
 		
 		return "/system1/admin_notice/admin_notice_read";
 	}
 
 	//수정화면 열기
 	@RequestMapping(value = "admin_notice_edit")
-	public String adminBoardNoticeEdit(BoardNotice boardNotice, Model model) {
+	public String adminBoardNoticeEdit(BoardNotice boardNotice, HttpServletRequest request, Model model) {
 		System.out.println("-----공지사항 게시판 수정화면 열기(admin_notice_edit) START-----");
 		
 		System.out.println("doc_no->"+boardNotice.getDoc_no());
@@ -1222,6 +1289,7 @@ public class JmhController {
 		model.addAttribute("board", selectBoardNotice);
 		
 		System.out.println("-----공지사항 게시판 수정화면 열기(admin_notice_edit) END-----");
+		insertAccessLog(request, model);
 
 		return "/system1/admin_notice/admin_notice_edit";
 	}
@@ -1237,14 +1305,17 @@ public class JmhController {
 
 		String before_attach_delete_flag = boardNotice.getAttach_delete_flag();
 		String before_attach_path = boardNotice.getAttach_path();
+		String before_attach_saved_name = boardNotice.getAttach_saved_name();
 		
 		System.out.println("before_attach_delete_flag->"+before_attach_delete_flag);
 		System.out.println("before_attach_path->"+before_attach_path);
+		System.out.println("before_attach_saved_name->"+before_attach_saved_name);
 		
 		if(before_attach_delete_flag.equals("D") && !before_attach_path.isEmpty()) {
 			//기존 첨부파일이 있고 삭제플래그가 D인 경우 삭제하기 -> 문서정보 업데이트 후 삭제
 			boardNotice.setAttach_name("");
 			boardNotice.setAttach_path("");
+			boardNotice.setAttach_saved_name("");
 		}
 		
 		if(file1.getSize() > 0) {			
@@ -1261,24 +1332,35 @@ public class JmhController {
 			//---------------------------------------------------------------------------------------
 			
 			// Service --> DB CRUD
-			boardNotice.setAttach_name(file1.getOriginalFilename());
-			boardNotice.setAttach_path(savedName);
+			boardNotice.setTbl_name("BOARD_NOTICE");
+			boardNotice.setAttach_name(file1.getOriginalFilename()); 
+			boardNotice.setAttach_path("/upload");
+			boardNotice.setAttach_saved_name(savedName);	
 		}
 		
 		//--------------------------------------------------
 		int resultCount = jmhService.updateBoard(boardNotice);
 		//--------------------------------------------------
 		if(resultCount > 0) {
-			if(before_attach_delete_flag.equals("D") && !before_attach_path.isEmpty()) {
+			if(before_attach_delete_flag.equals("D") && !before_attach_saved_name.isEmpty()) {
 			
 				//수정이 정상수행 되었을때 기존파일 삭제처리
-				String deleteFile = uploadPath + before_attach_path;
+				String deleteFile = uploadPath + before_attach_saved_name;
 				
 				log.info("deleteFile: " + deleteFile);
 				
 				//---------------------------------------
 				int delResult = upFileDelete(deleteFile);
 				//---------------------------------------
+				//-----------------------------------------------------------
+				int resultAttachCount = jmhService.deleteAttach(boardNotice);
+				//-----------------------------------------------------------
+			}
+			if(file1.getSize() > 0) {
+				//don_no받아서 파일첨부 등록
+				//-----------------------------------------------------------
+				int resultAttachCount = jmhService.insertAttach(boardNotice);
+				//-----------------------------------------------------------
 			}
 			model.addAttribute("action", "update"); //수행(수정)
 			model.addAttribute("status", "success"); //상태(성공)
@@ -1290,6 +1372,7 @@ public class JmhController {
 		}
 		
 		System.out.println("-----공지사항 게시판 수정(admin_notice_update) END-----");
+		insertAccessLog(request, model);
 		
 		return "forward:/submit_control";
 	}
@@ -1310,27 +1393,34 @@ public class JmhController {
 		//Servlet 상속 받지 못했을 때 realPath 불러오는 방법		
 		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 		String before_attach_path = boardNotice.getAttach_path();
+		String before_attach_saved_name = boardNotice.getAttach_saved_name();
+		
+		boardNotice.setTbl_name("BOARD_NOTICE");
 		
 		//--------------------------------------------------
 		int resultCount = jmhService.deleteBoard(boardNotice);
 		//--------------------------------------------------
 		System.out.println("JmhController resultCount->"+resultCount);
 		if(resultCount > 0) {
-			if(!before_attach_path.isEmpty()) {
+			if(!before_attach_saved_name.isEmpty()) {
 				//문서삭제가 정상수행 되었을때 첨부파일 삭제처리
-				String deleteFile = uploadPath + before_attach_path;
+				String deleteFile = uploadPath + before_attach_saved_name;
 				
 				log.info("deleteFile: " + deleteFile);
 				
 				//---------------------------------------
 				int delResult = upFileDelete(deleteFile);
-				//---------------------------------------			
+				//---------------------------------------
+				//-----------------------------------------------------------
+				int resultAttachCount = jmhService.deleteAttach(boardNotice);
+				//-----------------------------------------------------------
 			}
 		}else {
 			return "error";
 		}
 		
 		System.out.println("-----공지사항 게시판 삭제(admin_notice_delete) END-----");
+		insertAccessLog(request, model);
 		
 		return "success";
 	}
@@ -1340,8 +1430,9 @@ public class JmhController {
 	// 시스템 관리 페이지
 	//#####################
 	//1. 접속 통계
+	@ResponseBody
 	@GetMapping("/system_log_list")
-	public String systemLogList(AccessLog accessLog, String currentPage, HttpServletRequest request, Model model) {
+	public ModelAndView systemLogList(AccessLog accessLog, String currentPage, HttpServletRequest request, Model model) {
 		System.out.println("-----접속 통계 목록(/systemLogList) START-----");
 		
 		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
@@ -1356,17 +1447,80 @@ public class JmhController {
 		System.out.println("JmhController systemLogList codeList.size->"+codeList.size());
 		model.addAttribute("CodeList_system_category", codeList);
 		
+		List<JmhDaysDataVO> boardList = null;
 		String year_month = accessLog.getYear_month();
+		System.out.println("year_month:"+year_month);
 		if(year_month != null) {
-			//------------------------------------------------------------------
-			List<AccessLog> boardList = alogService.searchMonthList(year_month);
-			//------------------------------------------------------------------
+			//---------------------------------------------------
+			boardList = alogService.searchMonthList(year_month);
+			//---------------------------------------------------
+			System.out.println("접속통계 boardList.size="+boardList.size());
+		}else {
+			Date date = new Date();
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
+			System.out.println("오늘월->" + df.format(date));
+			year_month = df.format(date);
+			accessLog.setYear_month(year_month);
 		}
-		
+		/*
 		model.addAttribute("year_month", accessLog.getYear_month());
+		model.addAttribute("boardList", boardList);
 		System.out.println("----접속 통계 목록(systemLogList) END-----");
+		insertAccessLog(request, model);
 		
 		return "/system1/log/system_log/system_log_list";
+		*/
+		
+		ModelAndView mv = new ModelAndView();
+	    mv.setViewName("/system1/log/system_log/system_log_list"); // 뷰의 이름
+	    mv.addObject("year_month", accessLog.getYear_month()); //
+	    mv.addObject("boardList", boardList); //
+	    
+		System.out.println("----접속 통계 목록(systemLogList) END-----");
+		insertAccessLog(request, model);
+
+		return mv;
+		
+	}
+	
+	//1-2. 접속 통계(검색)
+	@ResponseBody
+	@GetMapping("/system_log_search")
+	public List<JmhDaysDataVO> systemLogSearch(AccessLog accessLog, String currentPage, HttpServletRequest request, Model model) {
+		System.out.println("-----접속 통계 검색(/systemLogSearch) START-----");
+		
+		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		//-------------------------------------------------
+		// 권한 정보 가져옴
+		Code code = new Code();
+		code.setField_name("system_category");
+		List<Code> codeList = uiService.codeList(code);
+		//-------------------------------------------------
+		System.out.println("JmhController systemLogList codeList.size->"+codeList.size());
+		model.addAttribute("CodeList_system_category", codeList);
+		
+		List<JmhDaysDataVO> boardList = null;
+		String year_month = accessLog.getYear_month();
+		System.out.println("year_month:"+year_month);
+		if(year_month != null) {
+			//---------------------------------------------------
+			boardList = alogService.searchMonthList(year_month);
+			//---------------------------------------------------
+			System.out.println("접속통계 boardList.size="+boardList.size());
+		}else {
+			Date date = new Date();
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
+			System.out.println("오늘월->" + df.format(date));
+			year_month = df.format(date);
+			accessLog.setYear_month(year_month);
+		}
+		
+		System.out.println("----접속 통계 검색(systemLogSearch) END-----");
+		insertAccessLog(request, model);
+
+		return boardList;
 		
 	}
 	
@@ -1394,13 +1548,27 @@ public class JmhController {
 		List<AccessLog> boardList = alogService.boardList(accessLog);
 		//--------------------------------------------------------------
 		
+		//-------------------------------------------------
+		// 권한 정보 가져옴
+		Code code = new Code();
+		code.setField_name("system_category");
+		List<Code> codeList = uiService.codeList(code);
+		//-------------------------------------------------
+		System.out.println("JmhController loginLogList codeList.size->"+codeList.size());
+		model.addAttribute("CodeList_system_category", codeList);
+
 		model.addAttribute("boardList", boardList); 
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("page", page);
-		model.addAttribute("search", accessLog.getSearch()); 	//검색필드
-		model.addAttribute("keyword", accessLog.getKeyword()); 	//검색어
+
+		model.addAttribute("from_date", accessLog.getFrom_date()); 	//기간from
+		model.addAttribute("to_date", accessLog.getTo_date()); 		//기간to
+		model.addAttribute("user_name", accessLog.getUser_name()); 	//사용자
+		model.addAttribute("system_category", accessLog.getSystem_category()); //권한(시스템)
+		model.addAttribute("ip", accessLog.getIp()); //ip
 		
 		System.out.println("----접속 이력 목록(accessLogList) END-----");
+		insertAccessLog(request, model);
 		
 		return "/system1/log/access_log/access_log_list";
 	}
@@ -1449,6 +1617,7 @@ public class JmhController {
 		model.addAttribute("ip", loginLog.getIp()); //ip
 		
 		System.out.println("----로그인 이력 목록(loginLogList) END-----");
+		insertAccessLog(request, model);
 		
 		return "/system1/log/login_log/login_log_list";
 	}
@@ -1472,6 +1641,7 @@ public class JmhController {
 		UserInfo userInfoDto = uiService.idConfirm(userInfo.getUser_id());
 		//-------------------------------------------------
 		model.addAttribute("userInfoDto", userInfoDto);
+		insertAccessLog(request, model);
 		
 		return "mypage/mypage_main";
 	}
@@ -1492,6 +1662,7 @@ public class JmhController {
 		
 		// 세션에 담긴 값들
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		model.addAttribute("userInfoDto", userInfoDTO);
 		System.out.println("userInfoDTO.getUser_id()->"+userInfoDTO.getUser_id());
 		System.out.println("userInfoDTO.getUser_pw()->"+userInfoDTO.getUser_pw());
 		//System.out.println("userInfoDTO.getUser_birth()->"+userInfoDTO.getUser_birth());
@@ -1519,6 +1690,8 @@ public class JmhController {
 		// 수정 페이지에서 받은 값들
 		System.out.println("user_id->"+userInfo.getUser_id());
 		System.out.println("user_pw->"+userInfo.getUser_pw());
+		
+		insertAccessLog(request, model);
 		
 		// 유효성 검사
 		if(!userInfo.getUser_id().equals(userInfoDTO.getUser_id()) || 

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>한강 수자원관리 종합 플랫폼 - 공지사항</title>
 
 <!--CSS START -->
 <style>
@@ -49,7 +49,7 @@
 				<td style="text-align:right">
 					<c:if test="${(userInfo.user_id eq board.user_id) or (userInfo.user_id eq 'admin')}">
 						<button type="button" class="btn btn-dark btn-sm" onclick="callAction('edit','admin_notice_edit?doc_no=${board.doc_no}')">수정</button>
-						<button type="button" class="btn btn-dark btn-sm" onclick="callAction('delete','admin_notice_delete?doc_no=${board.doc_no}&attach_path=${board.attach_path}')">삭제</button>
+						<button type="button" class="btn btn-dark btn-sm" onclick="callAction('delete','admin_notice_delete?doc_no=${board.doc_no}&attach_path=${board.attach_path}&attach_saved_name=${board.attach_saved_name}')">삭제</button>
 					</c:if>
 					<button type="button" class="btn btn-dark btn-sm" onclick="closeDoc()">닫기</button>
 				</td>
@@ -74,10 +74,10 @@
 				<th>제목</th>
 				<td>${board.subject}</td>
 			</tr>
-			<c:if test="${board.attach_path ne null}">
+			<c:if test="${board.attach_name ne null}">
 				<tr>
 					<th>파일첨부</th>
-					<td><a href="javascript:popup('/upload/${board.attach_path}',800,600)">${board.attach_name}</a></td>
+					<td><a href="javascript:popup('${board.attach_path}/${board.attach_saved_name}',800,600)">${board.attach_name}</a></td>
 				</tr>
 			</c:if>
 			<tr>

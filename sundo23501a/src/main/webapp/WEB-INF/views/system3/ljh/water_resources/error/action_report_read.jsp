@@ -1,18 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <%@ include file="/WEB-INF/views/header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>수자원 시설물 관리시스템 - 고장 결과 보고서</title>
 
 
 <style type="text/css">
 	.title {
 		text-align: center;
-		font-size: 25pt;
+		font-size: 25px;
+		font-weight: bold;
 	}
 	
 	table {
@@ -34,40 +34,47 @@
 	th {
 		background: #EAEAEA;
 		padding: 5px 10px;
-		width: 200px;
+		width: 150px;
+		height: 40px;
 	}
 	
 	td {
 		padding: 5px 10px;
+		height: 40px;
 	}
+	
 	header {
 		height: 55px;
 	}
-
+.underline {
+	border-bottom:2px solid #fff;
+}
 </style>
 
-	<script>
+<script>
 
-		$(function() {
+	$(function() {
 
-			$.ajax({
-				url			: '/main_header_3',
-				dataType 	: 'html',
-				success		: function(data) {
-					$('#header').html(data);
-				}
-			});
-
-			$.ajax({
-				url			: '/main_footer',
-				dataType 	: 'html',
-				success		: function(data) {
-					$('#footer').html(data);
-				}
-			});
+		$.ajax({
+			url			: '/main_header_3',
+			async		: false,
+			dataType 	: 'html',
+			success		: function(data) {
+				$('#header').html(data);
+			}
 		});
+		$("#sub-list-4").addClass('underline');
 
-	</script>
+		$.ajax({
+			url			: '/main_footer',
+			dataType 	: 'html',
+			success		: function(data) {
+				$('#footer').html(data);
+			}
+		});
+	});
+
+</script>
 <script type="text/javascript">
 	function delActionRpt() {
 		var answer = confirm('보고서를 삭제하시겠습니까?')
@@ -95,19 +102,14 @@
 </script>
 </head>
 <body>
-
-
 	<header id="header"></header>
-
-
-
-
-	<div class="container" style="margin-top: 3%">
+	<br>
+	<div class="container">
 		<div class="row">
 			<div id="center">
-
-				<p class="title">조치 결과 보고서 상세 페이지</p>
-				<div>
+				<div align="center"><span class="apptitle" style="height:45px">조치 결과 보고서 상세 페이지</span></div>
+				
+				<div style="margin-top:20px">
 					<table>
 						<thead>
 						<tr>
@@ -131,7 +133,6 @@
 						<tr><th>조치내역</th><td colspan="5">${actionRpt.action_content }</td></tr>
 						<tr><th>특이사항</th><td colspan="5">${actionRpt.spec_memo }</td></tr>
 						<tr><th>향후계획</th><td colspan="5">${actionRpt.future_plan }</td></tr>
-						<tr><th>파일</th><td colspan="5"></td></tr>
 						</tbody>
 					</table>
 					<div class="btns">

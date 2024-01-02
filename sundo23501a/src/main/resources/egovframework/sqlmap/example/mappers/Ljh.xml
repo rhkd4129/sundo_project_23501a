@@ -2,27 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.postgres.sample.service.impl.dao.ljh.LjhDAO">
 
-	<!-- 고장/조치결과보고 > 고장 보고서 목록 -->
-	<select id="ljhGetErrorRptList" resultType="breakReport">
-		SELECT	br.doc_no, TO_CHAR(br.create_datetime, 'yyyy-MM-dd') AS create_datetime,
-				br.facility_category, br.subject, u.user_name
-		FROM	break_report br, user_info u
-		WHERE	u.user_id = br.user_id
-		ORDER BY doc_no desc
+	<!-- 고장 보고서 목록 페이징 작업용 전체 보고서 개수 SELECT -->
+	<select id="ljhGetBreakRptCount" resultType="Integer">
+		SELECT	count(*)
+		FROM	break_report
 	</select>
 
 	<!-- 고장/조치결과보고 > 고장 보고서 목록 페이징 작업용 -->
 	<select id="ljhGetBreakRptListPage" parameterType="breakReport" resultType="breakReport">
 		<![CDATA[
-			SELECT	*
-			FROM	(
-						SELECT	br.doc_no, TO_CHAR(br.create_datetime, 'yyyy-MM-dd') AS create_datetime,
-								br.facility_category, br.subject, u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
-						FROM	break_report br, user_info u
-						WHERE	u.user_id = br.user_id
-					)
-			WHERE	rn >= #{start}
-			AND		rn <= #{end}
+		SELECT	*
+		FROM	(
+					SELECT	br.doc_no, TO_CHAR(br.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+							  br.facility_category, br.subject, u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+					FROM	break_report br, user_info u
+					WHERE	u.user_id = br.user_id
+				)
+		WHERE	rn >= #{start}
+		  AND		rn <= #{end}
 		]]>
 	</select>
 
@@ -39,21 +36,21 @@
 		FROM	code
 		WHERE	field_name IN ('check_target', 'm_category', 's_category')
 	</select>
-	
+
 	<!-- 고장보고서 작성 페이지에서 시설물 종류(facility_category) 선택 시 선택한 시설물 종류에 맞는 시설물 코드 SELECT -->
 	<select id="ljhGetWRCode" parameterType="string" resultType="waterResources">
 		SELECT	facility_code
 		FROM	water_resources
 		WHERE	facility_category = #{facility_category}
 	</select>
-	
+
 	<!-- 고장보고서 작성 페이지에서 시설물 코드(facility_code) 선택 시 선택한 시설물 코드에 맞는 알람 리스트 SELECT -->
 	<select id="ljhGetAlarm" resultType="alarm">
 		SELECT	*
 		FROM	alarm
 		WHERE	facility_code = #{facility_code}
-		AND		(alarm_flag is null OR alarm_flag = 'N')
-		ORDER BY alarm_code
+		  AND		(alarm_flag is null OR alarm_flag = 'N')
+		ORDER BY alarm_date asc, alarm_code asc
 	</select>
 
 	<!-- 고장보고서(break_report) TBL INSERT -->
@@ -61,127 +58,278 @@
 		INSERT INTO break_report (doc_no, user_id, facility_category, facility_code, check_target, m_category, s_category, subject,
 								  break_date, break_cause, current_state, handling_flag, handling_content, future_plan, create_datetime)
 		VALUES (nextval('break_report_doc_no_seq'), #{user_id}, #{facility_category},
-		 		#{facility_code}, #{check_target}, #{m_category}, #{s_category},
-		 		#{subject}, #{break_date}::date, #{break_cause}, #{current_state},
-		 		#{handling_flag}, #{handling_content}, #{future_plan}, CURRENT_DATE)
+				#{facility_code}, #{check_target}, #{m_category}, #{s_category},
+				#{subject}, #{break_date}::date, #{break_cause}, #{current_state},
+				#{handling_flag}, #{handling_content}, #{future_plan}, CURRENT_DATE)
 	</insert>
-	
+
 	<!-- 체크한 알람 코드의 'alarm_flag = Y'로 변경 -->
 	<update id="ljhUpdateAlarm" parameterType="alarm">
 		UPDATE	alarm
 		SET		alarm_flag = 'Y', break_report_no = (SELECT max(doc_no) FROM break_report)
 		WHERE	alarm_code = #{alarm_code}
 	</update>
-	
+
 	<!-- 고장 보고서 상세 - 고장 보고서 SELECT -->
 	<select id="ljhGetErrorRpt" parameterType="Integer" resultType="breakReport">
 		SELECT	b.*, u.user_name
 		FROM	break_report b, user_info u
 		WHERE	b.user_id = u.user_id
-		AND		doc_no = #{doc_no}
+		  AND		doc_no = #{doc_no}
 	</select>
-	
+
 	<!-- 고장 보고서 상세 - 고장 보고서에 등록된 알람 SELECT -->
 	<select id="ljhGetErrorRptAlarm" parameterType="Integer" resultType="alarm">
 		SELECT	alarm_code, alarm_content, TO_CHAR(alarm_date, 'yyyy-MM-dd') AS alarm_date,
-				facility_code, break_report_no, alarm_flag
+				  facility_code, break_report_no, alarm_flag
 		FROM	alarm
 		WHERE	break_report_no = #{doc_no}
-		ORDER BY alarm_code
+		ORDER BY alarm_date asc, alarm_code asc
 	</select>
-	
+
 	<!-- 고장보고서 수정 - break_report TBL -->
 	<update id="ljhUpdateErrorRpt" parameterType="breakReport">
 		UPDATE	break_report
 		SET		facility_category = #{facility_category}, facility_code = #{facility_code},
-				check_target = #{check_target}, m_category = #{m_category}, s_category = #{s_category},
-				subject = #{subject}, break_date = #{break_date}::date, break_cause = #{break_cause},
-				current_state = #{current_state}, handling_flag = #{handling_flag},	handling_content = #{handling_content},
-				future_plan = #{future_plan}, modify_datetime = CURRENT_DATE 
+				   check_target = #{check_target}, m_category = #{m_category}, s_category = #{s_category},
+				   subject = #{subject}, break_date = #{break_date}::date, break_cause = #{break_cause},
+			current_state = #{current_state}, handling_flag = #{handling_flag},	handling_content = #{handling_content},
+			future_plan = #{future_plan}, modify_datetime = CURRENT_DATE
 		WHERE	doc_no = #{doc_no}
 	</update>
-	
+
 	<!-- 고장보고서 수정 - alarm TBL -->
 	<update id="ljhUpdateRptAlarm" parameterType="alarm">
 		UPDATE	alarm
 		SET		alarm_flag = 'Y', break_report_no = #{break_report_no}
 		WHERE	alarm_code = #{alarm_code}
 	</update>
-	
+
 	<!-- 고장보고서 삭제 - break_report TBL -->
 	<delete id="ljhDeleteErrorRpt" parameterType="Integer">
 		DELETE	FROM	break_report
 		WHERE	doc_no = #{doc_no}
 	</delete>
-	
+
 	<!-- 고장보고서 삭제 - alarm TBL -->
 	<update id="ljhDeleteRptAlarm" parameterType="Integer">
 		UPDATE	alarm
 		SET		alarm_flag = null, break_report_no = null
 		WHERE	break_report_no = #{doc_no}
 	</update>
-	
-	
-<!-- ////////////////////////////////////////////////////////////////////////////////////// -->	
-	<!-- 고장/조치결과보고 > 조치 결과 보고서 목록 -->
-	<select id="ljhGetActionRptList" resultType="actionReport">
-		SELECT	ar.doc_no, ar.facility_category, ar.action_date,
-				TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') AS create_datetime,
-				u.user_name
-		FROM	action_report ar, user_info u
-		WHERE	u.user_id = ar.user_id
-		ORDER BY doc_no desc
+
+	<!-- 고장 보고서 검색 totalCount -->
+	<select id="ljhSearchErrCnt" parameterType="breakReport" resultType="Integer">
+		SELECT	count(*) as total
+		FROM	(
+		SELECT	br.doc_no, TO_CHAR(br.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+		br.facility_category, br.subject, u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+		FROM	break_report br, user_info u
+		WHERE	u.user_id = br.user_id
+		<if test="facility_category != 'all'">
+			AND		br.facility_category = #{facility_category}
+		</if>
+		<if test="user_name != ''">
+			AND		u.user_name LIKE '%' || #{user_name} || '%'
+		</if>
+		<if test="create_datetime != ''">
+			AND TO_CHAR(br.create_datetime, 'yyyy-MM-dd') = #{create_datetime}
+		</if>
+		)
 	</select>
-	
+
+	<!-- 고장보고서 검색 -->
+	<select id="ljhSearchError" parameterType="breakReport" resultType="breakReport">
+		SELECT	*
+		FROM	(
+		SELECT	br.doc_no, TO_CHAR(br.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+		br.facility_category, br.subject, u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+		FROM	break_report br, user_info u
+		WHERE	u.user_id = br.user_id
+		<if test="facility_category != 'all'">
+			AND		br.facility_category = #{facility_category}
+		</if>
+		<if test="user_name != ''">
+			AND		u.user_name LIKE '%' || #{user_name} || '%'
+		</if>
+		<if test="create_datetime != ''">
+			AND TO_CHAR(br.create_datetime, 'yyyy-MM-dd') = #{create_datetime}
+		</if>
+		)
+		WHERE	rn between #{start} and #{end}
+	</select>
+
+
+
+	<!-- ////////////////////////////////////////////////////////////////////////////////////// -->
+	<!-- 조치 결과 보고서 목록 페이징 작업용 전체 보고서 개수 SELECT -->
+	<select id="ljhGetActionRptCount" resultType="Integer">
+		SELECT	count(*)
+		FROM	action_report
+	</select>
+
 	<!-- 고장/조치결과보고 > 조치 결과 보고서 목록 페이징 작업용 -->
 	<select id="ljhGetActionRptListPage" parameterType="actionReport" resultType="actionReport">
 		<![CDATA[
-			SELECT	*
-			FROM	(
-						SELECT	ar.doc_no, ar.facility_category, ar.action_date,
-								TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') AS create_datetime,
-								u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
-						FROM	action_report ar, user_info u
-						WHERE	u.user_id = ar.user_id
-					)
-			WHERE	rn >= #{start}
-			AND		rn <= #{end}
+		SELECT	*
+		FROM	(
+					SELECT	ar.doc_no, ar.facility_category, ar.facility_code, ar.break_date, ar.action_date,
+							  TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+							  u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+					FROM	action_report ar, user_info u
+					WHERE	u.user_id = ar.user_id
+				)
+		WHERE	rn >= #{start}
+		  AND		rn <= #{end}
 		]]>
 	</select>
-	
+
 	<!-- 조치 결과 보고서 INSERT -->
 	<insert id="ljhInsertActionRpt" parameterType="actionReport">
 		INSERT INTO action_report (doc_no, user_id, facility_category, facility_code, check_target, m_category, s_category,
 								   break_date, action_date, break_content, action_content, spec_memo, future_plan, create_datetime)
 		VALUES (nextval('action_report_doc_no_seq'), #{user_id}, #{facility_category}, #{facility_code}, #{check_target},
 				#{m_category}, #{s_category}, #{break_date}::date, #{action_date}::date, #{break_content}, #{action_content},
-		 		#{spec_memo}, #{future_plan}, CURRENT_DATE)
+				#{spec_memo}, #{future_plan}, CURRENT_DATE)
 	</insert>
-	
+
 	<!-- 조치 결과 보고서 상세 -->
 	<select id="ljhGetActionRpt" parameterType="Integer" resultType="actionReport">
 		SELECT	ar.*, u.user_name
 		FROM	action_report ar, user_info u
 		WHERE	u.user_id = ar.user_id
-		AND		doc_no = #{doc_no}
+		  AND		doc_no = #{doc_no}
 	</select>
-	
+
 	<!-- 조치 결과 보고서 수정 -->
 	<update id="ljhUpdateActionRpt" parameterType="actionReport">
 		UPDATE	action_report
 		SET		facility_category = #{facility_category}, facility_code = #{facility_code},
-				check_target = #{check_target}, m_category = #{m_category}, s_category = #{s_category},
-				break_date = #{break_date}::date, action_date = #{action_date}::date,
-				break_content = #{break_content}, action_content = #{action_content},
-				spec_memo = #{spec_memo}, future_plan = #{future_plan}, modify_datetime = CURRENT_DATE 
+				   check_target = #{check_target}, m_category = #{m_category}, s_category = #{s_category},
+				   break_date = #{break_date}::date, action_date = #{action_date}::date,
+			break_content = #{break_content}, action_content = #{action_content},
+			spec_memo = #{spec_memo}, future_plan = #{future_plan}, modify_datetime = CURRENT_DATE
 		WHERE	doc_no = #{doc_no}
 	</update>
-	
+
+	<!-- 조치 결과 보고서 삭제 -->
 	<delete id="ljhDeleteActionRpt" parameterType="Integer">
 		DELETE	FROM	action_report
 		WHERE	doc_no = #{doc_no}
 	</delete>
-	
-	
-	
+
+	<!-- 조치 결과 보고서 검색 totalCount -->
+	<select id="ljhSearchActCnt" parameterType="actionReport" resultType="Integer">
+		SELECT	count(*) as total
+		FROM	(
+		SELECT	ar.doc_no, ar.facility_category, ar.action_date,
+		TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+		u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+		FROM	action_report ar, user_info u
+		WHERE	u.user_id = ar.user_id
+		<if test="facility_category != 'all'">
+			AND		ar.facility_category = #{facility_category}
+		</if>
+		<if test="user_name != ''">
+			AND		u.user_name LIKE '%' || #{user_name} || '%'
+		</if>
+		<if test="create_datetime != ''">
+			AND 	TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') = #{create_datetime}
+		</if>
+		<if test="action_date != ''">
+			AND		TO_CHAR(ar.action_date, 'yyyy-MM-dd') = #{action_date}
+		</if>
+		)
+	</select>
+
+	<!-- 조치 결과 보고서 검색 -->
+	<select id="ljhSearchAction" parameterType="actionReport" resultType="actionReport">
+		SELECT	*
+		FROM	(
+		SELECT	ar.doc_no, ar.facility_category, ar.action_date,
+		TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+		u.user_name, ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+		FROM	action_report ar, user_info u
+		WHERE	u.user_id = ar.user_id
+		<if test="facility_category != 'all'">
+			AND		ar.facility_category = #{facility_category}
+		</if>
+		<if test="user_name != ''">
+			AND		u.user_name LIKE '%' || #{user_name} || '%'
+		</if>
+		<if test="create_datetime != ''">
+			AND 	TO_CHAR(ar.create_datetime, 'yyyy-MM-dd') = #{create_datetime}
+		</if>
+		<if test="action_date != ''">
+			AND		TO_CHAR(ar.action_date, 'yyyy-MM-dd') = #{action_date}
+		</if>
+		)
+		WHERE	rn between #{start} and #{end}
+	</select>
+
+	<!-- 조치 결과 보고서 작성 > 고장보고서 보기 -->
+	<select id="ljhChoiceErrRptList" parameterType="actionReport" resultType="breakReport">
+		SELECT	*
+		FROM	(
+					SELECT	br.doc_no, TO_CHAR(br.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+							  br.facility_category, br.facility_code, br.subject, u.user_name,
+							  ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+					FROM	break_report br, user_info u
+					WHERE	u.user_id = br.user_id
+					  AND		facility_category = #{facility_category}
+					  AND		facility_code = #{facility_code}
+				)
+		WHERE	rn between #{start} and #{end}
+	</select>
+
+	<!-- 조치 결과 보고서 작성 > 고장보고서 보기 totalCount -->
+	<select id="ljhChoiceErrRptCnt" parameterType="actionReport" resultType="Integer">
+		SELECT	count(*) as total
+		FROM	(
+					SELECT	br.doc_no, TO_CHAR(br.create_datetime, 'yyyy-MM-dd') AS create_datetime,
+							  br.facility_category, br.facility_code, br.subject, u.user_name,
+							  ROW_NUMBER() OVER (ORDER BY doc_no desc) AS rn
+					FROM	break_report br, user_info u
+					WHERE	u.user_id = br.user_id
+					  AND		facility_category = #{facility_category}
+					  AND		facility_code = #{facility_code}
+				)
+	</select>
+
+
+
+	<!-- ////////////////////////////////////////////////////////////////////////////////////// -->
+	<!-- 그래프 -->
+	<select id="ljhErrorChart" resultType="Integer">
+		<!-- 관개수로, 댐, 저수지, 펌프장 -->
+		SELECT	count(*)
+		FROM	break_report
+		GROUP BY facility_category
+		ORDER BY facility_category
+		<!--
+                SELECT
+                    facility_categories.facility_category,
+                    COALESCE(count(break_report.facility_category), 0) as facility_count
+                FROM
+                    (SELECT DISTINCT facility_category FROM break_report) as facility_categories
+                LEFT JOIN
+                    break_report ON facility_categories.facility_category = break_report.facility_category
+                    AND break_report.create_datetime = current_date
+                GROUP BY
+                    facility_categories.facility_category
+                ORDER BY
+                    facility_categories.facility_category
+         -->
+	</select>
+
+	<select id="ljhActionChart" resultType="Integer">
+		<!-- 관개수로, 댐, 저수지, 펌프장 -->
+		SELECT	count(*)
+		FROM	action_report
+		GROUP BY facility_category
+		ORDER BY facility_category
+	</select>
+
+
+
 </mapper>

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>한강 수자원관리 종합 플랫폼 - 로그인 이력</title>
 
 <!--CSS START -->
 <!-- CSS END -->
@@ -90,7 +90,8 @@ hr{
 	border-radius: 10px;
 	padding: 10px;
 }
-.searchbox th, td {
+.searchbox th, 
+.searchbox td {
 	padding: 2px;
 }
 </style>
@@ -225,7 +226,7 @@ hr{
 						  <ul class="pagination justify-content-center">
 						    
 							<c:if test="${page.startPage > page.pageBlock}">
-							   	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">이전</a></li>
+							   	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">&laquo;</a></li><!-- 이전 -->
 							</c:if>
 						    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
 								<c:choose>
@@ -234,8 +235,8 @@ hr{
 								</c:choose>
 								<a class="page-link" href="javascript:gotoPage('${i}')">${i}</a></li>
 							</c:forEach>						
-						    <c:if test="${page.endPage > page.totalPage}">
-						    	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage+page.pageBlock}')">다음</a></li>
+						    <c:if test="${page.endPage < page.totalPage}">
+						    	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage+page.pageBlock}')">&raquo;</a></li><!-- 다음 -->
 						    </c:if>
 						    
 						  </ul>

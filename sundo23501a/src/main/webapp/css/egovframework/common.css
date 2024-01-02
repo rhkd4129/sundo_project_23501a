@@ -1,5 +1,14 @@
 @charset "UTF-8";
 
+.pagination {
+	cursor:pointer;
+}
+.page-link{
+	font-size: 0.875rem;
+}
+.underline {
+	border-bottom:2px solid #fff;
+}
 /*좌측메뉴*/
 .menubar {
 	min-width: 200px;
@@ -13,7 +22,7 @@
 }
 /*메뉴 타이틀*/
 .apptitle {
-	font-size: 20px;
+	font-size: 25px;
 	font-weight: bold;
 }
 

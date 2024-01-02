@@ -17,8 +17,11 @@ import lombok.RequiredArgsConstructor;
 @Mapper
 public interface LjhDAO {
 	
-	// 고장/조치결과보고 > 고장 보고서 목록
-	public List<BreakReport> ljhGetErrorRptList();
+	// 고장/조치결과보고 > 고장 보고서 목록 페이징 작업용 전체 보고서 개수 SELECT
+	public int ljhGetBreakRptCount();
+	
+	// 고장 보고서 목록 페이징 작업용
+	public List<BreakReport> ljhGetBreakRptListPage(BreakReport breakRpt);
 	
 	// 수자원 시설물 종류 SELECT
 	public List<WaterResources> ljhGetWaterCategory();
@@ -56,8 +59,22 @@ public interface LjhDAO {
 	// 고장보고서 삭제 - alarm TBL 수정
 	public int ljhDeleteRptAlarm(Integer doc_no);
 
+	// 고장보고서 검색 totalCount
+	public int ljhSearchErrCnt(BreakReport breakReport);
+	
+	// 고장보고서 검색
+	public List<BreakReport> ljhSearchError(BreakReport breakReport);
+	
+	
+//----------------------------------------------------------------------------------
 	// 고장/조치결과보고 > 조치 결과 보고서 목록
 	public List<ActionReport> ljhGetActionRptList();
+	
+	// 고장/조치결과보고 > 조치 결과 보고서 목록 페이징 작업용 전체 보고서 개수 SELECT
+	public int ljhGetActionRptCount();
+	
+	// 조치 결과 보고서 목록 페이징 작업용
+	public List<ActionReport> ljhGetActionRptListPage(ActionReport actionRpt);
 
 	// 조치 결과 보고서 INSERT
 	public int ljhInsertActionRpt(ActionReport actionReport);
@@ -71,11 +88,36 @@ public interface LjhDAO {
 	// 조치 결과 보고서 삭제
 	public int ljhDeleteActionRpt(Integer doc_no);
 
-	// 고장 보고서 목록 페이징 작업용
-	public List<BreakReport> ljhGetBreakRptListPage(BreakReport breakRpt);
+	// 조치 결과 보고서 검색 totalCount
+	public int ljhSearchActCnt(ActionReport actionReport);
+	
+	// 조치 결과 보고서 검색
+	public List<ActionReport> ljhSearchAction(ActionReport actionReport);
 
-	// 조치 결과 보고서 목록 페이징 작업용
-	public List<ActionReport> ljhGetActionRptListPage(ActionReport actionRpt);
+	// 조치 결과 보고서 작성 > 고장보고서 보기
+	public List<BreakReport> ljhChoiceErrRptList(ActionReport actionReport);
+
+	// 조치 결과 보고서 작성 > 고장보고서 보기 totalCount
+	public int ljhChoiceErrRptCnt(ActionReport actionReport);
+
+	
+//----------------------------------------------------------------------------------
+	// 그래프
+	public List<Integer> ljhErrorChart();
+	public List<Integer> ljhActionChart();
+
+	
+	
+
+
+
+	
+
+	
+
+
+
+
 	
 	
 	

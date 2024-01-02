@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import com.postgres.sample.dto.*;
+import com.postgres.sample.service.jmh.JmhUserInfoService;
 import com.postgres.sample.service.kjo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,44 +26,72 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequiredArgsConstructor
 public class KjoController {
-	private static final Logger Logger = LoggerFactory.getLogger(KjoController.class);
+    private static final Logger Logger = LoggerFactory.getLogger(KjoController.class);
     private final KjoService kjoService;
 
+    private final JmhUserInfoService uiService;		//사용자 관리
+	//접속이력 남기는 메소드
+	public void insertAccessLog(HttpServletRequest request, Model model) {
+		System.out.println("JmhController insertAccessLog Start..");
+		//접속이력
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		String requestURI = request.getRequestURI();        //  요청받은 페이지
+		String ip = request.getRemoteAddr();
+		String user_id = userInfoDTO.getUser_id();
+		
+		AccessLog accessLog = new AccessLog();
+		accessLog.setProgram_url(requestURI);
+		accessLog.setIp(ip);
+		accessLog.setUser_id(user_id);
+		//-------------------------------------------------
+		int result = uiService.InsertAccessLog(accessLog);
+		//-------------------------------------------------		
+		System.out.println("JmhController insertAccessLog End..");
+	}
+ 
+   
     @GetMapping("/water_resourcesList")
-    public String waterResoucesList(@RequestParam(defaultValue = "1") String currentPage, Model model) {
-    	System.out.println("water_resourcesList");
-    	WaterResources wr = new WaterResources();
-    	//	페이징 위한 수자원시설물 개수
-    	wr.setTotal(kjoService.cntWaterResource().getTotal());
-    	Paging page = new Paging(wr.getTotal(), currentPage,10);
-    	wr.setStart(page.getStart());
-    	wr.setEnd(page.getEnd());
-    	
-    	List<WaterResources> wrctgList = kjoService.findFacilityCategory();
-    	List<OrgArea> orgList = kjoService.findAllOrgArea();
-    	List<WaterResources> wrList = kjoService.PaingWaterResourceLists(wr);
+    public String waterResoucesList(@RequestParam(defaultValue = "1") String currentPage, HttpServletRequest request, Model model) {
+        System.out.println("water_resourcesList");
+        WaterResources wr = new WaterResources();
+        //   페이징 위한 수자원시설물 개수
+        wr.setTotal(kjoService.cntWaterResource().getTotal());
+        Paging page = new Paging(wr.getTotal(), currentPage,10);
+        wr.setStart(page.getStart());
+        wr.setEnd(page.getEnd());
 
-    	model.addAttribute("wrctgList",wrctgList);
-    	model.addAttribute("orgList",orgList);
-    	model.addAttribute("wrList",wrList);
-    	model.addAttribute("page",page);
-    	return "/system3/kjo/water_resources/water_resourcesList";
+        List<WaterResources> wrctgList = kjoService.findFacilityCategory();
+        List<OrgArea> orgList = kjoService.findAllOrgArea();
+        List<WaterResources> wrList = kjoService.PaingWaterResourceLists(wr);
+
+        model.addAttribute("wrctgList",wrctgList);
+        model.addAttribute("orgList",orgList);
+        model.addAttribute("wrList",wrList);
+        model.addAttribute("page",page);
+
+		insertAccessLog(request, model);
+
+        return "/system3/kjo/water_resources/water_resourcesList";
     }
 
     @ResponseBody
     @GetMapping("/facility_code_List")
-    public List<WaterResources> facilityCodeList(@RequestParam String facility_category) {
-    	
+    public List<WaterResources> facilityCodeList(@RequestParam String facility_category, HttpServletRequest request, Model model) {
+
         WaterResources wr = new WaterResources();
         wr.setFacility_category(facility_category);
         List<WaterResources> wrList = kjoService.findFacilityAddrbyCategory(wr);
         System.out.println(wrList);
+
+        insertAccessLog(request, model);
+        
         return wrList;
     }
-    
+
     @ResponseBody
     @GetMapping("/searchWaterResources")
-    public KjoResponse searchWaterResources(@RequestParam(defaultValue = "1") String currentPage, WaterResources wr) {
+    public KjoResponse searchWaterResources(@RequestParam(defaultValue = "1") String currentPage, WaterResources wr, HttpServletRequest request, Model model) {
 
         wr = kjoService.nullcheck(wr);
         wr.setTotal(kjoService.searchCnt(wr).getTotal());
@@ -81,14 +110,16 @@ public class KjoController {
 //                .obj(page)
 //                .build();
 
-        return response;
+		insertAccessLog(request, model); //접속이력
+
+		return response;
 
     }
-    
+
 
     @GetMapping("/checkresultform")
     public String checkresult(WaterResources wr, Model model, HttpServletRequest request) throws Exception {
-    	System.out.println("checkresult");
+        System.out.println("checkresult");
         wr= kjoService.findWaterResourcesById(wr);
         UserInfo ui = (UserInfo) request.getSession(false).getAttribute("userInfo");
         Logger.info("user : "+ui.toString());
@@ -96,12 +127,13 @@ public class KjoController {
         model.addAttribute("WaterResources",wr);
         model.addAttribute("UserInfo",ui);
 
+		insertAccessLog(request, model); //접속이력
 
         return "/system3/kjo/check/checkresultform";
     }
-    
+
     @PostMapping("/checkresultSave")
-    public String checkresultSave(KJO_CheckReport cr, RedirectAttributes redirectAttributes) {
+    public String checkresultSave(KJO_CheckReport cr, RedirectAttributes redirectAttributes, HttpServletRequest request, Model model) {
         //  입력된 사용자
         UserInfo ui = new UserInfo();
         ui.setUser_name(cr.getUser_name());
@@ -116,7 +148,7 @@ public class KjoController {
             int error = 0;
 
             redirectAttributes.addAttribute("WaterResources",wr);
-            return "redirect:/checkresultform";
+            return "Error";
         }
 
         CheckReport checkReport = new CheckReport();
@@ -135,7 +167,7 @@ public class KjoController {
         checkReport.setCreate_datetime(String.valueOf(LocalDate.now()));
 
         int result = kjoService.inputChkReport(checkReport);
-/*              chkList저장                                                */
+        /*              chkList저장                                                */
         String notes = cr.getNote();
         String grades = cr.getCheck_grade();
         String[] noteArray = notes.split("\\|",-1);
@@ -162,12 +194,13 @@ public class KjoController {
             chklistresult += kjoService.inputChkList(chkList);
         }
 
+		insertAccessLog(request, model); //접속이력
 
-        return "redirect:/selectCheckReportList";
+        return "Success";
     }
 
     @GetMapping("/selectCheckReportList")
-    public String selectCheckReportList(@RequestParam(defaultValue = "1") String currentPage, Model model){
+    public String selectCheckReportList(@RequestParam(defaultValue = "1") String currentPage, HttpServletRequest request, Model model){
         List<WaterResources> wrctgList = kjoService.findFacilityCategory();
         List<OrgArea> orgList = kjoService.findAllOrgArea();
         List<Organization> organizationList = kjoService.findAllOrgList();
@@ -179,7 +212,7 @@ public class KjoController {
 //        List<CheckReport> crList = kjoService.pageChkReport(crt);
 
         WaterResources wr = new WaterResources();
-        //	페이징 위한 수자원시설물 개수
+        //   페이징 위한 수자원시설물 개수
         wr.setTotal(kjoService.cntWaterResource().getTotal());
         Paging page = new Paging(wr.getTotal(), currentPage,10);
         wr.setStart(page.getStart());
@@ -200,12 +233,15 @@ public class KjoController {
         model.addAttribute("orgList",orgList);
 //        model.addAttribute("crList",crList);
         model.addAttribute("page",page);
+
+		insertAccessLog(request, model); //접속이력
+        
         return "/system3/kjo/check/selectCheckReportList";
     }
 
     @ResponseBody
     @GetMapping("/getcheckresultform")
-    public KjoResponse getcheckresultform(WaterResources wr,  Model model){
+    public KjoResponse getcheckresultform(WaterResources wr, HttpServletRequest request, Model model){
         System.out.println("checkresult");
 //        if (cr.get)
         if ("전체".equals(wr.getFacility_category())) {
@@ -230,11 +266,13 @@ public class KjoController {
         response.setObj(page);
         response.setObjList(CRList);
 
+		insertAccessLog(request, model); //접속이력
+
         return response;
     }
 
     @GetMapping("/selectcheckReportlist2")
-    public String selectcheckReportlist2(CheckReport checkReport,Model model) {
+    public String selectcheckReportlist2(CheckReport checkReport, HttpServletRequest request, Model model) {
         checkReport.setTotal(kjoService.cntCheckReportByFcCode(checkReport).getTotal());
         Paging page = new Paging(checkReport.getTotal(), checkReport.getCurrentPage(),10);
         checkReport.setStart(page.getStart());
@@ -252,13 +290,15 @@ public class KjoController {
         model.addAttribute("cate_name", checkReport.getCate_name());
         model.addAttribute("page",page);
 
+		insertAccessLog(request, model); //접속이력
+
         return "system3/kjo/check/selectCheckReportList2";
     }
 
 
 
     @GetMapping("/getcheckresult")
-    public String getcheckresult(CheckReport cr,Model model) {
+    public String getcheckresult(CheckReport cr, HttpServletRequest request, Model model) {
         CheckReport checkReport = kjoService.findCheckReportByDocNo(cr);
         CheckList cl = new CheckList();
         cl.setDoc_no(cr.getDoc_no());
@@ -277,14 +317,11 @@ public class KjoController {
         model.addAttribute("TopCLList", TopCLList);
         model.addAttribute("BotList", BotList);
         model.addAttribute("IpqList", IpqList);
+        
+		insertAccessLog(request, model); //접속이력
+
         return "system3/kjo/check/getcheckresult";
     }
 
 
-
-
-
-    
-    
-	
 }

@@ -15,7 +15,12 @@ public class BoardNotice {
 	private Date 	create_datetime;
 	private Date 	modify_datetime;
 
-	private String 	attach_name;		private String 	attach_path;
+	//파일첨부용
+	private String	tbl_name;
+	private Integer attach_no;
+	private String 	attach_name;
+	private String 	attach_path;
+	private String 	attach_saved_name;
 
 	//조회용
 	private int		rn;					//목록 rownum번호

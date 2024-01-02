@@ -116,19 +116,23 @@
 		
 	</select>
 
-	<select id="JmhSearchMonthList" parameterType="String" resultType="AccessLog">
-		SELECT (row_number() over()) AS rn, a.*, c.cate_name system_name 
+	<select id="JmhSearchMonthList" parameterType="String" resultType="JmhDaysDataVO">
+		SELECT (a.system_category || '-' || a.day) as day, count(*)::Int AS count
 		FROM (
-			SELECT p.*, u.user_name, u.system_category   					
-			FROM ACCESS_LOG p
-				LEFT OUTER JOIN USER_INFO u
-				ON p.user_id = u.user_id
-			ORDER BY p.access_datetime) a
-			LEFT OUTER JOIN CODE c
-			  ON a.system_category = c.cate_code
-			 AND c.field_name = 'system_category'
-		WHERE 1=1
-		  AND TO_CHAR(a.access_datetime, 'YYYY-MM') = #{year_month}
+				SELECT p.*, u.user_name, u.system_category
+					, c.cate_name as system_name
+					, EXTRACT(DAY FROM p.access_datetime)::Int AS day			
+				FROM ACCESS_LOG p
+					LEFT OUTER JOIN USER_INFO u
+						ON p.user_id = u.user_id
+					LEFT OUTER JOIN CODE c
+						ON u.system_category = c.cate_code
+						AND c.field_name = 'system_category'
+				WHERE 1=1 
+					AND TO_CHAR(p.access_datetime, 'YYYY-MM') = #{year_month}
+				ORDER BY p.access_datetime
+			) a
+		GROUP BY a.system_category || '-' || a.day;
 
 	</select>
 </mapper>

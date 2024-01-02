@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>한강 수자원관리 종합 플랫폼 - 내 정보 설정</title>
 
 <link rel="stylesheet" href="/bootstrap-5.3.2-examples/css/modals.css"><!-- 모달창 -->		
 <!--CSS START -->
@@ -138,31 +138,7 @@ header {
 		<!-- 본문 -->
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
-			<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
-			  <symbol id="house-door-fill" viewBox="0 0 16 16">
-			    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
-			  </symbol>
-			</svg>		
-			<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
-			    <ol class="breadcrumb breadcrumb-chevron p-1">
-			      <li class="breadcrumb-item">
-			        <a class="link-body-emphasis" href="/main">
-			          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
-			          <span class="visually-hidden">Home</span>
-			        </a>
-			      </li>
-			      <li class="breadcrumb-item">
-			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="">내 정보 설정</a>
-			      </li>
-			      <li class="breadcrumb-item active" aria-current="page">개인정보</li>
-			    </ol>
-			</nav>
-			<div class="container-fluid">
-				<div style="margin-top:15px;height:45px">
-					<span class="apptitle">개인정보</span>
-				</div>
-			</div>
-			
+						
 			<div id="contents" class="container-fluid">
 				<div class="row">
                
@@ -178,20 +154,44 @@ header {
 											<label for="username" class="form-label">아이디</label>
 											<div class="input-group has-validation">
 												<span class="input-group-text">ID</span>
-												<input type="text" class="form-control" id="username" value="${userInfoDto.user_id }" readonly>
+												<input type="text" class="form-control" value="${userInfoDto.user_id }" readonly>
 												<div class="invalid-feedback"></div>
 											</div>
 										</div>
 										
 										<div class="col-12">
 											<label for="address" class="form-label">이름</label>
-											<input type="text" class="form-control" id="address" value="${userInfoDto.user_name}" readonly>
+											<input type="text" class="form-control" value="${userInfoDto.user_name}" readonly>
 											<div class="invalid-feedback"></div>
 										</div>
 										
-										<div class="col-md-6">
-											<label for="address" class="form-label">핸드폰 번호</label>
-											<input type="text" class="form-control" id="address" value="${userInfoDto.user_tel}" readonly>
+										<div class="col-md-12">
+											<label for="address" class="form-label">EMAIL</label>
+											<input type="text" class="form-control" value="${userInfoDto.user_email}" readonly>
+											<div class="invalid-feedback"></div>
+										</div>
+										
+										<div class="col-md-12">
+											<label for="address" class="form-label">TEL</label>
+											<input type="text" class="form-control" value="${userInfoDto.user_tel}" readonly>
+											<div class="invalid-feedback"></div>
+										</div>
+										
+										<div class="col-md-12">
+											<label for="address" class="form-label">기간명</label>
+											<input type="text" class="form-control" value="${userInfoDto.org_name}" readonly>
+											<div class="invalid-feedback"></div>
+										</div>
+									
+										<div class="col-md-12">
+											<label for="address" class="form-label">소속부서</label>
+											<input type="text" class="form-control" value="${userInfoDto.user_department}" readonly>
+											<div class="invalid-feedback"></div>
+										</div>
+									
+										<div class="col-md-12">
+											<label for="address" class="form-label">직급</label>
+											<input type="text" class="form-control" value="${userInfoDto.user_position}" readonly>
 											<div class="invalid-feedback"></div>
 										</div>
 									

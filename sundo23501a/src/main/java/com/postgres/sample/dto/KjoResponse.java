@@ -9,6 +9,7 @@ import java.util.List;
 public class KjoResponse {
     List<?> ObjList;
     Object  obj;
+    String type;
 
 //    @Builder
 //    public KjoResponse(List<?> objList, Object obj) {

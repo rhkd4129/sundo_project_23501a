@@ -62,9 +62,10 @@
 }
 .h3{
 	font-weight: bold;
-    font-size: 25px;
+    font-size: 20px;
     color: #2C3E50;
     margin-bottom: 10px;
+    text-shadow: -3px 0px white, 0px 3px white, 3px 0px white, 0px -3px white;
 }
 .form-signin {
     max-width: 1050px;
@@ -80,6 +81,7 @@
     color: #2C3E50;
     margin-bottom: 10px;
     text-align:center;
+    text-shadow: -5px 0px white, 0px 5px white, 5px 0px white, 0px -5px white;
 }
 .radio-system-category{
 	cursor:pointer;
@@ -87,7 +89,19 @@
 .water-main-table {
 	width: 100%;
 	height: 100%;
-	border: 1px solid #eee;
+	border: 0px solid #2C3E50;
+	background-image: url(/images/seoulmap.png);
+	position: relative;
+    isolation: isolate;
+    box-shadow: 0px 0px 24px 0px rgb(0 0 0 / 40%), 0px 0px 0px 0px rgb(0 0 0 / 40%);
+}
+.water-main-table::after {
+	content: '';
+	position: absolute;
+	background: white;
+	z-index: -1;
+	inset: 0;
+	opacity: 0.6;
 }
 .water-sub-table{
 	width: 100%;
@@ -106,7 +120,7 @@
 	<table class="water-main-table">
 	<colgroup>
 	<col width="*">
-	<col width="610">
+	<col width="410">
 	</colgroup>
 		<tr>
 			<td>
@@ -114,19 +128,25 @@
 					<tr height="100">
 						<td valign="top">
 							<div>
-								<h3>관리시스템</h3>
+								<h4><b>관리시스템</b></h4>
 								<h2><p class="water-title">한강 수자원관리<br>종합플랫폼</p></h2>
 							</div>
 						</td>
 					</tr>
 					<tr height="*">
 						<td align="center">
-							<button class="btn btn-secondary py-2" type="button">기관소개</button>
-							<a href="/board_notice_list"><button class="btn btn-secondary py-2" type="button">공지사항</button></a>
+							<a href="/org_intro"><button class="btn btn-dark py-2" type="button">기관소개</button></a>
+							<a href="/board_notice_list"><button class="btn btn-dark py-2" type="button">공지사항</button></a>
 						</td>
 					</tr>
-					<tr height="100">
-						<td><div class="text-center text-body-secondary">© 2023. 중앙정보기술인재개발원 프로젝트 선도A조</div></td>
+					<tr height="150">
+						<td>							
+							<div class="text-center text-dark" style="font-size:20px">
+								<img src="http://www.sundosoft.co.kr/images/intro/ci_logo1.png"><br>
+								<b>중앙정보기술인재개발원 <font class="text-primary" style="font-size:40px;">A</font>조</b>
+							</div>
+							<div class="text-center"><b>이광현, 황인정, 강준우, 이진희, 조미혜</b></div>
+						</td>
 					</tr>
 				</table>
 			</td>
@@ -137,21 +157,21 @@
 						
 							<div id="water-tab" class="bd-example m-0 border-0">
 								<nav>
-									<div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
-										<button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-1" type="button" role="tab" aria-controls="nav-1" aria-selected="true" onclick="location.href='/user_login'">로그인</button>
-										<button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-2" type="button" role="tab" aria-controls="nav-2" aria-selected="false" tabindex="-1" onclick="location.href='/user_join_write'">회원가입</button>
+									<div class="nav nav-tabs" id="nav-tab" role="tablist">
+										<button style="background-color:white" class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-1" type="button" role="tab" aria-controls="nav-1" aria-selected="true" onclick="location.href='/user_login'"><b>로그인</b></button>
+										<button style="background-color:white" class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-2" type="button" role="tab" aria-controls="nav-2" aria-selected="false" tabindex="-1" onclick="location.href='/user_join_write'"><b>회원가입</b></button>
 									</div>
 								</nav>
 							</div>
 						
 							<form action="user_login_check" id="login-form" method="post">
 								<div class="wrapper">
-								<h2><span class="text-secondary">로그인</span></h2>
+								<h4><b><span class="text-primary">로그인</span></b></h4>
 									<div class="login-wrapper">
 										
 										<p class="text-primary">권한</p>
 										<p><input type="radio" id="system_category_2" name="system_category" value="2" checked> <label class="radio-system-category" for="system_category_2">실시간 수문정보 관리시스템</label></p>
-										<p><input type="radio" id="system_category_3" name="system_category" value="3"> <label class="radio-system-category" for="system_category_3">수자원 시설물 운영관리 시스템</label></p>
+										<p><input type="radio" id="system_category_3" name="system_category" value="3"> <label class="radio-system-category" for="system_category_3">수자원 시설물 관리시스템</label></p>
 										<p><input type="radio" id="system_category_1" name="system_category" value="1"> <label class="radio-system-category" for="system_category_1">관리자</label></p>
 										
 										
@@ -188,7 +208,7 @@
 											<a href="user_join_write"><input type="button" class="btn btn-outline-secondary btn-sm" style="font-size:0.75rem" value="회원가입"></a>
 										</div>
 										
-										<p class="mt-5 mb-3 text-body-secondary">&copy; 2023. 중앙정보기술인재개발원 프로젝트</p>
+										<p class="mt-5 text-body-secondary" align="center">&copy; 2023. 중앙정보기술인재개발원</p>
 									</div>
 								</div>
 							</form>

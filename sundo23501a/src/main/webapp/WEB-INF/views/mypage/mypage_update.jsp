@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>한강 수자원관리 종합 플랫폼 - 내 정보 설정</title>
 
 <!--CSS START -->
 <style type="text/css">
@@ -208,20 +208,13 @@ function confirm_authNumber() {
 <!-- JS END -->
 <script type="text/javascript">
 	$(function() {
-		
+		var system_category = "${userInfoDto.system_category}";
 		$.ajax({
-			url			: '/main_header',
+			url			: '/main_header_'+system_category,
+			async		: false,
 			dataType 	: 'html',
 			success		: function(data) {
 				$('#header').html(data);
-			}
-		});
-		
-		$.ajax({
-			url			: '/main_menu',
-			dataType 	: 'html',
-			success		: function(data) {
-				$('#menubar').html(data);
 			}
 		});
 	
@@ -260,36 +253,26 @@ header {
  		
  		<!-- 메뉴 -->
 		<div id="menubar" class="menubar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+			<div class="flex-shrink-0 p-3">
+			    <ul class="list-unstyled ps-0">
+			      <li class="mb-1">
+			        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#mypost-collapse" aria-expanded="true">
+					마이 페이지
+			        </button>
+			        <div class="collapse show" id="mypost-collapse">
+			          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+			            <li><a href="/mypage_main" class="link-body-emphasis d-inline-flex text-decoration-none rounded">내 정보 설정</a></li>
+			          </ul>
+			        </div>
+			      </li>
+			    </ul>
+			</div>
 		</div>
 		
 		<!-- 본문 -->
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
-			<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
-			  <symbol id="house-door-fill" viewBox="0 0 16 16">
-			    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
-			  </symbol>
-			</svg>		
-			<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
-			    <ol class="breadcrumb breadcrumb-chevron p-1">
-			      <li class="breadcrumb-item">
-			        <a class="link-body-emphasis" href="/main">
-			          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
-			          <span class="visually-hidden">Home</span>
-			        </a>
-			      </li>
-			      <li class="breadcrumb-item">
-			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="mypage_main">내 정보 설정</a>
-			      </li>
-			      <li class="breadcrumb-item active" aria-current="page">개인 정보 수정</li>
-			    </ol>
-			</nav>
-			<div class="container-fluid">
-				<div style="margin-top:15px;height:45px">
-					<span class="apptitle">개인 정보 수정</span>
-				</div>
-			</div>
-		    
+			
 			<form:form action="mypage_update_result" 
 					   id="userInfo" 
 					   method="post" 

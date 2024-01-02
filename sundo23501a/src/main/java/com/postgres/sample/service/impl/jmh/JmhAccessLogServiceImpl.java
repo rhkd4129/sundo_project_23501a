@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.postgres.sample.dto.AccessLog;
+import com.postgres.sample.dto.JmhDaysDataVO;
 import com.postgres.sample.service.impl.dao.jmh.AccessLogDAO;
 import com.postgres.sample.service.jmh.JmhAccessLogService;
 
@@ -27,10 +28,13 @@ public class JmhAccessLogServiceImpl extends EgovAbstractServiceImpl implements 
 
 		int totalCnt = 0;
 		
-		if(accessLog.getKeyword() != null) {
-			System.out.println("totalCount ★검색 Search---->"+accessLog.getSearch());
-			if(!accessLog.getKeyword().equals("")) {
-				System.out.println("totalCount ★검색 SearchKeyword---->"+accessLog.getKeyword());
+		if(accessLog.getSystem_category() != null) {
+			System.out.println("totalCount ★검색 권한---->"+accessLog.getSystem_category());
+			if(!accessLog.getSystem_category().equals("")) {
+				System.out.println("totalCount ★검색 기간 from---->"+accessLog.getFrom_date());
+				System.out.println("totalCount ★검색 기간 to---->"+accessLog.getTo_date());
+				System.out.println("totalCount ★검색 사용자---->"+accessLog.getUser_name());
+				System.out.println("totalCount ★검색 ip---->"+accessLog.getIp());
 				//검색 건수 가져오기
 				//-------------------------------------------------------------------
 				totalCnt = accessLogDAO.JmhSearchCount(accessLog);
@@ -55,10 +59,13 @@ public class JmhAccessLogServiceImpl extends EgovAbstractServiceImpl implements 
 		
 		List<AccessLog> boardList = null;
 		
-		if(accessLog.getKeyword() != null) {
-			System.out.println("boardList ★검색 Search---->"+accessLog.getSearch());
-			if(!accessLog.getKeyword().equals("")) {
-				System.out.println("boardList ★검색 SearchKeyword---->"+accessLog.getKeyword());
+		if(accessLog.getSystem_category() != null) {
+			System.out.println("boardList ★검색 권한---->"+accessLog.getSystem_category());
+			if(!accessLog.getSystem_category().equals("")) {
+				System.out.println("boardList ★검색 기간 from---->"+accessLog.getFrom_date());
+				System.out.println("boardList ★검색 기간 to---->"+accessLog.getTo_date());
+				System.out.println("boardList ★검색 사용자---->"+accessLog.getUser_name());
+				System.out.println("boardList ★검색 ip---->"+accessLog.getIp());
 				//----------------------------------------------------
 				boardList = accessLogDAO.JmhSearchList(accessLog);
 				//----------------------------------------------------
@@ -66,7 +73,6 @@ public class JmhAccessLogServiceImpl extends EgovAbstractServiceImpl implements 
 				return boardList;
 			}
 		}
-		System.out.println("accessLog user_id: "+accessLog.getUser_id());
 		System.out.println("accessLog start: "+accessLog.getStart());
 		System.out.println("accessLog end: "+accessLog.getEnd());
 		//---------------------------------------------------
@@ -78,10 +84,10 @@ public class JmhAccessLogServiceImpl extends EgovAbstractServiceImpl implements 
 	}
 
 	@Override
-	public List<AccessLog> searchMonthList(String year_month) {
+	public List<JmhDaysDataVO> searchMonthList(String year_month) {
 		System.out.println("JmhAccessLogServiceImpl searchMonthList START...");
 		
-		List<AccessLog> boardList = null;
+		List<JmhDaysDataVO> boardList = null;
 		System.out.println("year_month->"+year_month);
 		//------------------------------------------------------
 		boardList = accessLogDAO.JmhSearchMonthList(year_month);

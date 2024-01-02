@@ -49,6 +49,7 @@ public class UserInfoServiceImpl extends EgovAbstractServiceImpl implements User
 	public int InsertAccessLog(AccessLog accessLog) {
 		System.out.println("UserInfoServiceImpl InsertAccessLog Start..");
 		int result = userInfoDAO.JmhInsertAccessLog(accessLog);
+		System.out.println("result:"+result);
 		return result;
 	}
   

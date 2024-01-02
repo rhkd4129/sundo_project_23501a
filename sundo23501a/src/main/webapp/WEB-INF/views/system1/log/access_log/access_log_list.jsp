@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>한강 수자원관리 종합 플랫폼 - 접속 이력</title>
 
 <!--CSS START -->
 <!-- CSS END -->
@@ -59,6 +59,18 @@
 		}else{
 			$('#idNewWinFlag').prop('checked', true);
 		}
+
+		$('input[name=from_date]').change(function(){
+			document.frmSearch.submit();
+		});
+		
+		$('input[name=to_date]').change(function(){
+			document.frmSearch.submit();
+		});
+
+		$('select[name=system_category]').change(function(){
+			document.frmSearch.submit();
+		});	
 	});	
 	
 	
@@ -78,7 +90,8 @@ hr{
 	border-radius: 10px;
 	padding: 10px;
 }
-.searchbox th, td {
+.searchbox th, 
+.searchbox td {
 	padding: 2px;
 }
 </style>
@@ -105,36 +118,38 @@ hr{
 								</td>
 							</tr>
 						</table>
-						<form action="access_log_list">
+						<form name="frmSearch" action="access_log_list">
 							<div class="searchbox">
 								<table width="100%">
 									<tr>
 										<td><h6><b>검색조건</b></h6><hr></td>
 									</tr>
 									<tr>
-										<td>
+										<td>										
 											<table>
 												<tr>
 													<td style="padding-right:10px;font-weight:bold;">접속 기간</td>
-													<td><input type="date" name="from_date" class="form-control"></td>
+													<td><input type="date" name="from_date" class="form-control" value="${from_date}"></td>
 													<td>~</td>
-													<td><input type="date" name="to_date" class="form-control"></td>
+													<td><input type="date" name="to_date" class="form-control" value="${to_date}"></td>
 													<td style="padding:0px 10px 0px 20px;font-weight:bold;">사용자</td>
-													<td><input type="text" name="user_name" class="form-control"></td>
+													<td><input type="text" name="user_name" class="form-control" value="${user_name}"></td>
 													<td></td>
 												</tr>
 												<tr>
 													<td style="padding-right:10px;font-weight:bold;">시스템</td>
 													<td colspan="3">
-														<select class="form-select" name="search" style="font-size:0.8rem">
-															<option value="">전체</option>
+														<select class="form-select" name="system_category" style="font-size:0.8rem">
+															<option value="all">전체</option>
 															<c:forEach var="code" items="${CodeList_system_category}">
-																<option value="${code.cate_code}">${code.cate_name}</option>
+																<option value="${code.cate_code}" 
+																<c:if test="${system_category == code.cate_code}">selected</c:if>
+																>${code.cate_name}</option>
 															</c:forEach>
 														</select>
 													</td>
 													<td style="padding:0px 10px 0px 20px;font-weight:bold;">IP주소</td>
-													<td><input type="text" class="form-control me-2" style="font-size:0.8rem" name="keyword" placeholder="검색어를 입력하세요" required="required"></td>
+													<td><input type="text" class="form-control me-2" style="font-size:0.8rem" name="ip" value="${ip}"></td>
 													<td style="padding:0px 10px 0px 20px">
 														<button type="submit" class="btn btn-dark btn-sm">검색</button>
 														<button type="button" class="btn btn-outline-secondary btn-sm" onclick="goto('access_log_list')" style="cursor:pointer">
@@ -150,7 +165,7 @@ hr{
 									</tr>
 								</table>
 							</div>
-						</form>				
+						</form>					
 						<table width="100%" style="margin-bottom:5px">
 							<tr>
 								<!-- <td width="100">
@@ -211,7 +226,7 @@ hr{
 						  <ul class="pagination justify-content-center">
 						    
 							<c:if test="${page.startPage > page.pageBlock}">
-							   	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">이전</a></li>
+							   	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">&laquo;</a></li><!-- 이전 -->
 							</c:if>
 						    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
 								<c:choose>
@@ -220,10 +235,9 @@ hr{
 								</c:choose>
 								<a class="page-link" href="javascript:gotoPage('${i}')">${i}</a></li>
 							</c:forEach>						
-						    <c:if test="${page.endPage > page.totalPage}">
-						    	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage+page.pageBlock}')">다음</a></li>
+						    <c:if test="${page.endPage < page.totalPage}">
+						    	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage+page.pageBlock}')">&raquo;</a></li><!-- 다음 -->
 						    </c:if>
-						    
 						  </ul>
 						</nav>
 									

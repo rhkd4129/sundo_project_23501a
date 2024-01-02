@@ -40,9 +40,10 @@
 }
 .h3{
 	font-weight: bold;
-    font-size: 25px;
+    font-size: 20px;
     color: #2C3E50;
     margin-bottom: 10px;
+    text-shadow: -3px 0px white, 0px 3px white, 3px 0px white, 0px -3px white;
 }
 .form-signin {
     max-width: 1050px;
@@ -63,6 +64,7 @@
     color: #2C3E50;
     margin-bottom: 10px;
     text-align:center;
+    text-shadow: -5px 0px white, 0px 5px white, 5px 0px white, 0px -5px white;
 }
 .radio-system-category{
 	cursor:pointer;
@@ -70,7 +72,19 @@
 .water-main-table {
 	width: 100%;
 	height: 100%;
-	border: 1px solid #eee;
+	border: 0px solid #2C3E50;
+	background-image: url(/images/seoulmap.png);
+	position: relative;
+    isolation: isolate;
+    box-shadow: 0px 0px 24px 0px rgb(0 0 0 / 40%), 0px 0px 0px 0px rgb(0 0 0 / 40%);
+}
+.water-main-table::after {
+	content: '';
+	position: absolute;
+	background: white;
+	z-index: -1;
+	inset: 0;
+	opacity: 0.6;
 }
 .water-sub-table{
 	width: 100%;
@@ -300,7 +314,7 @@ select {
 	<table class="water-main-table">
 	<colgroup>
 	<col width="*">
-	<col width="610">
+	<col width="410">
 	</colgroup>
 		<tr>
 			<td>
@@ -308,19 +322,24 @@ select {
 					<tr height="100">
 						<td valign="top">
 							<div>
-								<h3>관리시스템</h3>
+								<h4><b>관리시스템</b></h4>
 								<h2><p class="water-title">한강 수자원관리<br>종합플랫폼</p></h2>
 							</div>
 						</td>
 					</tr>
 					<tr height="*">
 						<td align="center">
-							<button class="btn btn-secondary py-2" type="button">기관소개</button>
-							<a href="/board_notice_list"><button class="btn btn-secondary py-2" type="button">공지사항</button></a>
+							<a href="/org_intro"><button class="btn btn-dark py-2" type="button">기관소개</button></a>
+							<a href="/board_notice_list"><button class="btn btn-dark py-2" type="button">공지사항</button></a>
 						</td>
 					</tr>
-					<tr height="100">
-						<td><div class="text-center text-body-secondary">© 2023. 중앙정보기술인재개발원 프로젝트 선도A조</div></td>
+					<tr height="150">
+						<td>							
+							<div class="text-center text-dark" style="font-size:20px">
+								<img src="http://www.sundosoft.co.kr/images/intro/ci_logo1.png"><br>
+								<b>중앙정보기술인재개발원 <font class="text-primary" style="font-size:40px;">A</font>조</b>
+							</div>
+						</td>
 					</tr>
 				</table>
 			</td>
@@ -331,15 +350,15 @@ select {
 
 							<div id="water-tab" class="bd-example m-0 border-0">
 								<nav>
-									<div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
-										<button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-1" type="button" role="tab" aria-controls="nav-1" aria-selected="false" onclick="location.href='/user_login'">로그인</button>
-										<button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-2" type="button" role="tab" aria-controls="nav-2" aria-selected="true" tabindex="-1" onclick="location.href='/user_join_write'">회원가입</button>
+									<div class="nav nav-tabs" id="nav-tab" role="tablist">
+										<button style="background-color:white" class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-1" type="button" role="tab" aria-controls="nav-1" aria-selected="false" onclick="location.href='/user_login'"><b>로그인</b></button>
+										<button style="background-color:white" class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-2" type="button" role="tab" aria-controls="nav-2" aria-selected="true" tabindex="-1" onclick="location.href='/user_join_write'"><b>회원가입</b></button>
 									</div>
 								</nav>
 							</div>
 
 							<div class="wrapper">
-								<h2><span class="text-secondary">회원 가입</span></h2>
+								<h4><b><span class="text-primary">회원 가입</span></b></h4>
 					        
 						        <form:form action="write_user_info" method="post" 
 						                   name="frm" 
@@ -348,18 +367,17 @@ select {
 						                   onsubmit="return write_user_info()" width="100%">
 						        	<table width="100%" class="info-table">
 							        	<tr>
-							        		<td>
+							        		<td colspan="3">
 							        			<input type="hidden" name="env_alarm_comm">
 							        			<input type="hidden" name="env_alarm_reply">
 							        			<input type="hidden" name="env_alarm_mine">
 							        			<input type="hidden" name="env_alarm_meeting">
 							        			<input type="hidden" name="env_chat">
 							        		</td>
-							        	</tr>
-							        	
+							        	</tr>							        	
 							        	<tr>
 							        		<th>권한</th>
-							        		<td>
+							        		<td colspan="2">
 							        			<select name="system_category"  class="form-select">
 							        				<c:forEach var="code" items="${CodeList_system_category}" varStatus="status">
 														<option value="${code.cate_code}" 
@@ -370,7 +388,7 @@ select {
 							        		</td>
 							        	</tr>
 										<tr>
-											<th>아이디*</th>
+											<th>ID</th>
 											<td>
 												<input type="text" class="form-control" id="user_id" name="user_id" value="${userInfo.user_id }">
 												<small style="color: red"><form:errors path="user_id"/></small>
@@ -380,7 +398,7 @@ select {
 										</tr>
 										<tr>
 											<th>
-												<label for="userpass">비밀번호*</label>
+												<label for="userpass">PW</label>
 											</th>
 											<td colspan="2">
 												<input id="userpass" class="form-control" type="password" name="user_pw" value="${userInfo.user_pw }" placeholder="Password" autocomplete="off" required="required">
@@ -389,7 +407,7 @@ select {
 										</tr>
 										<tr>
 											<th>
-												<label for="userpasschk">비밀번호 확인*</label>
+												<label for="userpasschk">PW재확인</label>
 											</th>
 											<td colspan="2">
 												<input id="userpasschk" class="form-control" type="password" name="user_pw2" value="${userInfo.user_pw }" placeholder="동일하게 입력해주세요." autocomplete="off"/>
@@ -400,14 +418,14 @@ select {
 										</tr>
 											
 										<tr>
-											<th>이름*</th>
+											<th>이름</th>
 											<td colspan="2">
 												<input type="text" class="form-control" name="user_name" value="${userInfo.user_name}" required="required">
 												<small style="color: red"><form:errors path="user_name"/></small>
 											</td>
 										</tr>							          	
 							            <tr>
-							            	<th>EMAIL*</th>
+							            	<th>EMAIL</th>
 							            	<td colspan="2">
 							            		<div id="mail_input">
 								            		<input type="email" class="form-control" name="user_email" id="user_email" placeholder="ID@Email.com" value="${userInfo.user_email}" required="required">
@@ -430,14 +448,14 @@ select {
 							            	<td></td>
 							            </tr>
 							          	<tr>
-							          		<th>TEL*</th>
+							          		<th>TEL</th>
 							          		<td colspan="2">
 							          			<input type="tel" class="form-control" name="user_tel" placeholder="010-xxxx-xxxx" value="${userInfo.user_tel}" required="required">
 							          			<small style="color: red"><form:errors path="user_tel"/></small> 
 							          		</td>
 							          	</tr>
 										<tr>
-											<th>기간명*</th>
+											<th>기간명</th>
 											<td colspan="2">
 												<select name="org_code" class="form-select" >
 													<c:forEach var="org" items="${orgList}">
@@ -447,49 +465,29 @@ select {
 											</td>
 										</tr>
 										<tr>
-											<th>소속부서*</th>
+											<th>소속부서</th>
 											<td colspan="2">
 												<input type="text" class="form-control" name="user_department" id="user_department" required="required">
 												<small style="color: red"><form:errors path="user_department"/></small>
 											</td>
 										</tr>
 										<tr>
-											<th>직급*</th>
+											<th>직급</th>
 											<td colspan="2">
 												<input type="text" class="form-control" name="user_position" id="user_position" required="required">
 												<small style="color: red"><form:errors path="user_position"/></small>
 											</td>
 										</tr>
-							            <!-- <tr>
-							            	<th>우편번호</th>
-							            	<td>
-							            		<input type="text" class="form-control" name="sample6_postcode" id="sample6_postcode" placeholder="우편번호">
-							            	</td>
-							            	<td>
-												<input type="button" class="btn btn-dark btn-sm" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-											</td>
-										</tr>
-										<tr>
-											<th>주소</th>
-											<td colspan="2">
-												<input type="text" class="form-control mb-2" name="sample6_address" id="sample6_address" placeholder="주소">
-												<input type="text" class="form-control mb-2" name="sample6_detailAddress" id="sample6_detailAddress" placeholder="상세주소">
-												<input type="text" class="form-control" name="sample6_extraAddress" id="sample6_extraAddress" placeholder="참고항목">
-							            		<input type="hidden" name="user_address">
-							            	</td>
-							            </tr> -->
-										
 							        	<tr>
 							        		<td></td>
 							        		<td>
-							        			<!-- <input type="submit" class="w-100 btn btn-success btn-lg" value="가입하기"> -->
-							        			<button class="btn btn-success w-100 py-2" type="submit">가입하기</button>
+							        			<button class="btn btn-primary w-100 py-2" type="submit">가입하기</button>
 							        		</td>
 							        		<td></td>
 							        	</tr>		
 							  		</table>
 						  		</form:form>
-					        	<p class="mt-3 mb-3 text-body-secondary">&copy; 2023. 중앙정보기술인재개발원 프로젝트</p>
+					        	<p class="mt-3 text-body-secondary">&copy; 2023. 중앙정보기술인재개발원</p>
 					    	</div>
 						</td>
 					</tr>

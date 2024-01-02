@@ -1,17 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/WEB-INF/views/header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<title>수자원 시설물 관리시스템 - 고장 결과 보고서</title>
 <style type="text/css">
 	.title {
 		text-align: center;
-		font-size: 25pt;
+		font-size: 25px;
+		font-weight: bold;
 	}
 	
 	table {
@@ -28,26 +27,28 @@
 	th {
 		background: #EAEAEA;
 		padding: 5px 10px;
+		height: 40px;
+		width: 150px;
 	}
 	
 	td {
 		padding: 5px 10px;
+		height: 40px;
 	}
 	
-	select, .subject {
+	select {
+		width: 100%;
+		height: 35px;
+		border: none;
+	}
+	
+	textarea, input {
 		width: 100%;
 	}
 	
-	textarea {
-		width: 100%;
-	}
-	
-	.handling_content {
-		width: 95%;
-	}
-	
-	.handling_flag {
-		width: 4%;
+	.date {
+		height: 35px;
+		width: 200px;
 	}
 	
 	.btns {
@@ -59,16 +60,37 @@
 		width: 80px;
 	}
 	
-	.rptTbl th {
-		width: 200px;
+	header {
+		height: 55px;
 	}
-
-	.alarmTbl .cate {
-		width: 200px;
-	}
+.underline {
+	border-bottom:2px solid #fff;
+}	
 </style>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script type="text/javascript">
+
+	$(function() {
+
+		$.ajax({
+			url			: '/main_header_3',
+			async		: false,
+			dataType 	: 'html',
+			success		: function(data) {
+				$('#header').html(data);
+			}
+		});
+		$("#sub-list-4").addClass('underline');
+	
+		$.ajax({
+			url			: '/main_footer',
+			dataType 	: 'html',
+			success		: function(data) {
+				$('#footer').html(data);
+			}
+		});
+	});
+
+	
 	$(function() {
 		$('#waterCategorySelect').change(function() {
 			var category = $(this).val();
@@ -130,110 +152,120 @@
 </script>
 </head>
 <body>
-	<div>
-		<p class="title">고장 보고서 수정</p>
-		<form action="action_report_update" method="post">
-			<input type="hidden" name="doc_no" value="${actionRpt.doc_no}">
-			<table class="rptTbl">
-				<thead>
-					<tr>
-						<th>시설물 종류</th>
-						<td>
-							<select id="waterCategorySelect" name="facility_category">
-								<c:forEach var="water" items="${waterCategory }">
-									<c:if test="${water.facility_category == actionRpt.facility_category }">
-										<option value="${water.facility_category }" selected="selected">${water.facility_category }</option>
-									</c:if>
-									<c:if test="${water.facility_category != actionRpt.facility_category }">
-										<option value="${water.facility_category }">${water.facility_category }</option>
-									</c:if>
-								</c:forEach>
-							</select>
-						</td>
-						<th>시설물 코드</th>
-						<td>
-							<div id="wrCodeOption">
-								<select id="wrCodeSelect" name="facility_code">
-									<c:forEach var="wrCodeList" items="${wrCodeList }">
-										<c:if test="${wrCodeList.facility_code == actionRpt.facility_code}">
-											<option value="${wrCodeList.facility_code }" selected="selected">${wrCodeList.facility_code }</option>
-										</c:if>
-										<c:if test="${wrCodeList.facility_code != actionRpt.facility_code}">
-											<option value="${wrCodeList.facility_code }">${wrCodeList.facility_code }</option>
-										</c:if>
-									</c:forEach>
-								</select>
-							</div>
-						</td>
-						<th>작성자</th>
-						<td><input type="hidden" name="user_id" value="${actionRpt.user_id }">${actionRpt.user_name }</td>	<!-- 로그인한 사용자 이름 자동 표출 필요 -->
-					</tr>
-					<tr>
-						<th>점검대상</th>
-						<td>
-							<select name="check_target">
-								<c:forEach var="checkCode" items="${checkCodeList }">
-									<c:choose>
-										<c:when test="${checkCode.field_name == 'check_target' && checkCode.cate_name == actionRpt.check_target}">
-											<option value="${checkCode.cate_name }" selected="selected">${checkCode.cate_name }</option>
-										</c:when>
-										<c:when test="${checkCode.field_name == 'check_target' && checkCode.cate_name != actionRpt.check_target}">
-											<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
-										</c:when>
-									</c:choose>
-								</c:forEach>
-							</select>
-						</td>
-						<th>중분류</th>
-						<td>
-							<select name="m_category">
-								<c:forEach var="checkCode" items="${checkCodeList }">
-									<c:choose>
-										<c:when test="${checkCode.field_name == 'm_category' && checkCode.cate_name == actionRpt.m_category}">
-											<option value="${checkCode.cate_name }" selected="selected">${checkCode.cate_name }</option>
-										</c:when>
-										<c:when test="${checkCode.field_name == 'm_category' && checkCode.cate_name != actionRpt.m_category}">
-											<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
-										</c:when>
-									</c:choose>
-								</c:forEach>
-							</select>
-						</td>
-						<th>소분류</th>
-						<td>
-							<select name="s_category">
-								<c:forEach var="checkCode" items="${checkCodeList }">
-									<c:choose>
-										<c:when test="${checkCode.field_name == 's_category' && checkCode.cate_name == actionRpt.s_category}">
-											<option value="${checkCode.cate_name }" selected="selected">${checkCode.cate_name }</option>
-										</c:when>
-										<c:when test="${checkCode.field_name == 's_category' && checkCode.cate_name != actionRpt.s_category}">
-											<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
-										</c:when>
-									</c:choose>
-								</c:forEach>
-							</select>
-						</td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<th>고장/발생일자</th>
-						<td colspan="2"><input type="date" name="break_date" value="${actionRpt.break_date }"></td>
-						<td colspan="2"><input type="date" name="action_date" value="${actionRpt.action_date }"></td>					
-					</tr>
-					<tr><th>고장내역</th><td colspan="5"><textarea name="break_content">${actionRpt.break_content }</textarea></td></tr>
-					<tr><th>조치내역</th><td colspan="5"><textarea name="action_content">${actionRpt.action_content }</textarea></td></tr>
-					<tr><th>특이사항</th><td colspan="5"><textarea name="spec_memo">${actionRpt.spec_memo }</textarea></td>
-					<tr><th>향후계획</th><td colspan="5"><textarea name="future_plan">${actionRpt.future_plan }</textarea></td></tr>
-					<!-- <tr><th>파일첨부</th><td colspan="5"><input type="file" name="file1"></td></tr> -->
-				</tbody>
-			</table>
-			<div class="btns">
-				<button type="button" class="btn btn-dark btn-sm" onclick="location.href='/action_report_read?doc_no=${actionRpt.doc_no}'">돌아가기</button>
-				<button type="submit" class="btn btn-dark btn-sm">저장</button>
+	<header id="header" style="margin-top: 3%"></header>
+	
+	<div class="container">
+		<div class="row">
+			<div id="center">
+				<p class="title">조치 결과 보고서 수정</p>
+				<form action="action_report_update" method="post">
+					<input type="hidden" name="doc_no" value="${actionRpt.doc_no}">
+					<table class="rptTbl">
+						<thead>
+							<tr>
+								<th>시설물 종류</th>
+								<td>
+									<select id="waterCategorySelect" name="facility_category">
+										<c:forEach var="water" items="${waterCategory }">
+											<c:if test="${water.facility_category == actionRpt.facility_category }">
+												<option value="${water.facility_category }" selected="selected">${water.facility_category }</option>
+											</c:if>
+											<c:if test="${water.facility_category != actionRpt.facility_category }">
+												<option value="${water.facility_category }">${water.facility_category }</option>
+											</c:if>
+										</c:forEach>
+									</select>
+								</td>
+								<th>시설물 코드</th>
+								<td>
+									<div id="wrCodeOption">
+										<select id="wrCodeSelect" name="facility_code">
+											<c:forEach var="wrCodeList" items="${wrCodeList }">
+												<c:if test="${wrCodeList.facility_code == actionRpt.facility_code}">
+													<option value="${wrCodeList.facility_code }" selected="selected">${wrCodeList.facility_code }</option>
+												</c:if>
+												<c:if test="${wrCodeList.facility_code != actionRpt.facility_code}">
+													<option value="${wrCodeList.facility_code }">${wrCodeList.facility_code }</option>
+												</c:if>
+											</c:forEach>
+										</select>
+									</div>
+								</td>
+								<th>작성자</th>
+								<td><input type="hidden" name="user_id" value="${actionRpt.user_id }">${actionRpt.user_name }</td>	<!-- 로그인한 사용자 이름 자동 표출 필요 -->
+							</tr>
+							<tr>
+								<th>점검대상</th>
+								<td>
+									<select name="check_target">
+										<c:forEach var="checkCode" items="${checkCodeList }">
+											<c:choose>
+												<c:when test="${checkCode.field_name == 'check_target' && checkCode.cate_name == actionRpt.check_target}">
+													<option value="${checkCode.cate_name }" selected="selected">${checkCode.cate_name }</option>
+												</c:when>
+												<c:when test="${checkCode.field_name == 'check_target' && checkCode.cate_name != actionRpt.check_target}">
+													<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
+												</c:when>
+											</c:choose>
+										</c:forEach>
+									</select>
+								</td>
+								<th>중분류</th>
+								<td>
+									<select name="m_category">
+										<c:forEach var="checkCode" items="${checkCodeList }">
+											<c:choose>
+												<c:when test="${checkCode.field_name == 'm_category' && checkCode.cate_name == actionRpt.m_category}">
+													<option value="${checkCode.cate_name }" selected="selected">${checkCode.cate_name }</option>
+												</c:when>
+												<c:when test="${checkCode.field_name == 'm_category' && checkCode.cate_name != actionRpt.m_category}">
+													<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
+												</c:when>
+											</c:choose>
+										</c:forEach>
+									</select>
+								</td>
+								<th>소분류</th>
+								<td>
+									<select name="s_category">
+										<c:forEach var="checkCode" items="${checkCodeList }">
+											<c:choose>
+												<c:when test="${checkCode.field_name == 's_category' && checkCode.cate_name == actionRpt.s_category}">
+													<option value="${checkCode.cate_name }" selected="selected">${checkCode.cate_name }</option>
+												</c:when>
+												<c:when test="${checkCode.field_name == 's_category' && checkCode.cate_name != actionRpt.s_category}">
+													<option value="${checkCode.cate_name }">${checkCode.cate_name }</option>
+												</c:when>
+											</c:choose>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th>고장/발생 일자</th>
+								<td colspan="2"><input type="date" class="date form-control" name="break_date" value="${actionRpt.break_date }"></td>
+								<th>조치/복구 일자</th>
+								<td colspan="2"><input type="date" class="date form-control" name="action_date" value="${actionRpt.action_date }"></td>					
+							</tr>
+							<tr><th>고장내역</th><td colspan="5"><textarea rows="3" class="form-control" name="break_content">${actionRpt.break_content }</textarea></td></tr>
+							<tr><th>조치내역</th><td colspan="5"><textarea rows="3" class="form-control" name="action_content">${actionRpt.action_content }</textarea></td></tr>
+							<tr><th>특이사항</th><td colspan="5"><textarea rows="3" class="form-control" name="spec_memo">${actionRpt.spec_memo }</textarea></td>
+							<tr><th>향후계획</th><td colspan="5"><textarea rows="3" class="form-control" name="future_plan">${actionRpt.future_plan }</textarea></td></tr>
+						</tbody>
+					</table>
+					<div class="btns">
+						<button type="button" class="btn btn-dark btn-sm" onclick="location.href='/action_report_read?doc_no=${actionRpt.doc_no}'">돌아가기</button>
+						<button type="submit" class="btn btn-dark btn-sm">저장</button>
+					</div>
+				</form>
 			</div>
-		</form>
+		</div>
 	</div>
+	<footer class="footer py-2">
+		<div id="footer" class="container">
+		</div>
+	</footer>
 </body>
 </html>

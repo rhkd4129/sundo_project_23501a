@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>한강 수자원관리 종합 플랫폼 - 공지사항</title>
 
 <!--CSS START -->
 <!-- CSS END -->
@@ -78,7 +78,8 @@ hr{
 	border-radius: 10px;
 	padding: 10px;
 }
-.searchbox th, td {
+.searchbox th, 
+.searchbox td {
 	padding: 2px;
 }
 .tr-link {
@@ -118,7 +119,7 @@ hr{
 										<td>										
 											<table>
 												<tr>
-													<td style="padding-right:10px">조건</td>
+													<td style="padding-right:10px"><b>조건</b></td>
 													<td>
 														<select class="form-select" name="search" style="font-size:0.8rem">
 															<c:forEach var="code" items="${search_codelist}">
@@ -198,8 +199,9 @@ hr{
 										<c:set var="attach_name" value="${board.attach_name}"/>
 									    <c:set var="attach_length" value="${fn:length(attach_name)}"/>
 									    <c:set var="extension_name" value="${fn:substringAfter(attach_name, '.')}" />
+									    <c:set var="extension_name" value="${fn:toLowerCase(extension_name)}" />
 									    <c:if test="${extension_name ne ''}">
-									    	<a href="javascript:popup('/upload/${board.attach_path}',800,600)"><img src="/images/attach/icon_${extension_name}.png" alt="${board.attach_name}"> ${board.attach_name}</a>
+									    	<a href="javascript:popup('${board.attach_path}/${board.attach_saved_name}',800,600)"><img src="/images/attach/icon_${extension_name}.png" alt="${board.attach_name}"> ${board.attach_name}</a>
 									    </c:if>
 									</td>
 									<td>${board.bd_count}</td>
@@ -212,7 +214,7 @@ hr{
 						  <ul class="pagination justify-content-center">
 						    
 							<c:if test="${page.startPage > page.pageBlock}">
-							   	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">이전</a></li>
+							   	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">&laquo;</a></li><!-- 이전 -->
 							</c:if>
 						    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
 								<c:choose>
@@ -221,8 +223,8 @@ hr{
 								</c:choose>
 								<a class="page-link" href="javascript:gotoPage('${i}')">${i}</a></li>
 							</c:forEach>						
-						    <c:if test="${page.endPage > page.totalPage}">
-						    	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage+page.pageBlock}')">다음</a></li>
+						    <c:if test="${page.endPage < page.totalPage}">
+						    	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage+page.pageBlock}')">&raquo;</a></li></div><!-- 다음 -->
 						    </c:if>
 						    
 						  </ul>

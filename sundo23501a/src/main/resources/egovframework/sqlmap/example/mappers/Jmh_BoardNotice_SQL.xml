@@ -21,7 +21,8 @@
 		SELECT Count(*)
 		FROM (	SELECT p.*, u.user_name 
 				FROM BOARD_NOTICE p, USER_INFO u 
-				WHERE p.user_id = u.user_id ) a
+				WHERE p.user_id = u.user_id 
+			  ) a
 		WHERE 1=1
 		AND 
 			<choose>
@@ -58,9 +59,13 @@
 		(
 			SELECT (row_number() over()) AS rn, a.*
 			FROM
-					( SELECT p.*, u.user_name 							
-					  FROM BOARD_NOTICE p, USER_INFO u 
-					  WHERE p.user_id = u.user_id 
+					( SELECT p.*, u.user_name, t.attach_name, t.attach_path, t.attach_saved_name						
+					  FROM BOARD_NOTICE p
+						  LEFT OUTER JOIN USER_INFO u 
+					  		ON p.user_id = u.user_id 
+						  LEFT OUTER JOIN FILE_ATTACH t
+							ON p.doc_no = t.doc_no
+							AND 'BOARD_NOTICE' = t.tbl_name
 					  ORDER BY p.doc_no DESC) a
 		)
 		WHERE rn BETWEEN #{start} AND #{end}
@@ -73,9 +78,13 @@
 		(
 			SELECT (row_number() over()) AS rn, a.*
 			FROM
-					( SELECT p.*, u.user_name 
-					  FROM BOARD_NOTICE p, USER_INFO u 
-					  WHERE p.user_id = u.user_id 
+					( SELECT p.*, u.user_name, t.attach_name, t.attach_path, t.attach_saved_name						
+					  FROM BOARD_NOTICE p
+						  LEFT OUTER JOIN USER_INFO u 
+					  		ON p.user_id = u.user_id 
+						  LEFT OUTER JOIN FILE_ATTACH t
+							ON p.doc_no = t.doc_no
+							AND 'BOARD_NOTICE' = t.tbl_name
 					  ORDER BY p.doc_no DESC) a
 			WHERE 1=1
 			AND 
@@ -134,15 +143,42 @@
 				#{body},
 				NOW(),
 				NOW()
-			)	
+			)
+	</insert>
+	
+	<!-- 파일첨부 등록-->
+	<insert id="JmhInsertAttach" parameterType="BoardNotice">
+		<selectKey resultType="int" keyProperty="attach_no" order="BEFORE">
+        	SELECT COALESCE(MAX(attach_no),0)+1 FROM FILE_ATTACH
+    	</selectKey>
+		INSERT INTO 
+			FILE_ATTACH(
+				TBL_NAME, 
+				DOC_NO,
+				ATTACH_NO,
+				ATTACH_NAME, 
+				ATTACH_PATH,
+				ATTACH_SAVED_NAME
+			) 				
+			VALUES(
+				#{tbl_name}, 
+				#{doc_no},
+				#{attach_no},
+				#{attach_name}, 
+				#{attach_path},
+				#{attach_saved_name}
+			)
 	</insert>
 	
 	<!-- 문서 조회 -->
 	<select id="JmhSelectBoard" parameterType="BoardNotice" resultType="BoardNotice">
-		SELECT 	p.*, u.user_name
+		SELECT 	p.*, u.user_name, t.attach_name, t.attach_path, t.attach_saved_name
 		FROM BOARD_NOTICE p
 			LEFT OUTER JOIN USER_INFO u
-			ON p.user_id = u.user_id 
+				ON p.user_id = u.user_id 
+			LEFT OUTER JOIN FILE_ATTACH t
+				ON p.doc_no = t.doc_no
+				AND 'BOARD_NOTICE' = t.tbl_name
 		WHERE p.doc_no = #{doc_no}
 	</select>
 	
@@ -158,8 +194,14 @@
 	
 	<!-- 문서 삭제 -->
 	<delete id="JmhDeleteBoard" parameterType="BoardNotice">
-		DELETE BOARD_NOTICE 
+		DELETE FROM BOARD_NOTICE 
 		WHERE doc_no=#{doc_no}
+	</delete>
+
+	<!-- 파일첨부 삭제 -->
+	<delete id="JmhDeleteAttach" parameterType="BoardNotice">
+		DELETE FROM FILE_ATTACH 
+		WHERE tbl_name=#{tbl_name} AND doc_no=#{doc_no}
 	</delete>
 	
 	<!-- 조회수 증가 -->

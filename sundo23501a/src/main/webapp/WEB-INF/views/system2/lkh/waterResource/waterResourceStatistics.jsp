@@ -5,31 +5,33 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
+<title>실시간 수문정보 관리시스템 - 수자원 통계</title>
+<style>
 
-    <meta charset="UTF-8">
-    <title>수자원 목록</title>
-    <style>
+header {
+    height: 55px;
+}
 
-          header {
-              height: 55px;
-          }
+.doughnut_1{
+margin: 2%;
+border: 1px solid black;
+border-radius: 10px
+}
+.orgAreaLineGraph{
+    margin: 2%;
+    border: 1px solid black;
+    border-radius: 10px
+}
 
-        .doughnut_1{
-        margin: 2%;
-        border: 1px solid black;
-        border-radius: 10px
-        }
-        .orgAreaLineGraph{
-            margin: 2%;
-            border: 1px solid black;
-            border-radius: 10px
-        }
-
-        .flex-container {
-            display: flex;
-            flex-wrap: wrap;
-        }
-    </style>
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+.underline {
+	border-bottom:2px solid #fff;
+}
+</style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
@@ -38,12 +40,14 @@
         $(function () {
 
             $.ajax({
-                url			: '/main_header_21',
+                url			: '/main_header_2',
+                async		: false,
                 dataType 	: 'html',
                 success		: function(data) {
                     $('#header').html(data);
                 }
             });
+            $("#sub-list-2").addClass('underline');
 
             $.ajax({
                 url			: '/main_footer',
@@ -51,7 +55,7 @@
                 success		: function(data) {
                     $('#footer').html(data);
                 }
-            });
+            });            
 
             $.ajax({
                 url: "/doughnut_chart",
@@ -200,11 +204,25 @@
     </script>
 </head>
 <body>
-<header id="header"></header>
+	<header id="header"></header>
+	<br>
     <div class="container">
+    	<table width="100%" style="height:45px">
+			<tr>
+				<td style="width:100px;vertical-align:top"><span class="apptitle">수자원</span></td>
+				<td>
+					<div style="margin-top:-8px">
+						<div class="btn-group btn-group tapBtn">
+							<button type="button" class="btn btn-outline-dark" onclick="location.href='/waterResourcesList'">정보</button>
+							<button type="button" class="btn btn-dark" onclick="location.href='/waterResourceStatistics'">통계</button>
+						</div>			
+					</div>
+				</td>
+			</tr>
+		</table>
+		<br>
         <div class="row">
             <div id="center">
-                <h2><a href="/waterResourcesList">정보</a> | <a href="/waterResourceStatistics">통계</a></h2>
                 <div class="flex-container">
                     <!-- 첫 번째 그래프 영역 (비율 1) -->
                     <!-- 도넛 차트의 캔버스 ID 변경 -->

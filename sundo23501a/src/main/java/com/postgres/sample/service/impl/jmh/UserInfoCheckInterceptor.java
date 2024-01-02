@@ -8,9 +8,15 @@ import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.postgres.sample.controller.jmh.JmhController;
+import com.postgres.sample.dto.AccessLog;
+import com.postgres.sample.dto.LoginLog;
 import com.postgres.sample.dto.UserInfo;
-import com.postgres.sample.service.jmh.UserInfoService;
+import com.postgres.sample.service.jmh.JmhUserInfoService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class UserInfoCheckInterceptor extends EgovAbstractServiceImpl implements HandlerInterceptor {
 	public UserInfoCheckInterceptor() {
 		
