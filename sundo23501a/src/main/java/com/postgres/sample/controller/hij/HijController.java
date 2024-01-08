@@ -46,25 +46,25 @@ public class HijController {
     private final HijService hs;
 
     private final JmhUserInfoService uiService;		//사용자 관리
-	//접속이력 남기는 메소드
-	public void insertAccessLog(HttpServletRequest request, Model model) {
-		System.out.println("JmhController insertAccessLog Start..");
-		//접속이력
-		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-		
-		String requestURI = request.getRequestURI();        //  요청받은 페이지
-		String ip = request.getRemoteAddr();
-		String user_id = userInfoDTO.getUser_id();
-		
-		AccessLog accessLog = new AccessLog();
-		accessLog.setProgram_url(requestURI);
-		accessLog.setIp(ip);
-		accessLog.setUser_id(user_id);
-		//-------------------------------------------------
-		int result = uiService.InsertAccessLog(accessLog);
-		//-------------------------------------------------		
-		System.out.println("JmhController insertAccessLog End..");
-	}
+    //접속이력 남기는 메소드
+    public void insertAccessLog(HttpServletRequest request, Model model) {
+        System.out.println("JmhController insertAccessLog Start..");
+        //접속이력
+        UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+
+        String requestURI = request.getRequestURI();        //  요청받은 페이지
+        String ip = request.getRemoteAddr();
+        String user_id = userInfoDTO.getUser_id();
+
+        AccessLog accessLog = new AccessLog();
+        accessLog.setProgram_url(requestURI);
+        accessLog.setIp(ip);
+        accessLog.setUser_id(user_id);
+        //-------------------------------------------------
+        int result = uiService.InsertAccessLog(accessLog);
+        //-------------------------------------------------
+        System.out.println("JmhController insertAccessLog End..");
+    }
 
     //--------------------------------------------------------------------------------------
     // 1. 관측소 - 목록
@@ -101,9 +101,9 @@ public class HijController {
         model.addAttribute("CodeObserveMethod",codeListM);
         model.addAttribute("OrgList", orgList);
         model.addAttribute("categoryList", categoryList);
-        
+
         insertAccessLog(request, model); //접속이력
-        
+
         return "/system2/observation_sys/observation_find";
     }
 
@@ -121,9 +121,9 @@ public class HijController {
         model.addAttribute("CodeObserveType", codeListT);
         model.addAttribute("OrgList", orgList);
         model.addAttribute("categoryList", categoryList);
-        
+
         insertAccessLog(request, model); //접속이력
-        
+
         return "/system2/observation_sys/observation_create";
     }
 
@@ -143,9 +143,9 @@ public class HijController {
         System.out.println(" org_area: "+ observation.getOrg_area());
 
         int createResult = hs.obCreate(observation);
-        
+
         insertAccessLog(request, model); //접속이력
-        
+
         return "redirect:/observation_find";
     }
 
@@ -157,9 +157,9 @@ public class HijController {
         Observation getObservation = hs.getObservation(observation);
 
         model.addAttribute("observation", getObservation);
-        
+
         insertAccessLog(request, model); //접속이력
-        
+
         return "/system2/observation_sys/observation_detail";
     }
 
@@ -182,7 +182,7 @@ public class HijController {
         model.addAttribute("categoryList", categoryList);
 
         insertAccessLog(request, model); //접속이력
-        
+
         return "/system2/observation_sys/observation_edit";
     }
 
@@ -197,7 +197,7 @@ public class HijController {
         model.addAttribute("observation", observation);
 
         insertAccessLog(request, model); //접속이력
-        
+
         return "redirect:/observation_detail?observe_code="+observation.getObserve_code();
     }
 
@@ -211,36 +211,36 @@ public class HijController {
         deleteResult = hs.obDelete(observation);
 
         insertAccessLog(request, model); //접속이력
-        
+
         return deleteResult;
     }
-    
-    
+
+
     // 관측소 검색
     @ResponseBody
     @RequestMapping(value="/searchObservation")
     public HijResponse searchObservation(Observation observation, String currentPage, HttpServletRequest request, Model model) {
-    	
-    	int totalCount = hs.searchTotalO(observation);	//검색 갯수
-    	
-    	Paging page = new Paging(totalCount, currentPage, 10);
-    	observation.setStart(page.getStart());
-    	observation.setEnd(page.getEnd());
-    	
-    	List<Observation> searchO = hs.searchO(observation);
-    	
-    	HijResponse hijResponse = new HijResponse();
-    	hijResponse.setObj(page);
-    	hijResponse.setList(searchO);
-    	
-    	System.out.println("totalCountO : "+ totalCount);
 
-    	insertAccessLog(request, model); //접속이력
-        
-    	return hijResponse;
+        int totalCount = hs.searchTotalO(observation);	//검색 갯수
+
+        Paging page = new Paging(totalCount, currentPage, 10);
+        observation.setStart(page.getStart());
+        observation.setEnd(page.getEnd());
+
+        List<Observation> searchO = hs.searchO(observation);
+
+        HijResponse hijResponse = new HijResponse();
+        hijResponse.setObj(page);
+        hijResponse.setList(searchO);
+
+        System.out.println("totalCountO : "+ totalCount);
+
+        insertAccessLog(request, model); //접속이력
+
+        return hijResponse;
     }
-    
-//--------------------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------------------
 // 2. 관측소 - 시자료 - 수위
 //--------------------------------------------------------------------------------------
     // 수위 목록
@@ -261,13 +261,13 @@ public class HijController {
         model.addAttribute("page", page);
         model.addAttribute("waterLevelList", waterLevelList);
         model.addAttribute("waterLevelListSize", waterLevelList.size());
-        
-        System.out.println("time_find  totalcount :" +totalCount);
-        
-    	insertAccessLog(request, model); //접속이력
 
-    	return "/system2/observation_sys/time_find";
-        
+        System.out.println("time_find  totalcount :" +totalCount);
+
+        insertAccessLog(request, model); //접속이력
+
+        return "/system2/observation_sys/time_find";
+
     }
     // 수위 수정 조회
     @GetMapping("/time_edit")
@@ -277,354 +277,412 @@ public class HijController {
         waterLevel.setRiver_code(river_code);
         waterLevel.setObserve_date(observe_date);
         WaterLevel waterLevelT = hs.getWaterLevel(waterLevel);
-        
+
         model.addAttribute("waterLevel", waterLevelT);
         System.out.println("river_code : " +waterLevelT.getRiver_code());
         System.out.println("Observe_date : " +waterLevelT.getObserve_date());
-    
-    	insertAccessLog(request, model); //접속이력
-       
+
+        insertAccessLog(request, model); //접속이력
+
         return "/system2/observation_sys/time_edit";
     }
-    
+
     // 시자료 수정
     @PostMapping("/t_edit")
     public String tEdit(WaterLevel waterLevel, HttpServletRequest request, Model model) {
-    	System.out.println("HijController t_edit START");
-    	
-    	int editResult = hs.tEdit(waterLevel);
-       
+        System.out.println("HijController t_edit START");
+
+        int editResult = hs.tEdit(waterLevel);
+
         model.addAttribute("waterLevel", waterLevel);
         System.out.println("rivercode1: "+waterLevel.getRiver_code());
         System.out.println("Observe_date1: "+waterLevel.getObserve_date());
 
-    	insertAccessLog(request, model); //접속이력
-        
-    	return "redirect:/time_find?river_code="+waterLevel.getRiver_code();
+        insertAccessLog(request, model); //접속이력
+
+        return "redirect:/time_find?river_code="+waterLevel.getRiver_code();
     }
-    
+
     // 시자료 - 수위 - 검색
     @ResponseBody
     @RequestMapping(value="/searchWaterLevel")
     public HijResponse searchWaterLevel(WaterLevel waterLevel, String currentPage, HttpServletRequest request, Model model) {
-    	System.out.println("HijController searchWaterLevel START");
-    	
-    	int totalCount = hs.searchTotalW(waterLevel);	//검색 갯수
-    	System.out.println("totalCountW : "+ totalCount);
-    	
-    	System.out.println("currentPage : " +currentPage);
-		Paging page = new Paging(totalCount, currentPage, 10);
-		waterLevel.setStart(page.getStart()); waterLevel.setEnd(page.getEnd());
-		
-    	System.out.println("river_code : " + waterLevel.getRiver_code() );
-    	System.out.println("start_date : " + waterLevel.getStart_date() );
-    	System.out.println("end_date : " + waterLevel.getEnd_date() );
-    	
-    	List<WaterLevel> searchWlist = hs.searchW(waterLevel);
-    	
-    	System.out.println("searchW 사이즈c :" + searchWlist.size());
-    	System.out.println("river_code : " + waterLevel.getRiver_code() );
-    	HijResponse hijResponse = new HijResponse();
-    	hijResponse.setObj(page);
-    	hijResponse.setList(searchWlist);
-    	
-    	System.out.println("totalCountW : "+ totalCount);
-    	
-    	insertAccessLog(request, model); //접속이력
+        System.out.println("HijController searchWaterLevel START");
 
-    	return hijResponse;
-    	
+        int totalCount = hs.searchTotalW(waterLevel);	//검색 갯수
+        System.out.println("totalCountW : "+ totalCount);
+
+        System.out.println("currentPage : " +currentPage);
+        Paging page = new Paging(totalCount, currentPage, 10);
+        waterLevel.setStart(page.getStart()); waterLevel.setEnd(page.getEnd());
+
+        System.out.println("river_code : " + waterLevel.getRiver_code() );
+        System.out.println("start_date : " + waterLevel.getStart_date() );
+        System.out.println("end_date : " + waterLevel.getEnd_date() );
+
+        List<WaterLevel> searchWlist = hs.searchW(waterLevel);
+
+        System.out.println("searchW 사이즈c :" + searchWlist.size());
+        System.out.println("river_code : " + waterLevel.getRiver_code() );
+        HijResponse hijResponse = new HijResponse();
+        hijResponse.setObj(page);
+        hijResponse.setList(searchWlist);
+
+        System.out.println("totalCountW : "+ totalCount);
+
+        insertAccessLog(request, model); //접속이력
+
+        return hijResponse;
+
 
     }
-    
- //--------------------------------------------------------------------------------------  
- // 2. 관측소 - 시자료 - 강우량
- //--------------------------------------------------------------------------------------
-      // 강우량 목록
-      @GetMapping("/time_find_R")
-      public String time_find_R(RainFall rainFall, String currentPage, HttpServletRequest request, Model model) {
-          System.out.println("HijController time_find_R START");
-          
-          int totalCount= hs.rainFallTotal();
 
-          Paging page = new Paging(totalCount, currentPage, 10);
-          rainFall.setStart(page.getStart());
-          rainFall.setEnd(page.getEnd());
+    //--------------------------------------------------------------------------------------
+    // 2. 관측소 - 시자료 - 강우량
+    //--------------------------------------------------------------------------------------
+    // 강우량 목록
+    @GetMapping("/time_find_R")
+    public String time_find_R(RainFall rainFall, String currentPage, HttpServletRequest request, Model model) {
+        System.out.println("HijController time_find_R START");
 
-          List<RainFall> rainFallList = hs.rainFallList(rainFall);	// waterLevel 리스트
+        int totalCount= hs.rainFallTotal();
 
-          model.addAttribute("totalCount", totalCount);
-          model.addAttribute("page", page);
-          model.addAttribute("rainFallList", rainFallList);
-          model.addAttribute("rainFallListSize", rainFallList.size());
+        Paging page = new Paging(totalCount, currentPage, 10);
+        rainFall.setStart(page.getStart());
+        rainFall.setEnd(page.getEnd());
 
-      	  insertAccessLog(request, model); //접속이력
-          
-          return "/system2/observation_sys/time_find_R";
-      }
-      
-      // 강우량 수정 조회
-      @GetMapping("/time_edit_R")
-      public String time_edit_R(String river_code, Date observe_date, HttpServletRequest request, Model model) {
-          System.out.println("HijController time_edit_R START");
-          RainFall rainFall = new RainFall();
-          rainFall.setRiver_code(river_code);
-          rainFall.setObserve_date(observe_date);
-          RainFall rainFallT = hs.getRainFall(rainFall);
-          
-          model.addAttribute("rainFall", rainFallT);
-          System.out.println("river_code : " +rainFallT.getRiver_code());
-          System.out.println("Observe_date : " +rainFallT.getObserve_date());
-      
-      	  insertAccessLog(request, model); //접속이력
-          
-          return "/system2/observation_sys/time_edit_R";
-      }
-      
-      // 강우량 수정
-      @PostMapping("/t_edit_R")
-      public String t_edit_R(RainFall rainFall, HttpServletRequest request, Model model) {
-      	System.out.println("HijController t_edit_R START");
-      	
-      	int editResult = hs.tEditR(rainFall);
-         
-          model.addAttribute("rainFall", rainFall);
-          System.out.println("rivercode1: "+rainFall.getRiver_code());
-          System.out.println("Observe_date1: "+rainFall.getObserve_date());
-          
-      	insertAccessLog(request, model); //접속이력
+        List<RainFall> rainFallList = hs.rainFallList(rainFall);	// waterLevel 리스트
 
-      	return "redirect:/time_find_R?river_code="+rainFall.getRiver_code();
-      }    
-    
-      // 시자료 - 강우량 - 검색
-      @ResponseBody
-      @RequestMapping(value="/searchRainFall")
-      public HijResponse searchRainFall(RainFall rainFall, String currentPage, HttpServletRequest request, Model model) {
-      	
-      	int totalCount = hs.searchTotalR(rainFall);	//검색 갯수
-      	
-      	Paging page = new Paging(totalCount, currentPage, 10);
-      	rainFall.setStart(page.getStart());
-      	rainFall.setEnd(page.getEnd());
-      	
-      	List<RainFall> searchR = hs.searchR(rainFall);
-      	
-      	HijResponse hijResponse = new HijResponse();
-      	hijResponse.setObj(page);
-      	hijResponse.setList(searchR);
-      	
-      	System.out.println("totalCountR : "+ totalCount);
+        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("page", page);
+        model.addAttribute("rainFallList", rainFallList);
+        model.addAttribute("rainFallListSize", rainFallList.size());
 
-    	insertAccessLog(request, model); //접속이력
+        insertAccessLog(request, model); //접속이력
 
-      	return hijResponse;
-      }
-  //--------------------------------------------------------------------------------------  
-  // 2. 관측소 - 시자료 - 우량
-  //--------------------------------------------------------------------------------------
-       // 우량 목록
-       @GetMapping("/time_find_F")
-       public String time_find_F(Flow flow,  String currentPage, HttpServletRequest request, Model model) {
-           System.out.println("HijController time_find_F START");
-           
-           int totalCount= hs.flowTotal();
+        return "/system2/observation_sys/time_find_R";
+    }
 
-           Paging page = new Paging(totalCount, currentPage, 10);
-           flow.setStart(page.getStart());
-           flow.setEnd(page.getEnd());
-           List<Flow> flowYearList = hs.flowYearList(); // year 리스트
-           flow.setObserve_year(flowYearList.get(0).getObserve_year());
-           List<Flow> flowList = hs.flowList(flow);	// waterLevel 리스트
-           
+    // 강우량 수정 조회
+    @GetMapping("/time_edit_R")
+    public String time_edit_R(String river_code, Date observe_date, HttpServletRequest request, Model model) {
+        System.out.println("HijController time_edit_R START");
+        RainFall rainFall = new RainFall();
+        rainFall.setRiver_code(river_code);
+        rainFall.setObserve_date(observe_date);
+        RainFall rainFallT = hs.getRainFall(rainFall);
 
-           model.addAttribute("totalCount", totalCount);
-           model.addAttribute("page", page);
-           model.addAttribute("flowList", flowList);
-           model.addAttribute("flowListSize", flowList.size());
-           model.addAttribute("flowYearList", flowYearList);
-           
-           System.out.println("년 : " + flowList.get(0).getObserve_year());
-           System.out.println("getJanuary 0 : " + flowList.get(0).getJanuary());
-           System.out.println("getJanuary 1: " + flowList.get(1).getJanuary());
-           
-       	   insertAccessLog(request, model); //접속이력
+        model.addAttribute("rainFall", rainFallT);
+        System.out.println("river_code : " +rainFallT.getRiver_code());
+        System.out.println("Observe_date : " +rainFallT.getObserve_date());
 
-           return "/system2/observation_sys/time_find_F";
-       }
-       
-       // 우량 수정 조회
-       @GetMapping("/time_edit_F")
-       public String time_edit_F(String river_code, int observe_year, int observe_day, HttpServletRequest request, Model model) {
-           System.out.println("HijController time_edit_R START");
-           Flow flow = new Flow();
-           flow.setRiver_code(river_code);
-           flow.setObserve_year(observe_year);
-           flow.setObserve_day(observe_day);
-           
-           Flow flowF = hs.getFlow(flow);
-           
-           model.addAttribute("flow", flowF);
-    
-       	   insertAccessLog(request, model); //접속이력
-          
-           return "/system2/observation_sys/time_edit_F";
-       }
-       
-       // 우량 수정
-       @PostMapping("/t_edit_F")
-       public String t_edit_F(Flow flow, HttpServletRequest request, Model model) {
-       	System.out.println("HijController t_edit_F START");
-       	
-       	int editResult = hs.tEditF(flow);
-          
-        model.addAttribute("flow", flow);  
-        
+        insertAccessLog(request, model); //접속이력
+
+        return "/system2/observation_sys/time_edit_R";
+    }
+
+    // 강우량 수정
+    @PostMapping("/t_edit_R")
+    public String t_edit_R(RainFall rainFall, HttpServletRequest request, Model model) {
+        System.out.println("HijController t_edit_R START");
+
+        int editResult = hs.tEditR(rainFall);
+
+        model.addAttribute("rainFall", rainFall);
+        System.out.println("rivercode1: "+rainFall.getRiver_code());
+        System.out.println("Observe_date1: "+rainFall.getObserve_date());
+
+        insertAccessLog(request, model); //접속이력
+
+        return "redirect:/time_find_R?river_code="+rainFall.getRiver_code();
+    }
+
+    // 시자료 - 강우량 - 검색
+    @ResponseBody
+    @RequestMapping(value="/searchRainFall")
+    public HijResponse searchRainFall(RainFall rainFall, String currentPage, HttpServletRequest request, Model model) {
+
+        int totalCount = hs.searchTotalR(rainFall);	//검색 갯수
+
+        Paging page = new Paging(totalCount, currentPage, 10);
+        rainFall.setStart(page.getStart());
+        rainFall.setEnd(page.getEnd());
+
+        List<RainFall> searchR = hs.searchR(rainFall);
+
+        HijResponse hijResponse = new HijResponse();
+        hijResponse.setObj(page);
+        hijResponse.setList(searchR);
+
+        System.out.println("totalCountR : "+ totalCount);
+
+        insertAccessLog(request, model); //접속이력
+
+        return hijResponse;
+    }
+    //--------------------------------------------------------------------------------------
+    // 2. 관측소 - 시자료 - 우량
+    //--------------------------------------------------------------------------------------
+    // 우량 목록
+    @GetMapping("/time_find_F")
+    public String time_find_F(Flow flow,  String currentPage, HttpServletRequest request, Model model) {
+        System.out.println("HijController time_find_F START");
+
+        int totalCount= hs.flowTotal();
+
+        Paging page = new Paging(totalCount, currentPage, 10);
+        flow.setStart(page.getStart());
+        flow.setEnd(page.getEnd());
+        List<Flow> flowYearList = hs.flowYearList(); // year 리스트
+        flow.setObserve_year(flowYearList.get(0).getObserve_year());
+        List<Flow> flowList = hs.flowList(flow);	// waterLevel 리스트
+
+
+        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("page", page);
+        model.addAttribute("flowList", flowList);
+        model.addAttribute("flowListSize", flowList.size());
+        model.addAttribute("flowYearList", flowYearList);
+
+        System.out.println("년 : " + flowList.get(0).getObserve_year());
+        System.out.println("getJanuary 0 : " + flowList.get(0).getJanuary());
+        System.out.println("getJanuary 1: " + flowList.get(1).getJanuary());
+
+        insertAccessLog(request, model); //접속이력
+
+        return "/system2/observation_sys/time_find_F";
+    }
+
+    // 우량 수정 조회
+    @GetMapping("/time_edit_F")
+    public String time_edit_F(String river_code, int observe_year, int observe_day, HttpServletRequest request, Model model) {
+        System.out.println("HijController time_edit_R START");
+        Flow flow = new Flow();
+        flow.setRiver_code(river_code);
+        flow.setObserve_year(observe_year);
+        flow.setObserve_day(observe_day);
+
+        Flow flowF = hs.getFlow(flow);
+
+        model.addAttribute("flow", flowF);
+
+        insertAccessLog(request, model); //접속이력
+
+        return "/system2/observation_sys/time_edit_F";
+    }
+
+    // 우량 수정
+    @PostMapping("/t_edit_F")
+    public String t_edit_F(Flow flow, HttpServletRequest request, Model model) {
+        System.out.println("HijController t_edit_F START");
+
+        int editResult = hs.tEditF(flow);
+
+        model.addAttribute("flow", flow);
+
         System.out.println("flow : " + flow.getObserve_day());
 
-    	insertAccessLog(request, model); //접속이력
+        insertAccessLog(request, model); //접속이력
 
-       	return "redirect:/time_find_F?river_code="+flow.getRiver_code()+"&observe_year()=" + flow.getObserve_year();
-       }    
-       
-       // 시자료 - 우량 - 검색
-       @ResponseBody
-       @RequestMapping(value="/searchFlow")
-       public HijResponse searchRainFall(Flow flow, String currentPage, HttpServletRequest request, Model model) {
-       	
-       	int totalCount = hs.searchTotalF(flow);	//검색 갯수
-       	
-       	Paging page = new Paging(totalCount, currentPage, 10);
-       	flow.setStart(page.getStart());
-       	flow.setEnd(page.getEnd());
-       	
-       	List<Flow> searchF = hs.searchF(flow);
-       	
-       	HijResponse hijResponse = new HijResponse();
-       	hijResponse.setObj(page);
-       	hijResponse.setList(searchF);
-       	
-       	System.out.println("totalCountF : "+ totalCount);
-       	
-    	insertAccessLog(request, model); //접속이력
+        return "redirect:/time_find_F?river_code="+flow.getRiver_code()+"&observe_year()=" + flow.getObserve_year();
+    }
 
-       	return hijResponse;
-       }
-       
-       //--------------------------------------------------------------------------------------  
-       // 5. 관측소 - 통계 - 수위정보
-       //--------------------------------------------------------------------------------------
-       @ResponseBody
-       @GetMapping("/time_chart_list")
-       public ModelAndView waterLevelChartList(WaterLevel waterLevel, HttpServletRequest request, Model model){
-    	   System.out.println("---- 관측소 - 통계 - 수위정보 목록(waterLevelChartList) START-----");
-			
-			if(waterLevel.getStart_date() == null) {
-				waterLevel.setStart(1);
-				waterLevel.setEnd(1);
-				List<WaterLevel> waterLevelList = hs.waterLevelList(waterLevel);   // waterLevel 리스트
-				System.out.println("첫번째 관측일:"+waterLevelList.get(0).getObserve_date());
-				waterLevel.setStart_date(waterLevelList.get(0).getObserve_date());
-			}
-			WaterLevel waterLevelStat = hs.waterLevelStat(waterLevel);   // waterLevel 리스트
-				
-			
-			ModelAndView mv = new ModelAndView();
-		    mv.setViewName("/system2/observation_sys/time_chart_list"); // 뷰의 이름
-		    mv.addObject("start_date", waterLevel.getStart_date());
-		    mv.addObject("waterLevelStat", waterLevelStat);
-		    
-			System.out.println("---- 관측소 - 통계 - 수위정보 목록(waterLevelChartList) END-----");
-			//insertAccessLog(request, model);
-			
-			return mv;
-		}
+    // 시자료 - 우량 - 검색
+    @ResponseBody
+    @RequestMapping(value="/searchFlow")
+    public HijResponse searchRainFall(Flow flow, String currentPage, HttpServletRequest request, Model model) {
 
-       //검색
-       @ResponseBody
-       @GetMapping("/time_chart_search")
-       public WaterLevel waterLevelChartSearch(WaterLevel waterLevel, HttpServletRequest request, Model model){
-    	   System.out.println("---- 관측소 - 통계 - 수위정보 검색(waterLevelChartSearch) START-----");
-			
-			if(waterLevel.getStart_date() == null) {
-				waterLevel.setStart(1);
-				waterLevel.setEnd(1);
-				List<WaterLevel> waterLevelList = hs.waterLevelList(waterLevel);   // waterLevel 리스트
-				System.out.println("첫번째 관측일:"+waterLevelList.get(0).getObserve_date());
-				waterLevel.setStart_date(waterLevelList.get(0).getObserve_date());
-			}
-			WaterLevel waterLevelStat = hs.waterLevelStat(waterLevel);   // waterLevel 리스트
-			
-	    	System.out.println("---- 관측소 - 통계 - 수위정보 검색(waterLevelChartSearch) END-----");
-			insertAccessLog(request, model);
-			
-			return waterLevelStat;
-		}
-       
-       //--------------------------------------------------------------------------------------  
-       // 5. 관측소 - 통계 - 강우량 정보
-       //--------------------------------------------------------------------------------------
-       @ResponseBody
-       @GetMapping("/time_chart_list_R")
-       public ModelAndView rainFallChartListR(RainFall rainFall, HttpServletRequest request, Model model){
-    	   System.out.println("---- 관측소 - 통계 - 강우량 정보 목록(rainFallChartListR) START-----");
-			
-			if(rainFall.getStart_date() == null) {
-				System.out.println("1.조회기간:null");
-				System.out.println("1.river_code:"+rainFall.getRiver_code());
-				rainFall.setStart(1);
-				rainFall.setEnd(1);
-				List<RainFall> rainFallList = hs.rainFallList(rainFall);   // rainFall 리스트
-				System.out.println("첫번째 관측일:"+rainFallList.get(0).getObserve_date());
-				rainFall.setStart_date(rainFallList.get(0).getObserve_date());
-			}else {
-				System.out.println("2.조회기간:"+rainFall.getStart_date());
-				System.out.println("2.river_code:"+rainFall.getRiver_code());
-			}
-			RainFall rainFallStat = hs.rainFallStat(rainFall);   // rainFall 리스트
-			
-			System.out.println("rainFallStat 01시:"+rainFallStat.getHour_01());
-			System.out.println("rainFallStat 20시:"+rainFallStat.getHour_20());
-			//model.addAttribute("rainFallList", rainFallStat);				
-			//return "/system2/observation_sys/timeChart";			
-			
-			ModelAndView mv = new ModelAndView();
-		    mv.setViewName("/system2/observation_sys/time_chart_list_R"); // 뷰의 이름
-		    mv.addObject("start_date", rainFall.getStart_date());
-		    mv.addObject("rainFallStat", rainFallStat);
-		    
-			System.out.println("---- 관측소 - 통계 - 강우량 정보 목록(rainFallChartListR) END-----");
-			//insertAccessLog(request, model);
-			
-			return mv;
-		}
+        int totalCount = hs.searchTotalF(flow);	//검색 갯수
 
-       //검색
-       @ResponseBody
-       @GetMapping("/time_chart_search_R")
-       public RainFall rainFallChartSearchR(RainFall rainFall, HttpServletRequest request, Model model){
-    	   System.out.println("---- 관측소 - 통계 - 강수량 정보 검색(rainFallChartSearchR) START-----");
-			
-			if(rainFall.getStart_date() == null) {
-				System.out.println("1조회기간:null");
-				System.out.println("1river_code:"+rainFall.getRiver_code());
-				rainFall.setStart(1);
-				rainFall.setEnd(1);
-				List<RainFall> rainFallList = hs.rainFallList(rainFall);   // rainFall 리스트
-				System.out.println("첫번째 관측일:"+rainFallList.get(0).getObserve_date());
-				rainFall.setStart_date(rainFallList.get(0).getObserve_date());
-			}else {
-				System.out.println("2조회기간:"+rainFall.getStart_date());
-				System.out.println("2river_code:"+rainFall.getRiver_code());
-			}
-			RainFall rainFallStat = hs.rainFallStat(rainFall);   // rainFall 리스트
-			
-	    
-			System.out.println("---- 관측소 - 통계 - 강수량 정보 검색(rainFallChartSearchR) END-----");
-			insertAccessLog(request, model);
-			
-			return rainFallStat;
-		}
-       
+        Paging page = new Paging(totalCount, currentPage, 10);
+        flow.setStart(page.getStart());
+        flow.setEnd(page.getEnd());
+
+        List<Flow> searchF = hs.searchF(flow);
+
+        HijResponse hijResponse = new HijResponse();
+        hijResponse.setObj(page);
+        hijResponse.setList(searchF);
+
+        System.out.println("totalCountF : "+ totalCount);
+
+        insertAccessLog(request, model); //접속이력
+
+        return hijResponse;
+    }
+
+    //--------------------------------------------------------------------------------------
+    // 5. 관측소 - 통계 - 수위정보
+    //--------------------------------------------------------------------------------------
+    @ResponseBody
+    @GetMapping("/time_chart_list")
+    public ModelAndView waterLevelChartList(WaterLevel waterLevel, HttpServletRequest request, Model model){
+        System.out.println("---- 관측소 - 통계 - 수위정보 목록(waterLevelChartList) START-----");
+
+        if(waterLevel.getStart_date() == null) {
+            waterLevel.setStart(1);
+            waterLevel.setEnd(1);
+            List<WaterLevel> waterLevelList = hs.waterLevelList(waterLevel);   // waterLevel 리스트
+            System.out.println("첫번째 관측일:"+waterLevelList.get(0).getObserve_date());
+            waterLevel.setStart_date(waterLevelList.get(0).getObserve_date());
+        }
+        WaterLevel waterLevelStat = hs.waterLevelStat(waterLevel);   // waterLevel 리스트
+
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("/system2/observation_sys/time_chart_list"); // 뷰의 이름
+        mv.addObject("start_date", waterLevel.getStart_date());
+        mv.addObject("waterLevelStat", waterLevelStat);
+
+        System.out.println("---- 관측소 - 통계 - 수위정보 목록(waterLevelChartList) END-----");
+        //insertAccessLog(request, model);
+
+        return mv;
+    }
+
+    //검색
+    @ResponseBody
+    @GetMapping("/time_chart_search")
+    public WaterLevel waterLevelChartSearch(WaterLevel waterLevel, HttpServletRequest request, Model model){
+        System.out.println("---- 관측소 - 통계 - 수위정보 검색(waterLevelChartSearch) START-----");
+
+        if(waterLevel.getStart_date() == null) {
+            waterLevel.setStart(1);
+            waterLevel.setEnd(1);
+            List<WaterLevel> waterLevelList = hs.waterLevelList(waterLevel);   // waterLevel 리스트
+            System.out.println("첫번째 관측일:"+waterLevelList.get(0).getObserve_date());
+            waterLevel.setStart_date(waterLevelList.get(0).getObserve_date());
+        }
+        WaterLevel waterLevelStat = hs.waterLevelStat(waterLevel);   // waterLevel 리스트
+
+        System.out.println("---- 관측소 - 통계 - 수위정보 검색(waterLevelChartSearch) END-----");
+        insertAccessLog(request, model);
+
+        return waterLevelStat;
+    }
+
+    //--------------------------------------------------------------------------------------
+    // 5. 관측소 - 통계 - 강우량 정보
+    //--------------------------------------------------------------------------------------
+    @ResponseBody
+    @GetMapping("/time_chart_list_R")
+    public ModelAndView rainFallChartListR(RainFall rainFall, HttpServletRequest request, Model model){
+        System.out.println("---- 관측소 - 통계 - 강우량 정보 목록(rainFallChartListR) START-----");
+
+        if(rainFall.getStart_date() == null) {
+            System.out.println("1.조회기간:null");
+            System.out.println("1.river_code:"+rainFall.getRiver_code());
+            rainFall.setStart(1);
+            rainFall.setEnd(1);
+            List<RainFall> rainFallList = hs.rainFallList(rainFall);   // rainFall 리스트
+            System.out.println("첫번째 관측일:"+rainFallList.get(0).getObserve_date());
+            rainFall.setStart_date(rainFallList.get(0).getObserve_date());
+        }else {
+            System.out.println("2.조회기간:"+rainFall.getStart_date());
+            System.out.println("2.river_code:"+rainFall.getRiver_code());
+        }
+        RainFall rainFallStat = hs.rainFallStat(rainFall);   // rainFall 리스트
+
+        System.out.println("rainFallStat 01시:"+rainFallStat.getHour_01());
+        System.out.println("rainFallStat 20시:"+rainFallStat.getHour_20());
+        //model.addAttribute("rainFallList", rainFallStat);
+        //return "/system2/observation_sys/timeChart";
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("/system2/observation_sys/time_chart_list_R"); // 뷰의 이름
+        mv.addObject("start_date", rainFall.getStart_date());
+        mv.addObject("rainFallStat", rainFallStat);
+
+        System.out.println("---- 관측소 - 통계 - 강우량 정보 목록(rainFallChartListR) END-----");
+        insertAccessLog(request, model);
+
+        return mv;
+    }
+
+    //검색
+    @ResponseBody
+    @GetMapping("/time_chart_search_R")
+    public RainFall rainFallChartSearchR(RainFall rainFall, HttpServletRequest request, Model model){
+        System.out.println("---- 관측소 - 통계 - 강수량 정보 검색(rainFallChartSearchR) START-----");
+
+        if(rainFall.getStart_date() == null) {
+            System.out.println("1조회기간:null");
+            System.out.println("1river_code:"+rainFall.getRiver_code());
+            rainFall.setStart(1);
+            rainFall.setEnd(1);
+            List<RainFall> rainFallList = hs.rainFallList(rainFall);   // rainFall 리스트
+            System.out.println("첫번째 관측일:"+rainFallList.get(0).getObserve_date());
+            rainFall.setStart_date(rainFallList.get(0).getObserve_date());
+        }else {
+            System.out.println("2조회기간:"+rainFall.getStart_date());
+            System.out.println("2river_code:"+rainFall.getRiver_code());
+        }
+        RainFall rainFallStat = hs.rainFallStat(rainFall);   // rainFall 리스트
+
+
+        System.out.println("---- 관측소 - 통계 - 강수량 정보 검색(rainFallChartSearchR) END-----");
+        insertAccessLog(request, model);
+
+        return rainFallStat;
+    }
+
+    //--------------------------------------------------------------------------------------
+    // 5. 관측소 - 통계 - 우량 정보
+    //--------------------------------------------------------------------------------------
+    @ResponseBody
+    @GetMapping("/time_chart_list_F")
+    public ModelAndView rainFallChartListF(Flow flow, HttpServletRequest request, Model model){
+        System.out.println("---- 관측소 - 통계 - 우량정보 목록(rainFallChartListF) START-----");
+
+        List<Flow> flowYearList = hs.flowYearList(); // year 리스트
+        if(flow.getObserve_year() == null) {
+            System.out.println("1.년도:null");
+            System.out.println("1.river_code:"+flow.getRiver_code());
+            flow.setObserve_year(flowYearList.get(0).getObserve_year());
+        }else {
+            System.out.println("2.년도:"+flow.getObserve_year());
+            System.out.println("2.river_code:"+flow.getRiver_code());
+        }
+        System.out.println("3.년도:"+flow.getObserve_year());
+        List<Flow> flowList = hs.flowList(flow);
+
+        System.out.println("flowList size:"+flowList.size());
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("/system2/observation_sys/time_chart_list_F"); // 뷰의 이름
+        mv.addObject("year", flowList.get(0).getObserve_year());
+        mv.addObject("flowList", flowList);
+        mv.addObject("flowYearList", flowYearList);
+
+        System.out.println("---- 관측소 - 통계 - 우량정보 목록(rainFallChartListF) END-----");
+        insertAccessLog(request, model);
+
+        return mv;
+    }
+
+    //검색
+    @ResponseBody
+    @GetMapping("/time_chart_search_F")
+    public List<Flow> rainFallChartSearchF(Flow flow, HttpServletRequest request, Model model){
+        System.out.println("---- 관측소 - 통계 - 우량 정보 검색(rainFallChartSearchF) START-----");
+
+        List<Flow> flowYearList = hs.flowYearList(); // year 리스트
+        if(flow.getObserve_year() == null) {
+            System.out.println("1.년도:null");
+            System.out.println("1.river_code:"+flow.getRiver_code());
+            flow.setObserve_year(flowYearList.get(0).getObserve_year());
+        }else {
+            System.out.println("2.년도:"+flow.getObserve_year());
+            System.out.println("2.river_code:"+flow.getRiver_code());
+        }
+        System.out.println("3.년도:"+flow.getObserve_year());
+        List<Flow> flowList = hs.flowList(flow);
+
+
+        System.out.println("---- 관측소 - 통계 - 우량 정보 검색(rainFallChartSearchF) END-----");
+        insertAccessLog(request, model);
+
+        return flowList;
+    }
 }
 

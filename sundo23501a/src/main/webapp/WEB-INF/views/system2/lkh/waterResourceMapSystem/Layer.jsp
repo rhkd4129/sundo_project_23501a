@@ -323,12 +323,13 @@
             seoulHacunSugye = createDivCheckBox("list_level_2","seoulHacunSugye","서울 한강 수계",3,'#55B4D1');
             gyeonggiHacunSugye = createDivCheckBox("list_level_2","gyeonggiHacunSugye","경기 한강 수계",4,'#55B4D1');
             sumun = createDivCheckBox("list_level_1","sumun","수문",5,'green');
-            dam = createDivCheckBox("list_level_1","dam","댐",6,'red',false);
+            dam = createDivCheckBox("list_level_1","dam","댐",6,'red');
             layerMid.append(seoulHangang);
             layerMid.append(gyeonggiHacun);
             layerMid.append(seoulHacunSugye);
             layerMid.append(gyeonggiHacunSugye);
             layerMid.append(sumun);
+            layerMid.append(dam);
 
         }
 
