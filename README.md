@@ -20,7 +20,7 @@
 
 ## 시스템 구성도
 
-<img src="readme_image/sw.PNG" width="350px"><img src="readme_image/gis.PNG" width="350px" >
+<img src="readme_image/sw.PNG" width="450px"><img src="readme_image/gis.PNG" width="450px" >
 
 ##  프로젝트 기간
  🕛2023.12.4 - 2024.1.3
